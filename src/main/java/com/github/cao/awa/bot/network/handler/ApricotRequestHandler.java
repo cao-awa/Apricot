@@ -35,7 +35,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
             LOGGER.info(
                     "processing packets {}: {}",
                     ++ processed,
-                    request
+                    request.toString()
             );
             ReadonlyPacket packet = this.server.createPacket(request);
             if (packet != null) {

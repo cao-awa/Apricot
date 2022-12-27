@@ -4,6 +4,9 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.bot.config.*;
 import com.github.cao.awa.bot.event.*;
 import com.github.cao.awa.bot.event.pipeline.*;
+import com.github.cao.awa.bot.message.*;
+import com.github.cao.awa.bot.message.cq.factor.*;
+import com.github.cao.awa.bot.message.cq.factor.image.*;
 import com.github.cao.awa.bot.network.*;
 import com.github.cao.awa.bot.network.packet.*;
 import com.github.cao.awa.bot.network.packet.factor.*;
@@ -23,6 +26,7 @@ public class ApricotServer {
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
     private final Map<UUID, Plugin> plugins = new Object2ObjectOpenHashMap<>();
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
+    private final CqDeserializer cqDeserializers = new CqDeserializer();
     private Executor executor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
     private final Configure configs = new Configure(() -> "");
@@ -60,7 +64,7 @@ public class ApricotServer {
             }
         }));
 
-        if (this.configs.get("threadpool.enable").equals("true")) {
+        if (this.configs.get("event.threadpool.enable").equals("true")) {
             this.executor = Executors.newCachedThreadPool();
         } else {
             this.executor = Executors.newSingleThreadExecutor();
@@ -71,6 +75,9 @@ public class ApricotServer {
         // Setup packet deserializers
         this.packetDeserializers.register(new MessageReceivedPacketFactor());
 
+        // Setup CQ deserializers
+        this.cqDeserializers.register(new CqImageFactor());
+
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
@@ -78,7 +85,11 @@ public class ApricotServer {
     }
 
     public ReadonlyPacket createPacket(JSONObject json) {
-        return this.packetDeserializers.deserializer(json);
+        return this.packetDeserializers.deserializer(this, json);
+    }
+
+    public MessageElement createCq(List<String> elements) {
+        return this.cqDeserializers.deserializer(this, elements);
     }
 
     public void registerPlugin(Plugin plugin) {

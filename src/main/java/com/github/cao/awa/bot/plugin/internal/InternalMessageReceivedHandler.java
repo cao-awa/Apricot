@@ -2,6 +2,7 @@ package com.github.cao.awa.bot.plugin.internal;
 
 import com.github.cao.awa.bot.event.handler.message.*;
 import com.github.cao.awa.bot.event.receive.message.*;
+import com.github.cao.awa.bot.message.*;
 import com.github.cao.awa.bot.network.packet.send.message.*;
 import org.apache.logging.log4j.*;
 
@@ -10,22 +11,29 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
 
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        LOGGER.info(
+                "Handler received message from '{}': {}",
+                event.getPacket()
+                     .getSenderId(),
+                event.getPacket()
+                     .getMessage().toPlainText()
+        );
+
         if (event.getPacket()
-                 .getMessage().equals("aaawww114514")) {
-            LOGGER.info("Message received from {}: {}",
-                        event.getPacket().getSenderId(),
-                        event.getPacket()
-                             .getMessage()
-            );
-            System.out.println(event.getPacket().getType());
-            System.out.println(event.getPacket().getSenderId());
-            System.out.println(event.getPacket().getMessage());
-            System.out.println(event.getPacket().getResponseId());
+                 .getMessage()
+                 .handleMessage(element -> {
+                     if (element instanceof TextMessageElement text) {
+                         return text.getText()
+                                    .equals("awa");
+                     }
+                     return false;
+                 }, 0)) {
             event.getProxy()
                  .send(new SendMessagePacket(
-                         event.getPacket().getType(),
-                         "www",
-                         event.getPacket().getResponseId()
+                         SendMessageType.PRIVATE,
+                         "awa",
+                         event.getPacket()
+                              .getResponseId()
                  ));
         }
     }

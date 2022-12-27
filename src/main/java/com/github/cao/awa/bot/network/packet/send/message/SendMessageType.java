@@ -21,6 +21,6 @@ public enum SendMessageType {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 }

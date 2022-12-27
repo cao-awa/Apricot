@@ -2,6 +2,7 @@ package com.github.cao.awa.bot.network.packet.factor;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.bot.network.packet.*;
+import com.github.cao.awa.bot.server.*;
 import it.unimi.dsi.fastutil.objects.*;
 import org.jetbrains.annotations.*;
 
@@ -11,10 +12,10 @@ public class PacketDeserializer {
     private final Map<String, PacketFactor> factors = new Object2ObjectOpenHashMap<>();
 
     @Nullable
-    public ReadonlyPacket deserializer(JSONObject json) {
+    public ReadonlyPacket deserializer(ApricotServer server, JSONObject json) {
         String name = json.getString("post_type");
         if (this.factors.containsKey(name)) {
-            return this.factors.get(name).create(json);
+            return this.factors.get(name).create(server, json);
         }
         return null;
     }

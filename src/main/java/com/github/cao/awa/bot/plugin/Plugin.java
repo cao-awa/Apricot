@@ -2,13 +2,14 @@ package com.github.cao.awa.bot.plugin;
 
 import com.github.cao.awa.bot.event.*;
 import com.github.cao.awa.bot.event.handler.*;
+import com.github.cao.awa.bot.event.pipeline.*;
 import it.unimi.dsi.fastutil.objects.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
 
 public abstract class Plugin implements Comparable<Plugin> {
-    private final Map<String, EventHandler> handlers = new Object2ObjectOpenHashMap<>();
+    private final Map<String, List<EventHandler>> handlers = new Object2ObjectOpenHashMap<>();
 
     /**
      * Compares this object with the specified object for order.  Returns a
@@ -54,13 +55,23 @@ public abstract class Plugin implements Comparable<Plugin> {
     public abstract UUID getUuid();
 
     public void registerHandler(EventHandler handler) {
-        this.handlers.put(handler.getName(), handler);
+        if (!this.handlers.containsKey(handler.getName())) {
+            this.handlers.put(handler.getName(), new LinkedList<>());
+        }
+        this.handlers.get(handler.getName()).add(handler);
+    }
+
+    public void registerHandlers(EventHandler handler, EventHandler... handlers) {
+        registerHandler(handler);
+        for (EventHandler eventHandler : handlers) {
+            registerHandler(eventHandler);
+        }
     }
 
     public void fireEvent(Event event) {
-        EventHandler handler = this.handlers.get(event.getName());
-        if (handler != null) {
-            event.entrust(handler);
+        List<EventHandler> handlers = this.handlers.get(event.getName());
+        if (handlers != null) {
+            handlers.forEach(event::entrust);
         }
     }
 }

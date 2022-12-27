@@ -8,6 +8,7 @@ import java.util.*;
 public class InternalPlugin extends Plugin {
     public InternalPlugin() {
         registerHandler(new InternalMessageReceivedHandler());
+//        registerHandler(new InternalMessageReceivedHandler2());
     }
 
     @Override
