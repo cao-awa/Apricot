@@ -33,6 +33,6 @@ public class ImageMessageElement extends MessageElement {
     public String toPlainText() {
         return "[CQ:image,file=" + this.file + ",url=" + this.url + (this.subType == null ?
                                                                      "" :
-                                                                     ",subType=" + subType) + ")";
+                                                                     ",subType=" + subType) + "]";
     }
 }
