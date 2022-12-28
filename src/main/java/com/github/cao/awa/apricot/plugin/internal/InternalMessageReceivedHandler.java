@@ -20,6 +20,12 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
      */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
+        LOGGER.info(event.getPacket()
+                         .getSender()
+                         .getName() + ": " + event.getPacket()
+                                                  .getMessage()
+                                                  .get(0)
+                                                  .toPlainText());
         if (event.getPacket()
                  .getType() == SendMessageType.PRIVATE && event.getPacket()
                                                                .getMessage()
@@ -27,7 +33,8 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                                                                        element -> {
                                                                            if (element instanceof TextMessageElement text) {
                                                                                return text.getText()
-                                                                                          .equals("awa");
+                                                                                          .equals("awa") || text.getText()
+                                                                                                                .equals("aaawww114514");
                                                                            }
                                                                            return false;
                                                                        },
@@ -39,14 +46,17 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                          .getSenderId()
             );
             event.getProxy()
-                 .send(new SendMessagePacket(
-                         SendMessageType.PRIVATE,
-                         "awa",
-                         event.getPacket()
-                              .getResponseId()
-                 ), echo -> {
-                     System.out.println(echo.getIdentifier());
-                 });
+                 .send(
+                         new SendMessagePacket(
+                                 SendMessageType.PRIVATE,
+                                 "草",
+                                 event.getPacket()
+                                      .getResponseId()
+                         ),
+                         echo -> {
+                             System.out.println(echo.getIdentifier());
+                         }
+                 );
         }
     }
 }

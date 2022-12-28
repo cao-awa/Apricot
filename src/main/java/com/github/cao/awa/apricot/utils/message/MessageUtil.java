@@ -37,7 +37,9 @@ public class MessageUtil {
 
             // Deserialize and participate in the message.
             MessageElement element = server.createCq(args);
-            elements.add(element);
+            if (element != null) {
+                elements.add(element);
+            }
 
             // Update cursors
             cursor = endPos + 2;

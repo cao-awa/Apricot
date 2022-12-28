@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.network.packet.writer;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
@@ -8,10 +9,12 @@ import org.jetbrains.annotations.*;
 
 public class PacketJSONBufWriter {
     private static final Logger LOGGER = LogManager.getLogger("PacketWriter");
+    private final @NotNull ApricotServer server;
     private final @NotNull Channel channel;
     private @NotNull JSONObject json;
 
-    public PacketJSONBufWriter(@NotNull Channel channel) {
+    public PacketJSONBufWriter(@NotNull ApricotServer server, @NotNull Channel channel) {
+        this.server = server;
         this.channel = channel;
         this.json = new JSONObject();
     }
@@ -35,7 +38,10 @@ public class PacketJSONBufWriter {
             LOGGER.trace("Has an occurs not completed writing, ignored");
             return;
         }
-        this.channel.writeAndFlush(new TextWebSocketFrame(this.json.toString()));
+        TextWebSocketFrame frame = new TextWebSocketFrame(this.json.toString());
+        this.server.getTrafficsCounter().out(frame.content().array().length);
+        this.server.getPacketsCounter().out(1);
+        this.channel.writeAndFlush(frame);
         create();
     }
 

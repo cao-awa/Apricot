@@ -1,19 +1,28 @@
 package com.github.cao.awa.apricot.network.lazy;
 
-import com.google.common.base.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 import org.jetbrains.annotations.*;
 
 import java.util.function.Supplier;
 
-public class Lazy<T> {
+/**
+ * Memoize the supplier result to faster response get.
+ *
+ * @param <T> type
+ *
+ * @since 1.0.0
+ * @author 草二号机
+ */
+public final class Lazy<T> {
     private final @NotNull Supplier<T> supplier;
+    private final Receptacle<T> result = Receptacle.of();
 
     public Lazy(@NotNull Supplier<T> delegate) {
-        this.supplier = Suppliers.memoize(delegate::get);
+        this.supplier = delegate;
     }
 
     public T get() {
-        return this.supplier.get();
+        return this.result.getOrSet(this.supplier);
     }
 }
 

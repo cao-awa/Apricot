@@ -1,13 +1,15 @@
 package com.github.cao.awa.apricot.message;
 
-public final class TextMessageElement extends MessageElement {
-    private final String text;
+import org.jetbrains.annotations.*;
 
-    public TextMessageElement(String text) {
+public final class TextMessageElement extends MessageElement {
+    private final @Nullable String text;
+
+    public TextMessageElement(@Nullable String text) {
         this.text = text;
     }
 
-    public String getText() {
+    public @Nullable String getText() {
         return this.text;
     }
 

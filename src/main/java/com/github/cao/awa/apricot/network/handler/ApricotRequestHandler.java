@@ -23,6 +23,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     private final ApricotProxy proxy;
     private PacketJSONBufWriter writer;
     private Channel channel;
+    private StringBuilder fragment = null;
 
     public ApricotRequestHandler(ApricotServer server) {
         this.server = server;
@@ -36,25 +37,54 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     public void channelActive(ChannelHandlerContext context) throws Exception {
         super.channelActive(context);
         this.channel = context.channel();
-        this.writer = new PacketJSONBufWriter(this.channel);
+        this.writer = new PacketJSONBufWriter(
+                this.server,
+                this.channel
+        );
     }
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
+        this.server.getTrafficsCounter()
+                   .in(frame.content().array().length);
+        this.server.getPacketsCounter()
+                   .in(1);
         if (frame instanceof TextWebSocketFrame textFrame) {
-            final TextWebSocketFrame textSocketFrame = textFrame.copy();
-            this.server.submitTask(() -> {
-                JSONObject request = JSONObject.parseObject(textSocketFrame.text());
-                System.out.println(request);
-                ReadonlyPacket packet = this.server.createPacket(request);
-                if (packet != null) {
-                    packet.fireEvent(
-                            this.server,
-                            this.proxy
-                    );
+            if (frame.isFinalFragment()) {
+                if (this.fragment != null) {
+                    handleRequest(new TextWebSocketFrame(this.fragment.toString()));
+                    this.fragment = null;
                 }
-            });
+                handleRequest(textFrame);
+            } else {
+                if (this.fragment == null) {
+                    this.fragment = new StringBuilder(textFrame.text());
+                } else {
+                    LOGGER.warn("Occurs unexpected fragment appended");
+                }
+            }
+        } else {
+            if (frame instanceof ContinuationWebSocketFrame continuationFrame) {
+                this.fragment.append(continuationFrame.text());
+                LOGGER.debug("Fragment appended");
+            } else {
+            }
         }
+    }
+
+    public void handleRequest(TextWebSocketFrame frame) {
+        String text = frame.text();
+        LOGGER.info(text);
+        this.server.submitTask(() -> {
+            JSONObject request = JSONObject.parseObject(text);
+            ReadonlyPacket packet = this.server.createPacket(request);
+            if (packet != null) {
+                packet.fireEvent(
+                        this.server,
+                        this.proxy
+                );
+            }
+        });
     }
 
     public void send(Packet packet) {

@@ -6,7 +6,7 @@ import com.github.cao.awa.apricot.event.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.cq.factor.*;
 import com.github.cao.awa.apricot.message.cq.factor.image.*;
-import com.github.cao.awa.apricot.network.*;
+import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.*;
@@ -14,8 +14,9 @@ import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.resources.loader.*;
-import com.github.cao.awa.apricot.server.echo.*;
-import com.github.cao.awa.apricot.server.event.*;
+import com.github.cao.awa.apricot.server.service.counter.traffic.*;
+import com.github.cao.awa.apricot.server.service.echo.*;
+import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import it.unimi.dsi.fastutil.objects.*;
@@ -34,10 +35,19 @@ public class ApricotServer {
     private final Configure configs = new Configure(() -> "");
     private EventManager eventManager;
     private EchoManager echoManager;
+    private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
+    private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
-
     public ApricotServer() {
+    }
+
+    public TrafficCounter getTrafficsCounter() {
+        return this.trafficsCounter;
+    }
+
+    public TrafficCounter getPacketsCounter() {
+        return this.packetsCounter;
     }
 
     public void startup() throws Exception {
@@ -150,7 +160,7 @@ public class ApricotServer {
     }
 
     public void echo(Packet packet, Consumer<EchoResultPacket> action) {
-        this.echoManager.echo(
+        echo(
                 packet.getIdentifier(),
                 action
         );
@@ -168,5 +178,10 @@ public class ApricotServer {
                 identifier,
                 packet
         );
+    }
+
+    public boolean useEpoll() {
+        return this.configs.get("transport.type")
+                           .equals("epoll");
     }
 }

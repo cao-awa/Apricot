@@ -1,7 +1,6 @@
-package com.github.cao.awa.apricot.network;
+package com.github.cao.awa.apricot.network.io;
 
 import com.github.cao.awa.apricot.network.handler.*;
-import com.github.cao.awa.apricot.network.lazy.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -12,8 +11,10 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.codec.http.*;
 import io.netty.handler.codec.http.websocketx.*;
 import io.netty.handler.codec.http.websocketx.extensions.compression.*;
+import org.apache.logging.log4j.*;
 
 import java.util.concurrent.*;
+import java.util.function.*;
 
 /**
  * Network io of apricot bot server.
@@ -22,14 +23,15 @@ import java.util.concurrent.*;
  * @since 1.0.0
  */
 public class ApricotServerNetworkIo {
-    public static final Lazy<NioEventLoopGroup> DEFAULT_CHANNEL = new Lazy<>(() -> new NioEventLoopGroup(
+    private static final Logger LOGGER = LogManager.getLogger("ApricotNetworkIo");
+    private static final Supplier<NioEventLoopGroup> DEFAULT_CHANNEL = () -> new NioEventLoopGroup(
             0,
             Executors.newCachedThreadPool()
-    ));
-    public static final Lazy<EpollEventLoopGroup> EPOLL_CHANNEL = new Lazy<>(() -> new EpollEventLoopGroup(
+    );
+    private static final Supplier<EpollEventLoopGroup> EPOLL_CHANNEL = () -> new EpollEventLoopGroup(
             0,
             Executors.newCachedThreadPool()
-    ));
+    );
 
     private final ApricotServer server;
 
@@ -38,9 +40,16 @@ public class ApricotServerNetworkIo {
     }
 
     public void start(final int port) throws Exception {
+        boolean expectEpoll = server.useEpoll();
         boolean epoll = Epoll.isAvailable();
 
-        Lazy<? extends EventLoopGroup> lazy = epoll ? EPOLL_CHANNEL : DEFAULT_CHANNEL;
+        LOGGER.info(expectEpoll ?
+                    epoll ?
+                    "Apricot network io using Epoll" :
+                    "Apricot network io expected epoll, but Epoll is not available, switch to NIO" :
+                    "Apricot network io using NIO");
+
+        Supplier<? extends EventLoopGroup> lazy = epoll ? EPOLL_CHANNEL : DEFAULT_CHANNEL;
 
         Class<? extends ServerSocketChannel> channel = epoll ?
                                                        EpollServerSocketChannel.class :
@@ -56,10 +65,8 @@ public class ApricotServerNetworkIo {
                              worker
                      )
                      .option(
-                             ChannelOption.SO_BACKLOG,
-                             0
-                     )
-                     .option(
+                             // Real-time response is necessary
+                             // Enable TCP No delay to improve response speeds
                              ChannelOption.TCP_NODELAY,
                              true
                      )
@@ -67,14 +74,17 @@ public class ApricotServerNetworkIo {
                          @Override
                          protected void initChannel(SocketChannel ch) {
                              ChannelPipeline pipeline = ch.pipeline();
+                             // Do decodes
                              pipeline.addLast(new HttpServerCodec());
                              pipeline.addLast(new HttpObjectAggregator(65536));
                              pipeline.addLast(new WebSocketServerCompressionHandler());
                              pipeline.addLast(new WebSocketServerProtocolHandler(
                                      "/",
                                      null,
-                                     true
+                                     true,
+                                     1073741824
                              ));
+                             // Do handle
                              pipeline.addLast(new ApricotRequestHandler(ApricotServerNetworkIo.this.server));
                          }
                      });

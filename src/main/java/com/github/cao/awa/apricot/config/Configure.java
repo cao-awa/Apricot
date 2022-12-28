@@ -16,7 +16,7 @@ import java.util.function.*;
  * @author cao_awa
  */
 public class Configure {
-    private static final @NotNull Logger LOGGER = LogManager.getLogger();
+    private static final @NotNull Logger LOGGER = LogManager.getLogger("Configure");
     private final @NotNull Map<String, Map<String, String>> warning = new Object2ObjectOpenHashMap<>();
     private final @NotNull Map<String, String> configs = new Object2ObjectOpenHashMap<>();
     private @NotNull Supplier<String> loader;
@@ -61,7 +61,7 @@ public class Configure {
                                .strip();
                     if (line.startsWith("#")) {
                         // Note here
-                        LOGGER.debug("Note: " + line);
+                        LOGGER.debug("Configure note: " + line);
                     } else {
                         int note = line.indexOf("#");
                         if (note != - 1) {
@@ -69,7 +69,7 @@ public class Configure {
                                     0,
                                     note
                             );
-                            //  LOGGER.warn("The # should not be appear in properties line, ignored it");
+                            LOGGER.warn("The '#' should not be appear in properties line, ignored it");
                         }
                         int delimiter = line.indexOf("=");
                         if (delimiter == - 1) {
