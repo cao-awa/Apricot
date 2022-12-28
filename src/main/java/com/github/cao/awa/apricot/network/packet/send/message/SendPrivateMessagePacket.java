@@ -74,9 +74,14 @@ public class SendPrivateMessagePacket extends Packet {
     }
 
     @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
     public void write(PacketJSONBufWriter writer) {
         writer.take()
-              .put(
+              .fluentPut(
                       "action",
                       "send_private_msg"
               );

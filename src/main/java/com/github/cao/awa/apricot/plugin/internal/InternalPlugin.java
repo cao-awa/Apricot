@@ -15,6 +15,7 @@ public class InternalPlugin extends Plugin {
 
     public InternalPlugin() {
         registerHandler(new InternalMessageReceivedHandler());
+        registerHandler(new InternalEchoResultHandler());
 //        registerHandler(new InternalMessageReceivedHandler2());
     }
 

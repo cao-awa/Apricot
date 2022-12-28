@@ -78,9 +78,14 @@ public class SendMessagePacket extends Packet {
     }
 
     @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
     public void write(PacketJSONBufWriter writer) {
         writer.take()
-              .put(
+              .fluentPut(
                       "action",
                       "send_msg"
               );

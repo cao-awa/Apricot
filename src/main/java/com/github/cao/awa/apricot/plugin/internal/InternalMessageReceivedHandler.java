@@ -44,7 +44,9 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                          "awa",
                          event.getPacket()
                               .getResponseId()
-                 ));
+                 ), echo -> {
+                     System.out.println(echo.getIdentifier());
+                 });
         }
     }
 }

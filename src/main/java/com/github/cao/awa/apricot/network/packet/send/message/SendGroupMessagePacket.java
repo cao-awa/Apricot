@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.send.message;
 
+import com.github.cao.awa.apricot.identifier.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
@@ -20,6 +21,10 @@ public class SendGroupMessagePacket extends Packet {
         this.message = message;
         this.userId = userId;
         this.autoEscape = autoEscape;
+    }
+
+    public boolean isAutoEscape() {
+        return autoEscape;
     }
 
     public void compoundId(Function<Long, Long> function) {
@@ -48,9 +53,14 @@ public class SendGroupMessagePacket extends Packet {
     }
 
     @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
     public void write(PacketJSONBufWriter writer) {
         writer.take()
-              .put(
+              .fluentPut(
                       "action",
                       "send_group_msg"
               );

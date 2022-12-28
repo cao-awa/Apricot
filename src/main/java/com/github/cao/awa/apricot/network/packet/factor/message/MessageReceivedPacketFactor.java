@@ -20,7 +20,7 @@ public class MessageReceivedPacketFactor extends PacketFactor {
                 request.getLong("self_id"),
                 messageType == SendMessageType.PRIVATE ?
                 PribvateMessageSender.create(request.getJSONObject("sender")) :
-                GroupMessageSender.create(request.getJSONObject("sender")),
+                messageType == SendMessageType.GROUP ? GroupMessageSender.create(request.getJSONObject("sender")) : new GuildMessageSender(),
                 messageType == SendMessageType.PRIVATE ?
                 userId :
                 messageType == SendMessageType.GROUP ? request.getLong("group_id") : - 1,

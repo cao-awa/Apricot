@@ -2,17 +2,20 @@ package com.github.cao.awa.apricot.network.handler;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
 
+import java.util.function.*;
+
 /**
  * Request handler of apricot bot server.
  *
- * @since 1.0.0
  * @author 草二号机
+ * @since 1.0.0
  */
 public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private static final Logger LOGGER = LogManager.getLogger("ApricotRequestHandler");
@@ -23,7 +26,10 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
 
     public ApricotRequestHandler(ApricotServer server) {
         this.server = server;
-        this.proxy = new ApricotProxy(this);
+        this.proxy = new ApricotProxy(
+                this,
+                server
+        );
     }
 
     @Override
@@ -39,6 +45,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
             final TextWebSocketFrame textSocketFrame = textFrame.copy();
             this.server.submitTask(() -> {
                 JSONObject request = JSONObject.parseObject(textSocketFrame.text());
+                System.out.println(request);
                 ReadonlyPacket packet = this.server.createPacket(request);
                 if (packet != null) {
                     packet.fireEvent(
@@ -56,6 +63,23 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
 
     public void send(Packet packet, Runnable callback) {
         packet.writeAndFlush(this.writer);
+        callback.run();
+    }
+
+    public void send(Packet packet, Consumer<EchoResultPacket> echo) {
+        packet.writeAndFlush(this.writer);
+        this.server.echo(
+                packet,
+                echo
+        );
+    }
+
+    public void send(Packet packet, Consumer<EchoResultPacket> echo, Runnable callback) {
+        packet.writeAndFlush(this.writer);
+        this.server.echo(
+                packet,
+                echo
+        );
         callback.run();
     }
 }

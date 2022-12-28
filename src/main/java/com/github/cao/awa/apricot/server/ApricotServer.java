@@ -10,8 +10,12 @@ import com.github.cao.awa.apricot.network.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.*;
+import com.github.cao.awa.apricot.network.packet.factor.response.*;
+import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.resources.loader.*;
+import com.github.cao.awa.apricot.server.echo.*;
+import com.github.cao.awa.apricot.server.event.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import it.unimi.dsi.fastutil.objects.*;
@@ -20,6 +24,7 @@ import org.apache.logging.log4j.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.function.*;
 
 public class ApricotServer {
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
@@ -27,7 +32,8 @@ public class ApricotServer {
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
-    private Executor eventExecutor = Executors.newCachedThreadPool();
+    private EventManager eventManager;
+    private EchoManager echoManager;
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
 
@@ -66,15 +72,36 @@ public class ApricotServer {
 
         if (this.configs.get("event.threadpool.enable")
                         .equals("true")) {
-            this.eventExecutor = Executors.newCachedThreadPool();
+            this.eventManager = new EventManager(
+                    Executors.newCachedThreadPool(),
+                    this.plugins
+            );
         } else {
-            this.eventExecutor = Executors.newSingleThreadExecutor();
+            this.eventManager = new EventManager(
+                    Executors.newSingleThreadExecutor(),
+                    this.plugins
+            );
+        }
+
+        if (this.configs.get("task.threadpool.enable")
+                        .equals("true")) {
+            this.taskExecutor = Executors.newCachedThreadPool();
+        } else {
+            this.taskExecutor = Executors.newSingleThreadExecutor();
+        }
+
+        if (this.configs.get("echo.threadpool.enable")
+                        .equals("true")) {
+            this.echoManager = new EchoManager(Executors.newCachedThreadPool());
+        } else {
+            this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
         }
     }
 
     public void setupNetwork() throws Exception {
         // Setup packet deserializers
         this.packetDeserializers.register(new MessageReceivedPacketFactor());
+        this.packetDeserializers.register(new EchoResultPacketFactor());
 
         // Setup CQ deserializers
         this.cqDeserializers.register(new CqImageFactor());
@@ -114,12 +141,32 @@ public class ApricotServer {
      * @author 草二号机
      * @since 1.0.0
      */
-    public void fireEvent(Event event) {
-        this.plugins.values()
-                    .forEach(plugin -> this.eventExecutor.execute(() -> plugin.fireEvent(event)));
+    public void fireEvent(Event<?> event) {
+        this.eventManager.fireEvent(event);
     }
 
     public void submitTask(Runnable runnable) {
         this.taskExecutor.execute(runnable);
+    }
+
+    public void echo(Packet packet, Consumer<EchoResultPacket> action) {
+        this.echoManager.echo(
+                packet.getIdentifier(),
+                action
+        );
+    }
+
+    public void echo(String identifier, Consumer<EchoResultPacket> action) {
+        this.echoManager.echo(
+                identifier,
+                action
+        );
+    }
+
+    public void echo(String identifier, EchoResultPacket packet) {
+        this.echoManager.echo(
+                identifier,
+                packet
+        );
     }
 }

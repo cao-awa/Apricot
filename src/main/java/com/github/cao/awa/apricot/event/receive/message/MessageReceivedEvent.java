@@ -6,12 +6,9 @@ import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.*;
 
-public class MessageReceivedEvent extends Event {
-    private final MessageReceivedPacket packet;
-
+public class MessageReceivedEvent extends Event<MessageReceivedPacket> {
     public MessageReceivedEvent(ApricotProxy handler, MessageReceivedPacket packet) {
-        super(handler);
-        this.packet = packet;
+        super(handler, packet);
     }
 
     @Override
@@ -33,9 +30,5 @@ public class MessageReceivedEvent extends Event {
         if (handler instanceof MessageReceivedEventHandler messageReceivedHandler) {
             messageReceivedHandler.onMessageReceived(this);
         }
-    }
-
-    public MessageReceivedPacket getPacket() {
-        return this.packet;
     }
 }

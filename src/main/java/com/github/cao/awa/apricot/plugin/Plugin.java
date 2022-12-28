@@ -87,7 +87,7 @@ public abstract class Plugin implements Comparable<Plugin> {
      * @author 草二号机
      * @since 1.0.0
      */
-    public void fireEvent(Event event) {
+    public void fireEvent(Event<?> event) {
         List<EventHandler> handlers = this.handlers.get(event.getName());
         if (handlers != null) {
             handlers.forEach(event::entrust);

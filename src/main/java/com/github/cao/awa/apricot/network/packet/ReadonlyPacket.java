@@ -51,4 +51,9 @@ public abstract class ReadonlyPacket extends Packet {
      * @since 1.0.0
      */
     public abstract void fireEvent(ApricotServer server, ApricotProxy proxy);
+
+    @Override
+    public boolean shouldEcho() {
+        return false;
+    }
 }
