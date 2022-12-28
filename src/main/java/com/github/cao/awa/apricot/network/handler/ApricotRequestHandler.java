@@ -8,6 +8,7 @@ import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
+import org.jetbrains.annotations.*;
 
 import java.util.function.*;
 
@@ -23,7 +24,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     private final ApricotProxy proxy;
     private PacketJSONBufWriter writer;
     private Channel channel;
-    private StringBuilder fragment = null;
+    private final @NotNull StringBuilder fragment = new StringBuilder();
 
     public ApricotRequestHandler(ApricotServer server) {
         this.server = server;
@@ -46,19 +47,20 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
         this.server.getTrafficsCounter()
-                   .in(frame.content().array().length);
+                   .in(frame.content()
+                            .array().length);
         this.server.getPacketsCounter()
                    .in(1);
         if (frame instanceof TextWebSocketFrame textFrame) {
             if (frame.isFinalFragment()) {
-                if (this.fragment != null) {
+                if (this.fragment.length() > 0) {
                     handleRequest(new TextWebSocketFrame(this.fragment.toString()));
-                    this.fragment = null;
+                    this.fragment.setLength(0);
                 }
                 handleRequest(textFrame);
             } else {
-                if (this.fragment == null) {
-                    this.fragment = new StringBuilder(textFrame.text());
+                if (this.fragment.length() == 0) {
+                    this.fragment.append(textFrame.text());
                 } else {
                     LOGGER.warn("Occurs unexpected fragment appended");
                 }
@@ -74,7 +76,6 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
 
     public void handleRequest(TextWebSocketFrame frame) {
         String text = frame.text();
-        LOGGER.info(text);
         this.server.submitTask(() -> {
             JSONObject request = JSONObject.parseObject(text);
             ReadonlyPacket packet = this.server.createPacket(request);

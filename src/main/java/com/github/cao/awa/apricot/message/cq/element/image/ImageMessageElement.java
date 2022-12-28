@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.message.cq.image;
+package com.github.cao.awa.apricot.message.cq.element.image;
 
 import com.github.cao.awa.apricot.message.*;
 
@@ -33,6 +33,11 @@ public class ImageMessageElement extends MessageElement {
     public String toPlainText() {
         return "[CQ:image,file=" + this.file + ",url=" + this.url + (this.subType == null ?
                                                                      "" :
-                                                                     ",subType=" + subType) + "]";
+                                                                     ",subType=" + this.subType) + "]";
+    }
+
+    @Override
+    public String getShortName() {
+        return "ImageMessageElement{" + this.url + "}";
     }
 }

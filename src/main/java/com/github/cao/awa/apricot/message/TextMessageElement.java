@@ -21,4 +21,9 @@ public final class TextMessageElement extends MessageElement {
     public String toPlainText() {
         return this.text;
     }
+
+    @Override
+    public String getShortName() {
+        return "TextMessageElement{" + this.text + "}";
+    }
 }

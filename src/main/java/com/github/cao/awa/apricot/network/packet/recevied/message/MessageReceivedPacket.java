@@ -15,14 +15,26 @@ public class MessageReceivedPacket extends ReadonlyPacket {
     private final MessageSender sender;
     private final long responseId;
     private final long timestamp;
+    private final long messageId;
+    private final long targetId;
 
-    public MessageReceivedPacket(SendMessageType type, Message message, long botId, MessageSender sender, long responseId, long timestamp) {
+    public MessageReceivedPacket(SendMessageType type, Message message, long botId, MessageSender sender, long responseId, long timestamp, long messageId, long targetId) {
         this.type = type;
         this.message = message;
         this.botId = botId;
         this.sender = sender;
         this.responseId = responseId;
         this.timestamp = timestamp;
+        this.messageId = messageId;
+        this.targetId = targetId;
+    }
+
+    public long getMessageId() {
+        return messageId;
+    }
+
+    public long getTargetId() {
+        return targetId;
     }
 
     public long getTimestamp() {

@@ -1,13 +1,33 @@
 package com.github.cao.awa.apricot.plugin.internal;
 
+import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
+import com.github.cao.awa.apricot.resources.loader.*;
+import com.github.cao.awa.apricot.utils.io.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+import it.unimi.dsi.fastutil.objects.*;
 import org.apache.logging.log4j.*;
+
+import java.util.*;
 
 public class InternalMessageReceivedHandler extends MessageReceivedEventHandler {
     private static final Logger LOGGER = LogManager.getLogger("InternalMessageHandler");
+
+    private static final Map<String, String> replay = EntrustEnvironment.operation(
+            new Object2ObjectOpenHashMap<>(),
+            map -> {
+                JSONObject json = JSONObject.parseObject(IOUtil.read(ResourcesLoader.getResource("kv.json")));
+                json.forEach((k, v) -> {
+                    map.put(
+                            k,
+                            v.toString()
+                    );
+                });
+            }
+    );
 
     /**
      * Process event.
@@ -24,17 +44,14 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                          .getSender()
                          .getName() + ": " + event.getPacket()
                                                   .getMessage()
-                                                  .get(0)
-                                                  .toPlainText());
+                                                  .toString());
         if (event.getPacket()
                  .getType() == SendMessageType.PRIVATE && event.getPacket()
                                                                .getMessage()
                                                                .handleMessage(
                                                                        element -> {
                                                                            if (element instanceof TextMessageElement text) {
-                                                                               return text.getText()
-                                                                                          .equals("awa") || text.getText()
-                                                                                                                .equals("aaawww114514");
+                                                                               return replay.containsKey(text.getText());
                                                                            }
                                                                            return false;
                                                                        },
@@ -49,7 +66,13 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                  .send(
                          new SendMessagePacket(
                                  SendMessageType.PRIVATE,
-                                 "草",
+                                 replay.get(event.getPacket()
+                                                 .getMessage()
+                                                 .get(
+                                                         0,
+                                                         TextMessageElement.class
+                                                 )
+                                                 .getText()),
                                  event.getPacket()
                                       .getResponseId()
                          ),

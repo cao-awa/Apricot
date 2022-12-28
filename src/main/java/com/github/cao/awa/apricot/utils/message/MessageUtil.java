@@ -10,6 +10,7 @@ public class MessageUtil {
     public static Message process(ApricotServer server, String content) {
         int cursor = 0;
         int pos;
+
         List<MessageElement> elements = new ObjectArrayList<>();
         while ((pos = content.indexOf(
                 "[CQ:",
@@ -17,21 +18,25 @@ public class MessageUtil {
         )) != - 1) {
             // Process plain text.
             if (pos > cursor) {
-                elements.add(new TextMessageElement(content.substring(
+                String result = stripAndTrim(content.substring(
                         cursor,
                         pos
-                )));
+                ));
+                if (result.length() > 0) {
+                    elements.add(new TextMessageElement(result));
+                }
             }
             // Find cq code end.
             int endPos = content.indexOf(
                     "]",
-                    pos
+                    pos + 4
             );
             // Processing cq.
             String cq = content.substring(
                     pos + 1,
                     endPos
             );
+
             // Split the cq code.
             List<String> args = List.of(cq.split(","));
 
@@ -42,14 +47,21 @@ public class MessageUtil {
             }
 
             // Update cursors
-            cursor = endPos + 2;
+            cursor = endPos + 1;
         }
-        // If no cq code, mean this is fully plain text, process for all.
-        if (elements.size() == 0) {
-            elements.add(new TextMessageElement(content));
+        if (cursor < content.length()) {
+            // It means no CQ codes
+            String source = content.substring(cursor);
+            String result = stripAndTrim(content);
+            elements.add(result.length() > 0 ? new TextMessageElement(result) : new TextMessageElement(source));
         }
 
         // Let all prepared element participate in message
         return new Message().participateAll(elements);
+    }
+
+    public static String stripAndTrim(String source) {
+        return source.strip()
+                     .trim();
     }
 }

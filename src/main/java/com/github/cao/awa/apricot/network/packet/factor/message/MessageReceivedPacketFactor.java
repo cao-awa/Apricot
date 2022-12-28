@@ -14,6 +14,7 @@ public class MessageReceivedPacketFactor extends PacketFactor {
     public ReadonlyPacket create(ApricotServer server, JSONObject request) {
         SendMessageType messageType = SendMessageType.of(request.getString("message_type"));
         long userId = request.getLong("user_id");
+        long targetId = request.containsKey("target_id") ? request.getLong("target_id") : -1;
         return new MessageReceivedPacket(
                 messageType,
                 MessageUtil.process(server, request.getString("message")),
@@ -24,7 +25,9 @@ public class MessageReceivedPacketFactor extends PacketFactor {
                 messageType == SendMessageType.PRIVATE ?
                 userId :
                 messageType == SendMessageType.GROUP ? request.getLong("group_id") : - 1,
-                request.getLong("time")
+                request.getLong("time"),
+                request.getLong("message_id"),
+                targetId
         );
     }
 

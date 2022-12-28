@@ -45,4 +45,12 @@ public class Message {
         }
         return builder.toString();
     }
+
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (MessageElement element : this.elements) {
+            builder.append(element.getShortName());
+        }
+        return builder.toString();
+    }
 }

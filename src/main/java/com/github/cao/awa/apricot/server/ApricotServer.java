@@ -5,7 +5,9 @@ import com.github.cao.awa.apricot.config.*;
 import com.github.cao.awa.apricot.event.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.cq.factor.*;
+import com.github.cao.awa.apricot.message.cq.factor.at.*;
 import com.github.cao.awa.apricot.message.cq.factor.image.*;
+import com.github.cao.awa.apricot.message.cq.factor.replay.*;
 import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
@@ -33,12 +35,13 @@ public class ApricotServer {
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
-    private EventManager eventManager;
-    private EchoManager echoManager;
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
+    private EventManager eventManager;
+    private EchoManager echoManager;
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
+
     public ApricotServer() {
     }
 
@@ -115,6 +118,8 @@ public class ApricotServer {
 
         // Setup CQ deserializers
         this.cqDeserializers.register(new CqImageFactor());
+        this.cqDeserializers.register(new CqReplyFactor());
+        this.cqDeserializers.register(new CqAtFactor());
 
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
