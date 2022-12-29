@@ -43,4 +43,9 @@ public abstract class AccomplishPlugin extends Plugin {
             handlers.forEach(event::fireAccomplish);
         }
     }
+
+    @Override
+    public boolean shouldAsync() {
+        return true;
+    }
 }

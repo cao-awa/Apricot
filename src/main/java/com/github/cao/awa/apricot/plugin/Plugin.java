@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.plugin;
 
+import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -12,6 +13,16 @@ import java.util.*;
  * @since 1.0.0
  */
 public abstract class Plugin implements Comparable<Plugin> {
+    private ApricotServer server;
+
+    public ApricotServer getServer() {
+        return server;
+    }
+
+    public void setServer(ApricotServer server) {
+        this.server = server;
+    }
+
     /**
      * Compares this object with the specified object for order.  Returns a
      * negative integer, zero, or a positive integer as this object is less
@@ -54,4 +65,10 @@ public abstract class Plugin implements Comparable<Plugin> {
     }
 
     public abstract UUID getUuid();
+
+    public abstract void onInitialize();
+
+    public abstract String getName();
+
+    public abstract boolean shouldAsync();
 }

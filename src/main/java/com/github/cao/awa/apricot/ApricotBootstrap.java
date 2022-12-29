@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot;
 import com.github.cao.awa.apricot.plugin.internal.firewall.*;
 import com.github.cao.awa.apricot.plugin.internal.plugin.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.utils.times.*;
 
 public class ApricotBootstrap {
     public static void main(String[] args) {
@@ -10,15 +11,15 @@ public class ApricotBootstrap {
     }
 
     public void bootstrap() {
+        long start = TimeUtil.millions();
         ApricotServer server = new ApricotServer();
-
-        server.registerPlugin(new InternalPlugin());
-        server.registerFirewall(new InternalFirewall());
 
         try {
             server.startup();
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        System.out.println("Done in " + TimeUtil.processMillion(start));
     }
 }

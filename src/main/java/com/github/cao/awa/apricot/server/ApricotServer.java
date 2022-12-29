@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.server;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.config.*;
+import com.github.cao.awa.apricot.devlop.clazz.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.cq.factor.*;
@@ -14,15 +15,16 @@ import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
+import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
+import com.github.cao.awa.apricot.server.service.plugin.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import it.unimi.dsi.fastutil.objects.*;
 import org.apache.logging.log4j.*;
 
 import java.io.*;
@@ -31,18 +33,19 @@ import java.util.concurrent.*;
 import java.util.function.*;
 
 public class ApricotServer {
+    public static final ClazzScanner CLAZZ_SCANNER = new ClazzScanner(Plugin.class);
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
-    private final Map<UUID, AccomplishPlugin> plugins = new Object2ObjectOpenHashMap<>();
-    private final Map<UUID, FirewallPlugin> firewalls = new Object2ObjectOpenHashMap<>();
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
+    private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
+    private boolean active = true;
 
     public ApricotServer() {
     }
@@ -56,39 +59,51 @@ public class ApricotServer {
     }
 
     public void startup() throws Exception {
+        LOGGER.info("Startup apricot bot server");
+        setupConfig();
         setupServer();
+        setupPlugins();
         setupNetwork();
     }
 
-    public void setupServer() {
-        setupConfig();
+    public void setupPlugins() {
+        this.plugins.loadPlugins();
+    }
 
-        if (this.configs.get("event.threadpool.enable")
-                        .equals("true")) {
+    public void setupServer() {
+        if (this.configs.getBoolean("plugin.threadpool.enable")) {
+            this.plugins = new PluginManager(
+                    this,
+                    Executors.newCachedThreadPool()
+            );
+        } else {
+            this.plugins = new PluginManager(
+                    this,
+                    Executors.newSingleThreadExecutor()
+            );
+        }
+
+        if (this.configs.getBoolean("event.threadpool.enable")) {
             this.eventManager = new EventManager(
                     this,
                     Executors.newCachedThreadPool(),
-                    this.plugins,
-                    this.firewalls
+                    this.plugins
             );
         } else {
             this.eventManager = new EventManager(
                     this,
                     Executors.newSingleThreadExecutor(),
-                    this.plugins,
-                    this.firewalls
+                    this.plugins
             );
         }
 
-        if (this.configs.get("task.threadpool.enable")
-                        .equals("true")) {
+        if (this.configs.getBoolean("task.threadpool.enable")) {
             this.taskExecutor = Executors.newCachedThreadPool();
         } else {
             this.taskExecutor = Executors.newSingleThreadExecutor();
         }
 
-        if (this.configs.get("echo.threadpool.enable")
-                        .equals("true")) {
+        if (this.configs.getBoolean("echo.threadpool.enable")) {
             this.echoManager = new EchoManager(Executors.newCachedThreadPool());
         } else {
             this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
@@ -141,12 +156,21 @@ public class ApricotServer {
                             "epoll"
                     )
                     .setDefault(
+                            "plugin.async.enable",
+                            false
+                    )
+                    .setDefault(
+                            "plugin.threadpool.enable",
+                            true
+                    )
+                    .setDefault(
                             "server.port",
                             1145
                     );
     }
 
-    public void setupNetwork() throws Exception {
+    public void setupNetwork() {
+        LOGGER.info("Startup apricot bot server network");
         // Setup packet deserializers
         this.packetDeserializers.register(new MessageReceivedPacketFactor());
         this.packetDeserializers.register(new EchoResultPacketFactor());
@@ -159,7 +183,11 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        this.networkIo.start(configs.getInteger("server.port"));
+        submitTask(() -> EntrustEnvironment.trys(() -> this.networkIo.start(configs.getInteger("server.port"))));
+    }
+
+    public void submitTask(Runnable runnable) {
+        this.taskExecutor.execute(runnable);
     }
 
     public ReadonlyPacket createPacket(JSONObject json) {
@@ -177,17 +205,11 @@ public class ApricotServer {
     }
 
     public void registerPlugin(AccomplishPlugin plugin) {
-        this.plugins.put(
-                plugin.getUuid(),
-                plugin
-        );
+        this.plugins.registerAccomplish(plugin);
     }
 
     public void registerFirewall(FirewallPlugin plugin) {
-        this.firewalls.put(
-                plugin.getUuid(),
-                plugin
-        );
+        this.plugins.registerFirewall(plugin);
     }
 
     /**
@@ -200,10 +222,6 @@ public class ApricotServer {
      */
     public void fireEvent(Event<?> event) {
         this.eventManager.fireEvent(event);
-    }
-
-    public void submitTask(Runnable runnable) {
-        this.taskExecutor.execute(runnable);
     }
 
     public void echo(Packet packet, Consumer<EchoResultPacket> action) {
@@ -234,5 +252,21 @@ public class ApricotServer {
 
     public boolean shouldCaverMessage() {
         return this.configs.getBoolean("superfluous.space.remove");
+    }
+
+    public boolean shouldAsyncLoadPlugins() {
+        return this.configs.getBoolean("plugin.async.enable");
+    }
+
+    public synchronized void shutdown() {
+        if (this.active) {
+            LOGGER.info("Apricot bot server shutting down");
+            this.networkIo.shutdown();
+            this.eventManager.shutdown();
+            this.echoManager.shutdown();
+            this.plugins.shutdown();
+            LOGGER.info("Apricot bot server is shutdown");
+            System.exit(0);
+        }
     }
 }

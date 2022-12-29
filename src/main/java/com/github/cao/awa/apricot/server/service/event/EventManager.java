@@ -2,47 +2,45 @@ package com.github.cao.awa.apricot.server.service.event;
 
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.immigration.illegal.*;
-import com.github.cao.awa.apricot.plugin.accomplish.*;
-import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
+import com.github.cao.awa.apricot.server.service.plugin.*;
 
-import java.util.*;
 import java.util.concurrent.*;
 
 public class EventManager implements ConcurrentService {
     private final ApricotServer server;
     private final Executor executor;
-    private final Map<UUID, AccomplishPlugin> plugins;
-    private final Map<UUID, FirewallPlugin> firewalls;
+    private final PluginManager plugins;
+    private boolean active = true;
 
-    public EventManager(ApricotServer server, Executor executor, Map<UUID, AccomplishPlugin> plugins, Map<UUID, FirewallPlugin> firewalls) {
+    public EventManager(ApricotServer server, Executor executor, PluginManager plugins) {
         this.server = server;
         this.executor = executor;
         this.plugins = plugins;
-        this.firewalls = firewalls;
     }
 
     public void fireEvent(Event<?> event) {
-        this.executor.execute(() -> {
-            if (this.firewalls.values()
-                              .stream()
-                              .allMatch(firewall -> firewall.fireEvent(event))) {
-                this.plugins.values()
-                            .forEach(plugin -> this.executor.execute(() -> plugin.fireEvent(event)));
-            } else {
-                this.server.fireEvent(new IllegalImmigrationEvent(
-                                    event.getProxy(),
-                                    event
-                            ));
-            }
-        });
-
-
+        if (this.active) {
+            this.executor.execute(() -> {
+                if (this.plugins.getFirewallPlugins()
+                                .stream()
+                                .allMatch(firewall -> firewall.fireEvent(event))) {
+                    this.plugins.getAccomplishPlugins()
+                                .forEach(plugin -> this.executor.execute(() -> plugin.fireEvent(event)));
+                } else {
+                    this.server.fireEvent(new IllegalImmigrationEvent(
+                            event.getProxy(),
+                            event
+                    ));
+                }
+            });
+        }
     }
 
     @Override
     public void shutdown() {
+        this.active = false;
         if (this.executor instanceof ThreadPoolExecutor threadPool) {
             threadPool.shutdown();
         }

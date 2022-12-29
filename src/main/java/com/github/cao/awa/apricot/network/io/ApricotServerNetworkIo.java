@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.io;
 
-import com.github.cao.awa.apricot.network.handler.*;
+import com.github.cao.awa.apricot.network.io.channel.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
@@ -8,11 +8,9 @@ import io.netty.channel.epoll.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.*;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.http.*;
-import io.netty.handler.codec.http.websocketx.*;
-import io.netty.handler.codec.http.websocketx.extensions.compression.*;
 import org.apache.logging.log4j.*;
 
+import java.util.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
@@ -33,10 +31,14 @@ public class ApricotServerNetworkIo {
             Executors.newCachedThreadPool()
     );
 
+    private final ApricotChannelInitializer channelInitializer;
+
     private final ApricotServer server;
+    private final List<ChannelFuture> channels = new CopyOnWriteArrayList<>();
 
     public ApricotServerNetworkIo(ApricotServer server) {
         this.server = server;
+        this.channelInitializer = new ApricotChannelInitializer(server);
     }
 
     public void start(final int port) throws Exception {
@@ -59,43 +61,38 @@ public class ApricotServerNetworkIo {
         EventLoopGroup worker = lazy.get();
         ServerBootstrap bootstrap = new ServerBootstrap();
         try {
-            bootstrap.channel(channel)
-                     .group(
-                             boss,
-                             worker
-                     )
-                     .option(
-                             // Real-time response is necessary
-                             // Enable TCP No delay to improve response speeds
-                             ChannelOption.TCP_NODELAY,
-                             true
-                     )
-                     .childHandler(new ChannelInitializer<SocketChannel>() {
-                         @Override
-                         protected void initChannel(SocketChannel ch) {
-                             ChannelPipeline pipeline = ch.pipeline();
-                             // Do decodes
-                             pipeline.addLast(new HttpServerCodec());
-                             pipeline.addLast(new HttpObjectAggregator(65536));
-                             pipeline.addLast(new WebSocketServerCompressionHandler());
-                             pipeline.addLast(new WebSocketServerProtocolHandler(
-                                     "/",
-                                     null,
-                                     true,
-                                     1073741824
-                             ));
-                             // Do handle
-                             pipeline.addLast(new ApricotRequestHandler(ApricotServerNetworkIo.this.server));
-                         }
-                     });
-            ChannelFuture future = bootstrap.bind(port)
-                                            .sync();
-            future.channel()
-                  .closeFuture()
-                  .sync();
+            this.channels.add(bootstrap.channel(channel)
+                                       .group(
+                                               boss,
+                                               worker
+                                       )
+                                       .option(
+                                               // Real-time response is necessary
+                                               // Enable TCP No delay to improve response speeds
+                                               ChannelOption.TCP_NODELAY,
+                                               true
+                                       )
+                                       .childHandler(channelInitializer)
+                                       .bind(port)
+                                       .sync()
+                                       .channel()
+                                       .closeFuture()
+                                       .syncUninterruptibly());
         } finally {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
+        }
+    }
+
+    public void shutdown() {
+        for (ChannelFuture channelFuture : this.channels) {
+            try {
+                channelFuture.channel()
+                             .close()
+                             .sync();
+            } catch (InterruptedException interruptedException) {
+                LOGGER.error("Interrupted whilst closing channel");
+            }
         }
     }
 }

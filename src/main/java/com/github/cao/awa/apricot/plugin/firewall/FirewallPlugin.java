@@ -36,4 +36,9 @@ public abstract class FirewallPlugin extends Plugin {
         return this.handlers.stream()
                             .allMatch(event::fireFirewall);
     }
+
+    @Override
+    public boolean shouldAsync() {
+        return false;
+    }
 }
