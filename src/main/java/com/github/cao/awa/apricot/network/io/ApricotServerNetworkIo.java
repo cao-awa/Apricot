@@ -74,10 +74,10 @@ public class ApricotServerNetworkIo {
                                        )
                                        .childHandler(channelInitializer)
                                        .bind(port)
-                                       .sync()
+                                       .syncUninterruptibly()
                                        .channel()
                                        .closeFuture()
-                                       .syncUninterruptibly());
+                                       .sync());
         } finally {
             boss.shutdownGracefully();
             worker.shutdownGracefully();
