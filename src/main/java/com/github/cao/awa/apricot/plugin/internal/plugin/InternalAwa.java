@@ -41,15 +41,15 @@ public class InternalAwa extends MessageReceivedEventHandler {
      */
     @Override
     public void onMessageReceived(MessageReceivedEvent event) {
-        LOGGER.info(event.getPacket()
-                         .getSender()
-                         .getName() + ": " + event.getPacket()
-                                                  .getMessage()
-                                                  .toString());
-
-        LOGGER.info(event.getPacket()
-                         .getMessage()
-                         .carver(TextMessageElement.class).toPlainText());
+//        LOGGER.info(event.getPacket()
+//                         .getSender()
+//                         .getName() + ": " + event.getPacket()
+//                                                  .getMessage()
+//                                                  .toString());
+//
+//        LOGGER.info(event.getPacket()
+//                         .getMessage()
+//                         .carver(TextMessageElement.class).toPlainText());
         if (event.getPacket()
                  .getType() == SendMessageType.PRIVATE && event.getPacket()
                                                                .getMessage()

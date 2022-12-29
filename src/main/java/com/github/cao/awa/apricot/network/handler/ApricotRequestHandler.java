@@ -20,7 +20,8 @@ import java.util.function.*;
  */
 public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private static final Logger LOGGER = LogManager.getLogger("ApricotRequestHandler");
-    private static final Consumer<EchoResultPacket> DO_NO_HANDLE_ECHO = result -> {};
+    private static final Consumer<EchoResultPacket> DO_NO_HANDLE_ECHO = result -> {
+    };
     private final @NotNull ApricotServer server;
     private final @NotNull ApricotProxy proxy;
     private final @NotNull StringBuilder fragment = new StringBuilder();
@@ -82,7 +83,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     }
 
     public void handleRequest(TextWebSocketFrame frame) {
-       final String text = frame.text();
+        final String text = frame.text();
         this.server.submitTask(() -> {
             final ReadonlyPacket packet = this.server.createPacket(JSONObject.parseObject(text));
             packet.fireEvent(
@@ -92,14 +93,17 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
         });
     }
 
-    public void send(Packet packet) {
-        this.server.echo(packet, DO_NO_HANDLE_ECHO);
-        packet.writeAndFlush(this.writer);
-    }
-
     public void send(Packet packet, Runnable callback) {
         send(packet);
         callback.run();
+    }
+
+    public void send(Packet packet) {
+        this.server.echo(
+                packet,
+                DO_NO_HANDLE_ECHO
+        );
+        packet.writeAndFlush(this.writer);
     }
 
     public void send(Packet packet, Consumer<EchoResultPacket> echo) {

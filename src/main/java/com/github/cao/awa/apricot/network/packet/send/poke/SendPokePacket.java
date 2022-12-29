@@ -13,11 +13,13 @@ public class SendPokePacket extends Packet {
     private SendMessageType type;
     private long targetId;
     private long botId;
+    private long responseId;
 
-    public SendPokePacket(@NotNull SendMessageType type, long targetId, long botId) {
+    public SendPokePacket(@NotNull SendMessageType type, long targetId, long botId, long responseId) {
         this.type = type;
         this.targetId = targetId;
         this.botId = botId;
+        this.responseId = responseId;
     }
 
     public void compoundType(Function<SendMessageType, SendMessageType> function) {
@@ -70,8 +72,8 @@ public class SendPokePacket extends Packet {
                             this.targetId,
                             this.botId
                     ).toMessage(),
-                    this.targetId,
-                    this.botId,
+                    this.responseId,
+                    0,
                     false
             ).write(writer);
         } else {
@@ -80,7 +82,7 @@ public class SendPokePacket extends Packet {
                             this.targetId,
                             this.botId
                     ).toMessage(),
-                    this.targetId,
+                    this.responseId,
                     false
             ).write(writer);
         }

@@ -20,6 +20,7 @@ public class InternalPlugin extends AccomplishPlugin {
         registerHandler(new InternalAwa());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new InternalIllegalImmigrationHandler());
+        registerHandler(new PokeReciprocity());
     }
 
     @Override

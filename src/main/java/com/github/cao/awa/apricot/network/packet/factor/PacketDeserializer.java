@@ -18,6 +18,9 @@ public class PacketDeserializer {
         try {
             if (request.containsKey("post_type")) {
                 name = request.getString("post_type");
+                if (request.containsKey("sub_type")) {
+                    name = name + "-" + request.getString("sub_type");
+                }
             } else {
                 request = request.getJSONObject("echo");
                 name = request.getString("type");

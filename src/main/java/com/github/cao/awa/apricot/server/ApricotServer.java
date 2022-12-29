@@ -15,6 +15,7 @@ import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.invalid.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.*;
+import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.plugin.*;
@@ -178,6 +179,7 @@ public class ApricotServer {
         this.packetDeserializers.register(new MessageReceivedPacketFactor());
         this.packetDeserializers.register(new EchoResultPacketFactor());
         this.packetDeserializers.register(new InvalidDataReceivedPacketFactor());
+        this.packetDeserializers.register(new PokeReceivedPacketFactor());
 
         // Setup CQ deserializers
         this.cqDeserializers.register(new CqImageFactor());

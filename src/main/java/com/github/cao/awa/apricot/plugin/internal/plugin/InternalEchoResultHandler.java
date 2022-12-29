@@ -18,9 +18,6 @@ public class InternalEchoResultHandler extends EchoResultEventHandler {
      */
     @Override
     public void onResult(EchoResultEvent event) {
-        LOGGER.info("Message has an result, echo identifier is: {}",
-                    event.getPacket()
-                         .getIdentifier());
         event.getProxy().getServer().echo(event.getPacket().getIdentifier(), event.getPacket());
     }
 }

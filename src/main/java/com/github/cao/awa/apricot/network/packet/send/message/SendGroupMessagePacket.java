@@ -8,18 +8,18 @@ import org.jetbrains.annotations.*;
 import java.util.function.*;
 
 public class SendGroupMessagePacket extends Packet {
-    private long userId;
+    private long groupId;
     private @NotNull AssembledMessage message;
     private boolean autoEscape = false;
 
-    public SendGroupMessagePacket(@NotNull AssembledMessage message, long userId) {
+    public SendGroupMessagePacket(@NotNull AssembledMessage message, long groupId) {
         this.message = message;
-        this.userId = userId;
+        this.groupId = groupId;
     }
 
-    public SendGroupMessagePacket(@NotNull AssembledMessage message, long userId, boolean autoEscape) {
+    public SendGroupMessagePacket(@NotNull AssembledMessage message, long groupId, boolean autoEscape) {
         this.message = message;
-        this.userId = userId;
+        this.groupId = groupId;
         this.autoEscape = autoEscape;
     }
 
@@ -36,15 +36,15 @@ public class SendGroupMessagePacket extends Packet {
     }
 
     public void compoundId(Function<Long, Long> function) {
-        setUserId(function.apply(getUserId()));
+        setGroupId(function.apply(getGroupId()));
     }
 
-    private long getUserId() {
-        return this.userId;
+    private long getGroupId() {
+        return this.groupId;
     }
 
-    private void setUserId(long userId) {
-        this.userId = userId;
+    private void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
     public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
@@ -71,7 +71,7 @@ public class SendGroupMessagePacket extends Packet {
         this.message.incinerateMessage(message -> {
             new SendGroupMessagePacket(
                     message,
-                    this.userId,
+                    this.groupId,
                     this.autoEscape
             ).writeAndFlush(writer);
         });
@@ -87,7 +87,7 @@ public class SendGroupMessagePacket extends Packet {
               )
               .fluentPut(
                       "group_id",
-                      this.userId
+                      this.groupId
               )
               .fluentPut(
                       "auto_escape",

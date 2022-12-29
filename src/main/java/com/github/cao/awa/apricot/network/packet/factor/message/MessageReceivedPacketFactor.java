@@ -38,6 +38,6 @@ public class MessageReceivedPacketFactor extends PacketFactor {
 
     @Override
     public String getName() {
-        return "message";
+        return "message-normal";
     }
 }

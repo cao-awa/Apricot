@@ -16,7 +16,7 @@ public abstract class Packet {
     private final @Nullable String identifier;
 
     public Packet() {
-        this.identifier = shouldEcho() ? RandomIdentifier.randomIdentifier(256) : null;
+        this.identifier = shouldEcho() ? RandomIdentifier.randomIdentifier(32) : null;
     }
 
     public abstract boolean shouldEcho();
