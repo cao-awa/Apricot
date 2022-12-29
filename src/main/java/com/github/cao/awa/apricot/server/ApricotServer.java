@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.server;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.config.*;
-import com.github.cao.awa.apricot.event.*;
+import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.cq.factor.*;
 import com.github.cao.awa.apricot.message.cq.factor.at.*;
@@ -14,7 +14,8 @@ import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
-import com.github.cao.awa.apricot.plugin.*;
+import com.github.cao.awa.apricot.plugin.accomplish.*;
+import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
@@ -31,7 +32,8 @@ import java.util.function.*;
 
 public class ApricotServer {
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
-    private final Map<UUID, Plugin> plugins = new Object2ObjectOpenHashMap<>();
+    private final Map<UUID, AccomplishPlugin> plugins = new Object2ObjectOpenHashMap<>();
+    private final Map<UUID, FirewallPlugin> firewalls = new Object2ObjectOpenHashMap<>();
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
@@ -59,6 +61,41 @@ public class ApricotServer {
     }
 
     public void setupServer() {
+        setupConfig();
+
+        if (this.configs.get("event.threadpool.enable")
+                        .equals("true")) {
+            this.eventManager = new EventManager(
+                    this,
+                    Executors.newCachedThreadPool(),
+                    this.plugins,
+                    this.firewalls
+            );
+        } else {
+            this.eventManager = new EventManager(
+                    this,
+                    Executors.newSingleThreadExecutor(),
+                    this.plugins,
+                    this.firewalls
+            );
+        }
+
+        if (this.configs.get("task.threadpool.enable")
+                        .equals("true")) {
+            this.taskExecutor = Executors.newCachedThreadPool();
+        } else {
+            this.taskExecutor = Executors.newSingleThreadExecutor();
+        }
+
+        if (this.configs.get("echo.threadpool.enable")
+                        .equals("true")) {
+            this.echoManager = new EchoManager(Executors.newCachedThreadPool());
+        } else {
+            this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
+        }
+    }
+
+    public void setupConfig() {
         this.configs.init(() -> EntrustEnvironment.receptacle(receptacle -> {
             File config = new File("configs/bot-server.conf");
             if (! config.isFile()) {
@@ -83,32 +120,30 @@ public class ApricotServer {
             }
         }));
 
-        if (this.configs.get("event.threadpool.enable")
-                        .equals("true")) {
-            this.eventManager = new EventManager(
-                    Executors.newCachedThreadPool(),
-                    this.plugins
-            );
-        } else {
-            this.eventManager = new EventManager(
-                    Executors.newSingleThreadExecutor(),
-                    this.plugins
-            );
-        }
-
-        if (this.configs.get("task.threadpool.enable")
-                        .equals("true")) {
-            this.taskExecutor = Executors.newCachedThreadPool();
-        } else {
-            this.taskExecutor = Executors.newSingleThreadExecutor();
-        }
-
-        if (this.configs.get("echo.threadpool.enable")
-                        .equals("true")) {
-            this.echoManager = new EchoManager(Executors.newCachedThreadPool());
-        } else {
-            this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
-        }
+        this.configs.setDefault(
+                    "superfluous.space.remove",
+                    true
+            )
+                    .setDefault(
+                            "event.threadpool.enable",
+                            true
+                    )
+                    .setDefault(
+                            "task.threadpool.enable",
+                            true
+                    )
+                    .setDefault(
+                            "echo.threadpool.enable",
+                            true
+                    )
+                    .setDefault(
+                            "transport.type",
+                            "epoll"
+                    )
+                    .setDefault(
+                            "server.port",
+                            1145
+                    );
     }
 
     public void setupNetwork() throws Exception {
@@ -124,7 +159,7 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        this.networkIo.start(Integer.parseInt(configs.get("server.port")));
+        this.networkIo.start(configs.getInteger("server.port"));
     }
 
     public ReadonlyPacket createPacket(JSONObject json) {
@@ -141,8 +176,15 @@ public class ApricotServer {
         );
     }
 
-    public void registerPlugin(Plugin plugin) {
+    public void registerPlugin(AccomplishPlugin plugin) {
         this.plugins.put(
+                plugin.getUuid(),
+                plugin
+        );
+    }
+
+    public void registerFirewall(FirewallPlugin plugin) {
+        this.firewalls.put(
                 plugin.getUuid(),
                 plugin
         );
@@ -188,5 +230,9 @@ public class ApricotServer {
     public boolean useEpoll() {
         return this.configs.get("transport.type")
                            .equals("epoll");
+    }
+
+    public boolean shouldCaverMessage() {
+        return this.configs.getBoolean("superfluous.space.remove");
     }
 }

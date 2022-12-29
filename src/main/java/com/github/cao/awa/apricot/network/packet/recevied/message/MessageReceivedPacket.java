@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.recevied.message;
 
-import com.github.cao.awa.apricot.event.receive.message.*;
+import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
@@ -15,10 +15,10 @@ public class MessageReceivedPacket extends ReadonlyPacket {
     private final MessageSender sender;
     private final long responseId;
     private final long timestamp;
-    private final long messageId;
+    private final String messageId;
     private final long targetId;
 
-    public MessageReceivedPacket(SendMessageType type, Message message, long botId, MessageSender sender, long responseId, long timestamp, long messageId, long targetId) {
+    public MessageReceivedPacket(SendMessageType type, Message message, long botId, MessageSender sender, long responseId, long timestamp, String messageId, long targetId) {
         this.type = type;
         this.message = message;
         this.botId = botId;
@@ -29,7 +29,7 @@ public class MessageReceivedPacket extends ReadonlyPacket {
         this.targetId = targetId;
     }
 
-    public long getMessageId() {
+    public String getMessageId() {
         return messageId;
     }
 

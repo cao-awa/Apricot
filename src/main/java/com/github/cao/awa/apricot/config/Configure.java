@@ -20,6 +20,7 @@ public class Configure {
     private final @NotNull Map<String, Map<String, String>> warning = new Object2ObjectOpenHashMap<>();
     private final @NotNull Map<String, String> configs = new Object2ObjectOpenHashMap<>();
     private @NotNull Supplier<String> loader;
+    private final Map<String, String> defaultValues = new Object2ObjectOpenHashMap<>();
 
     /**
      * Setting basic prepares.
@@ -224,5 +225,27 @@ public class Configure {
                 value,
                 info
         );
+    }
+
+    public boolean getBoolean(String key) {
+        return getOrDefault(key).equals("true");
+    }
+
+    public int getInteger(String key) {
+        return Integer.parseInt(getOrDefault(key));
+    }
+
+    public Configure setDefault(@NotNull String key, @NotNull Object value) {
+        this.defaultValues.put(key, Objects.toString(value));
+        return this;
+    }
+
+    public String getOrDefault(String key) {
+        String defaultValue = this.defaultValues.get(key);
+        String current = get(key);
+        if (current.equals("") && defaultValue != null) {
+            return defaultValue;
+        }
+        return current;
     }
 }

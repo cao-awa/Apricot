@@ -1,7 +1,7 @@
-package com.github.cao.awa.apricot.plugin.internal;
+package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.response.*;
-import com.github.cao.awa.apricot.event.receive.response.*;
+import com.github.cao.awa.apricot.event.handler.accomplish.response.*;
+import com.github.cao.awa.apricot.event.receive.accomplish.response.*;
 import org.apache.logging.log4j.*;
 
 public class InternalEchoResultHandler extends EchoResultEventHandler {

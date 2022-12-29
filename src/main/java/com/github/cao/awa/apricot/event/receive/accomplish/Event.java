@@ -1,9 +1,9 @@
-package com.github.cao.awa.apricot.event;
+package com.github.cao.awa.apricot.event.receive.accomplish;
 
-import com.github.cao.awa.apricot.event.handler.*;
+import com.github.cao.awa.apricot.event.handler.accomplish.*;
+import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.*;
 
 public abstract class Event<T extends ReadonlyPacket> {
     private final ApricotProxy proxy;
@@ -15,7 +15,7 @@ public abstract class Event<T extends ReadonlyPacket> {
     }
 
     public T getPacket() {
-        return packet;
+        return this.packet;
     }
 
     public ApricotProxy getProxy() {
@@ -37,5 +37,16 @@ public abstract class Event<T extends ReadonlyPacket> {
      * @author 草二号机
      * @since 1.0.0
      */
-    public abstract void entrust(EventHandler handler);
+    public abstract void fireAccomplish(AccomplishEventHandler handler);
+
+    /**
+     * Fire event, let event entrust handler to process self.
+     *
+     * @param handler
+     *         handler
+     * @author cao_awa
+     * @author 草二号机
+     * @since 1.0.0
+     */
+    public abstract boolean fireFirewall(FirewallEventHandler handler);
 }

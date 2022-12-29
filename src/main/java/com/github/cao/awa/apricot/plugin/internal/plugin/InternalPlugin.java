@@ -1,6 +1,6 @@
-package com.github.cao.awa.apricot.plugin.internal;
+package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.plugin.*;
+import com.github.cao.awa.apricot.plugin.accomplish.*;
 
 import java.util.*;
 
@@ -10,12 +10,13 @@ import java.util.*;
  * @since 1.0.0
  * @author cao_awa
  */
-public class InternalPlugin extends Plugin {
+public class InternalPlugin extends AccomplishPlugin {
     private static final UUID ID = UUID.fromString("8e599f58-703f-4dc9-beb8-abee377fb39a");
 
     public InternalPlugin() {
         registerHandler(new InternalMessageReceivedHandler());
         registerHandler(new InternalEchoResultHandler());
+        registerHandler(new InternalIllegalImmigrationHandler());
 //        registerHandler(new InternalMessageReceivedHandler2());
     }
 

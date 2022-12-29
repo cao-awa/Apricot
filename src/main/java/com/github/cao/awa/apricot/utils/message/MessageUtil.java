@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.utils.message;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.utils.text.*;
 import it.unimi.dsi.fastutil.objects.*;
 
 import java.util.*;
@@ -11,6 +12,11 @@ public class MessageUtil {
         int cursor = 0;
         int pos;
 
+        content = stripAndTrim(
+                server,
+                content
+        );
+
         List<MessageElement> elements = new ObjectArrayList<>();
         while ((pos = content.indexOf(
                 "[CQ:",
@@ -18,10 +24,13 @@ public class MessageUtil {
         )) != - 1) {
             // Process plain text.
             if (pos > cursor) {
-                String result = stripAndTrim(content.substring(
-                        cursor,
-                        pos
-                ));
+                String result = stripAndTrim(
+                        server,
+                        content.substring(
+                                cursor,
+                                pos
+                        )
+                );
                 if (result.length() > 0) {
                     elements.add(new TextMessageElement(result));
                 }
@@ -31,6 +40,9 @@ public class MessageUtil {
                     "]",
                     pos + 4
             );
+            if (endPos == - 1) {
+                break;
+            }
             // Processing cq.
             String cq = content.substring(
                     pos + 1,
@@ -38,7 +50,10 @@ public class MessageUtil {
             );
 
             // Split the cq code.
-            List<String> args = List.of(cq.split(","));
+            List<String> args = TextUtil.splitToList(
+                    cq,
+                    ','
+            );
 
             // Deserialize and participate in the message.
             MessageElement element = server.createCq(args);
@@ -52,7 +67,10 @@ public class MessageUtil {
         if (cursor < content.length()) {
             // It means no CQ codes
             String source = content.substring(cursor);
-            String result = stripAndTrim(content);
+            String result = stripAndTrim(
+                    server,
+                    source
+            );
             elements.add(result.length() > 0 ? new TextMessageElement(result) : new TextMessageElement(source));
         }
 
@@ -60,8 +78,10 @@ public class MessageUtil {
         return new Message().participateAll(elements);
     }
 
-    public static String stripAndTrim(String source) {
-        return source.strip()
-                     .trim();
+    public static String stripAndTrim(ApricotServer server, String source) {
+        return server.shouldCaverMessage() ?
+               source.strip()
+                     .trim() :
+               source;
     }
 }

@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot;
 
-import com.github.cao.awa.apricot.plugin.internal.*;
+import com.github.cao.awa.apricot.plugin.internal.firewall.*;
+import com.github.cao.awa.apricot.plugin.internal.plugin.*;
 import com.github.cao.awa.apricot.server.*;
 
 public class ApricotBootstrap {
@@ -12,6 +13,7 @@ public class ApricotBootstrap {
         ApricotServer server = new ApricotServer();
 
         server.registerPlugin(new InternalPlugin());
+        server.registerFirewall(new InternalFirewall());
 
         try {
             server.startup();

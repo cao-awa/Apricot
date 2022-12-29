@@ -1,8 +1,5 @@
 package com.github.cao.awa.apricot.plugin;
 
-import com.github.cao.awa.apricot.event.*;
-import com.github.cao.awa.apricot.event.handler.*;
-import it.unimi.dsi.fastutil.objects.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -15,8 +12,6 @@ import java.util.*;
  * @since 1.0.0
  */
 public abstract class Plugin implements Comparable<Plugin> {
-    private final Map<String, List<EventHandler>> handlers = new Object2ObjectOpenHashMap<>();
-
     /**
      * Compares this object with the specified object for order.  Returns a
      * negative integer, zero, or a positive integer as this object is less
@@ -59,38 +54,4 @@ public abstract class Plugin implements Comparable<Plugin> {
     }
 
     public abstract UUID getUuid();
-
-    public void registerHandlers(EventHandler handler, EventHandler... handlers) {
-        registerHandler(handler);
-        for (EventHandler eventHandler : handlers) {
-            registerHandler(eventHandler);
-        }
-    }
-
-    public void registerHandler(EventHandler handler) {
-        if (! this.handlers.containsKey(handler.getName())) {
-            this.handlers.put(
-                    handler.getName(),
-                    new LinkedList<>()
-            );
-        }
-        this.handlers.get(handler.getName())
-                     .add(handler);
-    }
-
-    /**
-     * Let an event be fired.
-     *
-     * @param event
-     *         event
-     * @author cao_awa
-     * @author 草二号机
-     * @since 1.0.0
-     */
-    public void fireEvent(Event<?> event) {
-        List<EventHandler> handlers = this.handlers.get(event.getName());
-        if (handlers != null) {
-            handlers.forEach(event::entrust);
-        }
-    }
 }

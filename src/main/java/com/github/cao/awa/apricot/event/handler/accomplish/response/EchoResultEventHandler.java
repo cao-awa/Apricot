@@ -1,9 +1,9 @@
-package com.github.cao.awa.apricot.event.handler.response;
+package com.github.cao.awa.apricot.event.handler.accomplish.response;
 
-import com.github.cao.awa.apricot.event.handler.*;
-import com.github.cao.awa.apricot.event.receive.response.*;
+import com.github.cao.awa.apricot.event.handler.accomplish.*;
+import com.github.cao.awa.apricot.event.receive.accomplish.response.*;
 
-public abstract class EchoResultEventHandler extends EventHandler {
+public abstract class EchoResultEventHandler extends AccomplishEventHandler {
     @Override
     public final String getName() {
         return "echo-result";
