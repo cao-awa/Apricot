@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.utils.text;
 
-import it.unimi.dsi.fastutil.objects.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -64,7 +64,7 @@ public class TextUtil {
     @NotNull
     public static List<String> partitionToList(@NotNull String str, int size, boolean saveUnnecessary) {
         int capacity = str.length() / size + 1;
-        List<String> result = new ObjectArrayList<>(capacity);
+        List<String> result = ApricotCollectionFactor.newArrayList(capacity);
         int cursor = 0;
         for (int i = 0; i < capacity; i++) {
             int nextCursor = cursor + size;
@@ -155,7 +155,7 @@ public class TextUtil {
 
     @NotNull
     public static List<String> equivalentRepeated(@NotNull String str) {
-        List<String> result = new ObjectArrayList<>();
+        List<String> result = ApricotCollectionFactor.newArrayList();
         StringBuilder builder = new StringBuilder();
         char last = str.charAt(0);
         boolean started = false;

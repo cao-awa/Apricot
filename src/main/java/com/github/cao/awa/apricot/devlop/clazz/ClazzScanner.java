@@ -1,21 +1,22 @@
 package com.github.cao.awa.apricot.devlop.clazz;
 
+import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import it.unimi.dsi.fastutil.objects.*;
 
 import java.io.*;
 import java.lang.annotation.*;
 import java.net.*;
+import java.util.*;
 
 public class ClazzScanner {
-    private final ObjectArrayList<Class<?>> classes;
+    private final List<Class<?>> classes;
 
     public ClazzScanner(Class<?> clazz) {
         this.classes = getAllAssignedClass(clazz);
     }
 
-    public ObjectArrayList<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> clazz) {
-        ObjectArrayList<Class<?>> list = new ObjectArrayList<>();
+    public List<Class<?>> getTypesAnnotatedWith(Class<? extends Annotation> clazz) {
+        List<Class<?>> list = ApricotCollectionFactor.newArrayList();
         EntrustEnvironment.tryFor(this.classes, c -> {
             if (c.isAnnotationPresent(clazz)) {
                 list.add(c);
@@ -24,8 +25,8 @@ public class ClazzScanner {
         return list;
     }
 
-    public ObjectArrayList<Class<?>> getAllAssignedClass(Class<?> clazz) {
-        ObjectArrayList<Class<?>> classes = new ObjectArrayList<>();
+    public List<Class<?>> getAllAssignedClass(Class<?> clazz) {
+        List<Class<?>> classes = ApricotCollectionFactor.newArrayList();
         EntrustEnvironment.tryFor(getClasses(clazz), c -> {
             if (clazz.isAssignableFrom(c) && ! clazz.equals(c)) {
                 classes.add(c);
@@ -34,7 +35,7 @@ public class ClazzScanner {
         return classes;
     }
 
-    public ObjectArrayList<Class<?>> getClasses(Class<?> cls) {
+    public List<Class<?>> getClasses(Class<?> cls) {
         String pk = cls.getPackage().getName();
         String path = pk.replace('.', '/');
         ClassLoader classloader = Thread.currentThread().getContextClassLoader();
@@ -42,8 +43,8 @@ public class ClazzScanner {
         return getClasses(new File(url.getFile()), pk);
     }
 
-    private ObjectArrayList<Class<?>> getClasses(File dir, String path) {
-        ObjectArrayList<Class<?>> classes = new ObjectArrayList<>();
+    private List<Class<?>> getClasses(File dir, String path) {
+        List<Class<?>> classes = ApricotCollectionFactor.newArrayList();
         if (! dir.exists()) {
             return classes;
         }
@@ -59,7 +60,7 @@ public class ClazzScanner {
         return classes;
     }
 
-    public ObjectArrayList<Class<?>> getClasses() {
+    public List<Class<?>> getClasses() {
         return this.classes;
     }
 }

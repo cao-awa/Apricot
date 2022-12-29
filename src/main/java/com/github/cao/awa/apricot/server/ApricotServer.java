@@ -8,10 +8,12 @@ import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.cq.factor.*;
 import com.github.cao.awa.apricot.message.cq.factor.at.*;
 import com.github.cao.awa.apricot.message.cq.factor.image.*;
+import com.github.cao.awa.apricot.message.cq.factor.poke.*;
 import com.github.cao.awa.apricot.message.cq.factor.replay.*;
 import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
+import com.github.cao.awa.apricot.network.packet.factor.invalid.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
@@ -26,6 +28,7 @@ import com.github.cao.awa.apricot.server.service.plugin.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
+import org.jetbrains.annotations.*;
 
 import java.io.*;
 import java.util.*;
@@ -174,11 +177,13 @@ public class ApricotServer {
         // Setup packet deserializers
         this.packetDeserializers.register(new MessageReceivedPacketFactor());
         this.packetDeserializers.register(new EchoResultPacketFactor());
+        this.packetDeserializers.register(new InvalidDataReceivedPacketFactor());
 
         // Setup CQ deserializers
         this.cqDeserializers.register(new CqImageFactor());
         this.cqDeserializers.register(new CqReplyFactor());
         this.cqDeserializers.register(new CqAtFactor());
+        this.cqDeserializers.register(new CqPokeFactor());
 
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
@@ -190,6 +195,7 @@ public class ApricotServer {
         this.taskExecutor.execute(runnable);
     }
 
+    @NotNull
     public ReadonlyPacket createPacket(JSONObject json) {
         return this.packetDeserializers.deserializer(
                 this,

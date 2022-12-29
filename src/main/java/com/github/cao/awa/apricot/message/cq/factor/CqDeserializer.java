@@ -2,19 +2,19 @@ package com.github.cao.awa.apricot.message.cq.factor;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.server.*;
-import it.unimi.dsi.fastutil.objects.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
 
 public class CqDeserializer {
-    private final Map<String, CqFactor> factors = new Object2ObjectOpenHashMap<>();
+    private final Map<String, CqFactor> factors = ApricotCollectionFactor.newHashMap();
 
     @Nullable
     public MessageElement deserializer(ApricotServer server, List<String> elements) {
         String name = elements.get(0);
         if (this.factors.containsKey(name)) {
-            Map<String, String> args = new Object2ObjectOpenHashMap<>();
+            Map<String, String> args = ApricotCollectionFactor.newHashMap();
 
             for (int i = 1;elements.size() > i;i++) {
                 String content = elements.get(i);

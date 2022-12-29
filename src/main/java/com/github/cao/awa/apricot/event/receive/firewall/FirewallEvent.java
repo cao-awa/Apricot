@@ -1,11 +1,13 @@
-package com.github.cao.awa.apricot.event.receive.accomplish;
+package com.github.cao.awa.apricot.event.receive.firewall;
 
+import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
+import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
 
-public abstract class NoFirewallEvent extends Event<ReadonlyPacket> {
-    public NoFirewallEvent(ApricotProxy proxy, ReadonlyPacket packet) {
+public abstract class FirewallEvent<T extends ReadonlyPacket> extends Event<T> {
+    public FirewallEvent(ApricotProxy proxy, T packet) {
         super(
                 proxy,
                 packet
@@ -22,7 +24,7 @@ public abstract class NoFirewallEvent extends Event<ReadonlyPacket> {
      * @since 1.0.0
      */
     @Override
-    public boolean fireFirewall(FirewallEventHandler handler) {
-        return true;
+    public void fireAccomplish(AccomplishEventHandler handler) {
+
     }
 }

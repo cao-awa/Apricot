@@ -57,8 +57,24 @@ public class IOUtil {
      * @since 1.0.0
      */
     public static void write(OutputStream output, String input) throws IOException {
-        output.write(input.getBytes());
+        write0(output, input);
         output.close();
+    }
+
+    /**
+     * Write string to output.
+     *
+     * @param output
+     *         Output
+     * @param input
+     *         Input
+     * @throws IOException
+     *         Happened IO error
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public static void write0(OutputStream output, String input) throws IOException {
+        output.write(input.getBytes());
     }
 
     /**
@@ -74,8 +90,24 @@ public class IOUtil {
      * @since 1.0.0
      */
     public static void write(Writer writer, String input) throws IOException {
-        writer.write(input);
+        write0(writer, input);
         writer.close();
+    }
+
+    /**
+     * Write string to output.
+     *
+     * @param writer
+     *         Writer
+     * @param input
+     *         Input
+     * @throws IOException
+     *         Happened IO error
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public static void write0(Writer writer, String input) throws IOException {
+        writer.write(input);
     }
 
     /**

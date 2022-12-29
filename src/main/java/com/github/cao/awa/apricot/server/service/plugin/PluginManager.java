@@ -6,14 +6,12 @@ import com.github.cao.awa.apricot.plugin.accomplish.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
-import com.github.cao.awa.apricot.utils.times.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import it.unimi.dsi.fastutil.objects.*;
 import org.apache.logging.log4j.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.*;
 
 import static com.github.cao.awa.apricot.server.ApricotServer.CLAZZ_SCANNER;
 
@@ -66,7 +64,7 @@ public class PluginManager implements ConcurrentService {
 
             boolean shouldAsync = server.shouldAsyncLoadPlugins();
 
-            List<Plugin> blockLoading = new ObjectArrayList<>();
+            List<Plugin> blockLoading = ApricotCollectionFactor.newArrayList();
 
             for (Class<?> clazz : classList) {
                 EntrustEnvironment.trys(

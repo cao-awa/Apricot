@@ -4,20 +4,21 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.cq.element.poke.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.resources.loader.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import it.unimi.dsi.fastutil.objects.*;
 import org.apache.logging.log4j.*;
 
 import java.util.*;
 
-public class InternalMessageReceivedHandler extends MessageReceivedEventHandler {
-    private static final Logger LOGGER = LogManager.getLogger("InternalMessageHandler");
+public class InternalAwa extends MessageReceivedEventHandler {
+    private static final Logger LOGGER = LogManager.getLogger("InternalAwa");
 
     private static final Map<String, String> replay = EntrustEnvironment.operation(
-            new Object2ObjectOpenHashMap<>(),
+            ApricotCollectionFactor.newHashMap(),
             map -> {
                 JSONObject json = JSONObject.parseObject(IOUtil.read(ResourcesLoader.getResource("kv.json")));
                 json.forEach((k, v) -> {
@@ -45,6 +46,10 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                          .getName() + ": " + event.getPacket()
                                                   .getMessage()
                                                   .toString());
+
+        LOGGER.info(event.getPacket()
+                         .getMessage()
+                         .carver(TextMessageElement.class).toPlainText());
         if (event.getPacket()
                  .getType() == SendMessageType.PRIVATE && event.getPacket()
                                                                .getMessage()
@@ -66,13 +71,13 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                  .send(
                          new SendMessagePacket(
                                  SendMessageType.PRIVATE,
-                                 replay.get(event.getPacket()
-                                                 .getMessage()
-                                                 .get(
-                                                         0,
-                                                         TextMessageElement.class
-                                                 )
-                                                 .getText()),
+                                 new TextMessageElement(replay.get(event.getPacket()
+                                                                        .getMessage()
+                                                                        .get(
+                                                                                0,
+                                                                                TextMessageElement.class
+                                                                        )
+                                                                        .getText())).toMessage(),
                                  event.getPacket()
                                       .getResponseId()
                          ),
@@ -80,6 +85,39 @@ public class InternalMessageReceivedHandler extends MessageReceivedEventHandler 
                              System.out.println(echo.getIdentifier());
                          }
                  );
+        }
+
+        long id = event.getPacket()
+                       .getSenderId();
+        long botId = event.getPacket()
+                          .getBotId();
+
+        AssembledMessage message = event.getPacket()
+                                        .getMessage();
+
+        if (event.getPacket()
+                 .getMessage()
+                 .handleMessage(
+                         element -> {
+                             if (element instanceof TextMessageElement text) {
+                                 return "poke".equals(text.getText());
+                             }
+                             return false;
+                         },
+                         0
+                 )) {
+            event.getProxy()
+                 .send(new SendMessagePacket(
+                         event.getPacket()
+                              .getType(),
+                         new PokeMessageElement(
+                                 id,
+                                 botId
+                         ).toMessage()
+                          .participate(new TextMessageElement("www")),
+                         event.getPacket()
+                              .getResponseId()
+                 ));
         }
     }
 }

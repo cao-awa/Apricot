@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.config;
 
+import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import it.unimi.dsi.fastutil.objects.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;
 
@@ -17,10 +17,10 @@ import java.util.function.*;
  */
 public class Configure {
     private static final @NotNull Logger LOGGER = LogManager.getLogger("Configure");
-    private final @NotNull Map<String, Map<String, String>> warning = new Object2ObjectOpenHashMap<>();
-    private final @NotNull Map<String, String> configs = new Object2ObjectOpenHashMap<>();
+    private final @NotNull Map<String, Map<String, String>> warning = ApricotCollectionFactor.newHashMap();
+    private final @NotNull Map<String, String> configs = ApricotCollectionFactor.newHashMap();
     private @NotNull Supplier<String> loader;
-    private final Map<String, String> defaultValues = new Object2ObjectOpenHashMap<>();
+    private final Map<String, String> defaultValues = ApricotCollectionFactor.newHashMap();
 
     /**
      * Setting basic prepares.
@@ -213,14 +213,10 @@ public class Configure {
      *         Warning when config match to target
      */
     public void warningWhen(String key, String value, String info) {
-        Map<String, String> map = this.warning.get(key);
-        if (map == null) {
-            map = new Object2ObjectOpenHashMap<>();
-            this.warning.put(
-                    key,
-                    map
-            );
-        }
+        Map<String, String> map = this.warning.computeIfAbsent(
+                key,
+                k -> ApricotCollectionFactor.newHashMap()
+        );
         map.put(
                 value,
                 info

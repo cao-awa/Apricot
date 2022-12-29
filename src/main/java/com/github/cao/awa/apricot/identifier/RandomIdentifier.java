@@ -13,7 +13,7 @@ public class RandomIdentifier {
     }
 
     public static String randomIdentifier(int size) {
-        return String.valueOf(EntrustEnvironment.operation(
+        return new String(EntrustEnvironment.operation(
                 new char[size],
                 result -> {
                     for (int i = 0; i < size; i++) {

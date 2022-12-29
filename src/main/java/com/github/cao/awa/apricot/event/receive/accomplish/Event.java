@@ -9,8 +9,8 @@ public abstract class Event<T extends ReadonlyPacket> {
     private final ApricotProxy proxy;
     private final T packet;
 
-    public Event(ApricotProxy handler, T packet) {
-        this.proxy = handler;
+    public Event(ApricotProxy proxy, T packet) {
+        this.proxy = proxy;
         this.packet = packet;
     }
 

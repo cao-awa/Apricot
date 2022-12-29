@@ -8,9 +8,9 @@ import com.github.cao.awa.apricot.network.handler.*;
 public class IllegalImmigrationEvent extends NoFirewallEvent {
     private final Event<?> event;
 
-    public IllegalImmigrationEvent(ApricotProxy handler, Event<?> event) {
+    public IllegalImmigrationEvent(ApricotProxy proxy, Event<?> event) {
         super(
-                handler,
+                proxy,
                 event.getPacket()
         );
         this.event = event;

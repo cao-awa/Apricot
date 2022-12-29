@@ -3,15 +3,14 @@ package com.github.cao.awa.apricot.event.receive.accomplish.message;
 import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
-import com.github.cao.awa.apricot.event.handler.firewall.filter.group.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.*;
 
 public class MessageReceivedEvent extends Event<MessageReceivedPacket> {
-    public MessageReceivedEvent(ApricotProxy handler, MessageReceivedPacket packet) {
-        super(handler, packet);
+    public MessageReceivedEvent(ApricotProxy proxy, MessageReceivedPacket packet) {
+        super(proxy, packet);
     }
 
     @Override
@@ -46,10 +45,8 @@ public class MessageReceivedEvent extends Event<MessageReceivedPacket> {
      */
     @Override
     public boolean fireFirewall(FirewallEventHandler handler) {
-        if (handler instanceof MessageIncludeFilter messageFilter) {
+        if (handler instanceof MessageReceivedFilter messageFilter) {
             return messageFilter.legitimate(this);
-        } else if (handler instanceof GroupFilter groupFilter) {
-            return groupFilter.legitimate(this);
         }
         return true;
     }

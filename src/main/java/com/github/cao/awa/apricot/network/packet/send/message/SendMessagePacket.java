@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.send.message;
 
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
@@ -10,17 +11,17 @@ public class SendMessagePacket extends Packet {
     private SendMessageType type;
     private long userId;
     private long groupId;
-    private String message;
+    private AssembledMessage message;
     private boolean autoEscape = false;
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull String message, long userId, long groupId) {
+    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId, long groupId) {
         this.type = type;
         this.userId = userId;
         this.groupId = groupId;
         this.message = message;
     }
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull String message, long userId, long groupId, boolean autoEscape) {
+    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId, long groupId, boolean autoEscape) {
         this.type = type;
         this.userId = userId;
         this.groupId = groupId;
@@ -28,13 +29,13 @@ public class SendMessagePacket extends Packet {
         this.autoEscape = autoEscape;
     }
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull String message, long userId) {
+    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId) {
         this.type = type;
         this.userId = userId;
         this.message = message;
     }
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull String message, long userId, boolean autoEscape) {
+    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId, boolean autoEscape) {
         this.type = type;
         this.userId = userId;
         this.message = message;
@@ -53,6 +54,18 @@ public class SendMessagePacket extends Packet {
         this.type = type;
     }
 
+    public void compoundAutoEscape(Function<Boolean, Boolean> function) {
+        setAutoEscape(function.apply(isAutoEscape()));
+    }
+
+    public boolean isAutoEscape() {
+        return autoEscape;
+    }
+
+    public void setAutoEscape(boolean autoEscape) {
+        this.autoEscape = autoEscape;
+    }
+
     public void compoundId(Function<Long, Long> function) {
         setUserId(function.apply(getUserId()));
     }
@@ -65,16 +78,24 @@ public class SendMessagePacket extends Packet {
         this.userId = userId;
     }
 
-    public void compoundMessage(Function<String, String> function) {
+    public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
         setMessage(function.apply(getMessage()));
     }
 
-    private String getMessage() {
+    private AssembledMessage getMessage() {
         return this.message;
     }
 
-    private void setMessage(String message) {
+    private void setMessage(AssembledMessage message) {
         this.message = message;
+    }
+
+    public long getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
     }
 
     @Override
@@ -84,6 +105,17 @@ public class SendMessagePacket extends Packet {
 
     @Override
     public void write(PacketJSONBufWriter writer) {
+        // This not final child packet, write but do not flush it.
+        // The final child will flush.
+        this.message.incinerateMessage(message -> {
+            new SendMessagePacket(
+                    this.type,
+                    message,
+                    this.userId,
+                    this.groupId,
+                    this.autoEscape
+            ).write(writer);
+        });
         writer.take()
               .fluentPut(
                       "action",

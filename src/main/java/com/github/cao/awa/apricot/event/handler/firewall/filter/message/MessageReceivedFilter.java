@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.firewall.filter.message;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 
-public abstract class MessageIncludeFilter extends FirewallEventHandler {
+public abstract class MessageReceivedFilter extends FirewallEventHandler {
     /**
      * Filter the legitimated message to accepts.
      *

@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.send.message;
 
-import com.github.cao.awa.apricot.identifier.*;
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
@@ -9,22 +9,30 @@ import java.util.function.*;
 
 public class SendGroupMessagePacket extends Packet {
     private long userId;
-    private @NotNull String message;
+    private @NotNull AssembledMessage message;
     private boolean autoEscape = false;
 
-    public SendGroupMessagePacket(@NotNull String message, long userId) {
+    public SendGroupMessagePacket(@NotNull AssembledMessage message, long userId) {
         this.message = message;
         this.userId = userId;
     }
 
-    public SendGroupMessagePacket(@NotNull String message, long userId, boolean autoEscape) {
+    public SendGroupMessagePacket(@NotNull AssembledMessage message, long userId, boolean autoEscape) {
         this.message = message;
         this.userId = userId;
         this.autoEscape = autoEscape;
     }
 
+    public void compoundAutoEscape(Function<Boolean, Boolean> function) {
+        setAutoEscape(function.apply(isAutoEscape()));
+    }
+
     public boolean isAutoEscape() {
         return autoEscape;
+    }
+
+    public void setAutoEscape(boolean autoEscape) {
+        this.autoEscape = autoEscape;
     }
 
     public void compoundId(Function<Long, Long> function) {
@@ -39,16 +47,16 @@ public class SendGroupMessagePacket extends Packet {
         this.userId = userId;
     }
 
-    public void compoundMessage(Function<String, String> function) {
+    public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
         setMessage(function.apply(getMessage()));
     }
 
     @NotNull
-    private String getMessage() {
+    private AssembledMessage getMessage() {
         return this.message;
     }
 
-    private void setMessage(@NotNull String message) {
+    private void setMessage(@NotNull AssembledMessage message) {
         this.message = message;
     }
 
@@ -59,6 +67,14 @@ public class SendGroupMessagePacket extends Packet {
 
     @Override
     public void write(PacketJSONBufWriter writer) {
+        // Final child packet, write and flush it.
+        this.message.incinerateMessage(message -> {
+            new SendGroupMessagePacket(
+                    message,
+                    this.userId,
+                    this.autoEscape
+            ).writeAndFlush(writer);
+        });
         writer.take()
               .fluentPut(
                       "action",
@@ -67,7 +83,7 @@ public class SendGroupMessagePacket extends Packet {
         writer.take("params")
               .fluentPut(
                       "message",
-                      this.message
+                      this.message.toPlainText()
               )
               .fluentPut(
                       "group_id",

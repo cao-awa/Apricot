@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.send.message;
 
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
@@ -9,30 +10,42 @@ import java.util.function.*;
 public class SendPrivateMessagePacket extends Packet {
     private long userId;
     private long groupId = - 1;
-    private @NotNull String message;
+    private @NotNull AssembledMessage message;
     private boolean autoEscape = false;
 
-    public SendPrivateMessagePacket(@NotNull String message, long userId) {
+    public SendPrivateMessagePacket(@NotNull AssembledMessage message, long userId) {
         this.message = message;
         this.userId = userId;
     }
 
-    public SendPrivateMessagePacket(@NotNull String message, long userId, long groupId) {
+    public SendPrivateMessagePacket(@NotNull AssembledMessage message, long userId, long groupId) {
         this.message = message;
         this.userId = userId;
         this.groupId = groupId;
     }
 
-    public SendPrivateMessagePacket(@NotNull String message, long userId, long groupId, boolean autoEscape) {
+    public SendPrivateMessagePacket(@NotNull AssembledMessage message, long userId, long groupId, boolean autoEscape) {
         this.message = message;
         this.userId = userId;
         this.groupId = groupId;
         this.autoEscape = autoEscape;
     }
 
-    public SendPrivateMessagePacket(@NotNull String message, long userId, boolean autoEscape) {
+    public SendPrivateMessagePacket(@NotNull AssembledMessage message, long userId, boolean autoEscape) {
         this.message = message;
         this.userId = userId;
+        this.autoEscape = autoEscape;
+    }
+
+    public void compoundAutoEscape(Function<Boolean, Boolean> function) {
+        setAutoEscape(function.apply(isAutoEscape()));
+    }
+
+    public boolean isAutoEscape() {
+        return autoEscape;
+    }
+
+    public void setAutoEscape(boolean autoEscape) {
         this.autoEscape = autoEscape;
     }
 
@@ -60,16 +73,16 @@ public class SendPrivateMessagePacket extends Packet {
         this.groupId = id;
     }
 
-    public void compoundMessage(Function<String, String> function) {
+    public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
         setMessage(function.apply(getMessage()));
     }
 
     @NotNull
-    private String getMessage() {
+    private AssembledMessage getMessage() {
         return this.message;
     }
 
-    private void setMessage(@NotNull String message) {
+    private void setMessage(@NotNull AssembledMessage message) {
         this.message = message;
     }
 
@@ -80,6 +93,15 @@ public class SendPrivateMessagePacket extends Packet {
 
     @Override
     public void write(PacketJSONBufWriter writer) {
+        // Final child packet, write and flush it.
+        this.message.incinerateMessage(message -> {
+            new SendPrivateMessagePacket(
+                    message,
+                    this.userId,
+                    this.groupId,
+                    this.autoEscape
+            ).writeAndFlush(writer);
+        });
         writer.take()
               .fluentPut(
                       "action",
@@ -88,7 +110,7 @@ public class SendPrivateMessagePacket extends Packet {
         writer.take("params")
               .fluentPut(
                       "message",
-                      this.message
+                      this.message.toPlainText()
               )
               .fluentPut(
                       "user_id",

@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.plugin.internal.firewall;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
-import com.github.cao.awa.apricot.server.*;
 
 import java.util.*;
 
@@ -14,6 +13,7 @@ public class InternalFirewall extends FirewallPlugin {
     public void onInitialize() {
         registerHandler(new InternalMessageFilter());
         registerHandler(new InternalGroupFilter());
+        registerHandler(new InternalInvalidDataHandler());
     }
 
     @Override

@@ -3,12 +3,12 @@ package com.github.cao.awa.apricot.plugin.accomplish;
 import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.plugin.*;
-import it.unimi.dsi.fastutil.objects.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 
 import java.util.*;
 
 public abstract class AccomplishPlugin extends Plugin {
-    private final Map<String, List<AccomplishEventHandler>> handlers = new Object2ObjectOpenHashMap<>();
+    private final Map<String, List<AccomplishEventHandler>> handlers = ApricotCollectionFactor.newHashMap();
 
     public void registerHandlers(AccomplishEventHandler handler, AccomplishEventHandler... handlers) {
         registerHandler(handler);

@@ -3,7 +3,7 @@ plugins {
 }
 
 group 'org.example'
-version '1.0-SNAPSHOT'
+version '1.0.0'
 
 repositories {
     mavenCentral()
@@ -28,7 +28,6 @@ dependencies {
     shadow 'commons-io:commons-io:2.11.0'
     shadow 'it.unimi.dsi:fastutil:8.5.11'
     shadow 'com.github.oshi:oshi-core:6.4.0'
-    shadow 'com.google.guava:guava:31.1-jre'
 
     shadow 'org.jetbrains:annotations:23.1.0'
 }

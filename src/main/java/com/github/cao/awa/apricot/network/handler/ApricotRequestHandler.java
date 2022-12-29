@@ -20,13 +20,14 @@ import java.util.function.*;
  */
 public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocketFrame> {
     private static final Logger LOGGER = LogManager.getLogger("ApricotRequestHandler");
-    private final ApricotServer server;
-    private final ApricotProxy proxy;
+    private static final Consumer<EchoResultPacket> DO_NO_HANDLE_ECHO = result -> {};
+    private final @NotNull ApricotServer server;
+    private final @NotNull ApricotProxy proxy;
+    private final @NotNull StringBuilder fragment = new StringBuilder();
     private PacketJSONBufWriter writer;
     private Channel channel;
-    private final @NotNull StringBuilder fragment = new StringBuilder();
 
-    public ApricotRequestHandler(ApricotServer server) {
+    public ApricotRequestHandler(@NotNull ApricotServer server) {
         this.server = server;
         this.proxy = new ApricotProxy(
                 this,
@@ -45,19 +46,20 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     }
 
     @Override
-    protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
+    protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) {
         this.server.getTrafficsCounter()
                    .in(frame.content()
                             .array().length);
         this.server.getPacketsCounter()
                    .in(1);
+        handleFragment(frame);
+    }
+
+    private void handleFragment(WebSocketFrame frame) {
         if (frame instanceof TextWebSocketFrame textFrame) {
             if (frame.isFinalFragment()) {
-                if (this.fragment.length() > 0) {
-                    handleRequest(new TextWebSocketFrame(this.fragment.toString()));
-                    this.fragment.setLength(0);
-                }
                 handleRequest(textFrame);
+                LOGGER.debug("Handled single fragment packet");
             } else {
                 if (this.fragment.length() == 0) {
                     this.fragment.append(textFrame.text());
@@ -65,52 +67,55 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
                     LOGGER.warn("Occurs unexpected fragment appended");
                 }
             }
-        } else {
-            if (frame instanceof ContinuationWebSocketFrame continuationFrame) {
-                this.fragment.append(continuationFrame.text());
-                LOGGER.debug("Fragment appended");
-            } else {
+        } else if (frame instanceof ContinuationWebSocketFrame continuationFrame) {
+            this.fragment.append(continuationFrame.text());
+            LOGGER.debug("Fragment appended");
+
+            if (continuationFrame.isFinalFragment()) {
+                handleRequest(new TextWebSocketFrame(this.fragment.toString()));
+                this.fragment.setLength(0);
             }
+        } else {
+            LOGGER.warn("Occurs unexpected fragment appender received");
         }
+
     }
 
     public void handleRequest(TextWebSocketFrame frame) {
-        String text = frame.text();
+       final String text = frame.text();
         this.server.submitTask(() -> {
-            JSONObject request = JSONObject.parseObject(text);
-            ReadonlyPacket packet = this.server.createPacket(request);
-            if (packet != null) {
-                packet.fireEvent(
-                        this.server,
-                        this.proxy
-                );
-            }
+            final ReadonlyPacket packet = this.server.createPacket(JSONObject.parseObject(text));
+            packet.fireEvent(
+                    this.server,
+                    this.proxy
+            );
         });
     }
 
     public void send(Packet packet) {
+        this.server.echo(packet, DO_NO_HANDLE_ECHO);
         packet.writeAndFlush(this.writer);
     }
 
     public void send(Packet packet, Runnable callback) {
-        packet.writeAndFlush(this.writer);
+        send(packet);
         callback.run();
     }
 
     public void send(Packet packet, Consumer<EchoResultPacket> echo) {
-        packet.writeAndFlush(this.writer);
         this.server.echo(
                 packet,
                 echo
         );
+        packet.writeAndFlush(this.writer);
     }
 
     public void send(Packet packet, Consumer<EchoResultPacket> echo, Runnable callback) {
-        packet.writeAndFlush(this.writer);
         this.server.echo(
                 packet,
                 echo
         );
+        packet.writeAndFlush(this.writer);
         callback.run();
     }
 }

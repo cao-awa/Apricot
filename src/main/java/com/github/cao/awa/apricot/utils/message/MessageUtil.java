@@ -2,13 +2,13 @@ package com.github.cao.awa.apricot.utils.message;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.text.*;
-import it.unimi.dsi.fastutil.objects.*;
 
 import java.util.*;
 
 public class MessageUtil {
-    public static Message process(ApricotServer server, String content) {
+    public static AssembledMessage process(ApricotServer server, String content) {
         int cursor = 0;
         int pos;
 
@@ -17,7 +17,7 @@ public class MessageUtil {
                 content
         );
 
-        List<MessageElement> elements = new ObjectArrayList<>();
+        List<MessageElement> elements = ApricotCollectionFactor.newArrayList();
         while ((pos = content.indexOf(
                 "[CQ:",
                 cursor
@@ -64,8 +64,8 @@ public class MessageUtil {
             // Update cursors
             cursor = endPos + 1;
         }
+        // It means have more information can be precessed to text element
         if (cursor < content.length()) {
-            // It means no CQ codes
             String source = content.substring(cursor);
             String result = stripAndTrim(
                     server,
@@ -74,8 +74,13 @@ public class MessageUtil {
             elements.add(result.length() > 0 ? new TextMessageElement(result) : new TextMessageElement(source));
         }
 
+        // It means have CQ codes is unsupported
+        if (elements.size() == 0) {
+            elements.add(new TextMessageElement(content));
+        }
+
         // Let all prepared element participate in message
-        return new Message().participateAll(elements);
+        return new AssembledMessage().participateAll(elements);
     }
 
     public static String stripAndTrim(ApricotServer server, String source) {

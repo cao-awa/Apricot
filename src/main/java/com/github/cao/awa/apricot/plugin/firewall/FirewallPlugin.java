@@ -3,12 +3,12 @@ package com.github.cao.awa.apricot.plugin.firewall;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.plugin.*;
-import it.unimi.dsi.fastutil.objects.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 
 import java.util.*;
 
 public abstract class FirewallPlugin extends Plugin {
-    private final List<FirewallEventHandler> handlers = new ObjectArrayList<>();
+    private final List<FirewallEventHandler> handlers = ApricotCollectionFactor.newArrayList();
 
     public void registerHandlers(FirewallEventHandler handler, FirewallEventHandler... handlers) {
         registerHandler(handler);

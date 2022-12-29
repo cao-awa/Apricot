@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
-import com.github.cao.awa.apricot.server.*;
 
 import java.util.*;
 
@@ -18,7 +17,7 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public void onInitialize() {
-        registerHandler(new InternalMessageReceivedHandler());
+        registerHandler(new InternalAwa());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new InternalIllegalImmigrationHandler());
     }

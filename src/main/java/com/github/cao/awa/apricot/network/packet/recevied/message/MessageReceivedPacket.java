@@ -10,7 +10,7 @@ import com.github.cao.awa.apricot.server.*;
 
 public class MessageReceivedPacket extends ReadonlyPacket {
     private final SendMessageType type;
-    private final Message message;
+    private final AssembledMessage message;
     private final long botId;
     private final MessageSender sender;
     private final long responseId;
@@ -18,7 +18,7 @@ public class MessageReceivedPacket extends ReadonlyPacket {
     private final String messageId;
     private final long targetId;
 
-    public MessageReceivedPacket(SendMessageType type, Message message, long botId, MessageSender sender, long responseId, long timestamp, String messageId, long targetId) {
+    public MessageReceivedPacket(SendMessageType type, AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, String messageId, long targetId) {
         this.type = type;
         this.message = message;
         this.botId = botId;
@@ -49,7 +49,7 @@ public class MessageReceivedPacket extends ReadonlyPacket {
         return this.responseId;
     }
 
-    public Message getMessage() {
+    public AssembledMessage getMessage() {
         return this.message;
     }
 
