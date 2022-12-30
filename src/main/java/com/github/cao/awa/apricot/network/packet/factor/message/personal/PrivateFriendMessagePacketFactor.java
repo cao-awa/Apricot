@@ -2,13 +2,13 @@ package com.github.cao.awa.apricot.network.packet.factor.message.personal;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.factor.message.group.*;
+import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.sender.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.message.*;
 
-public class PrivateFriendMessagePacketFactor extends GroupMessageReceivedFactor {
+public class PrivateFriendMessagePacketFactor extends PacketFactor {
     @Override
     public ReadonlyPacket create(ApricotServer server, JSONObject request) {
         return new PrivateFriendMessageReceivedPacket(
@@ -20,7 +20,7 @@ public class PrivateFriendMessagePacketFactor extends GroupMessageReceivedFactor
                 PrivateMessageSender.create(request.getJSONObject("sender")),
                 request.getLong("user_id"),
                 request.getLong("time"),
-                request.getString("message_id")
+                request.getLong("message_id")
         );
     }
 

@@ -20,7 +20,7 @@ public class EchoManager implements ConcurrentService {
         this.executor = executor;
     }
 
-    public void echo(@Nullable String identifier, @NotNull Consumer<EchoResultPacket> action) {
+    public synchronized void echo(@Nullable String identifier, @NotNull Consumer<EchoResultPacket> action) {
         if (this.active) {
             if (identifier == null) {
                 return;
@@ -36,7 +36,7 @@ public class EchoManager implements ConcurrentService {
         }
     }
 
-    public void echo(@Nullable String identifier, @NotNull EchoResultPacket packet) {
+    public synchronized void echo(@Nullable String identifier, @NotNull EchoResultPacket packet) {
         if (this.active) {
             if (identifier == null) {
                 return;

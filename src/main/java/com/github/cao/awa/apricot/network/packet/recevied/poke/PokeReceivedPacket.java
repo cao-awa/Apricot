@@ -1,9 +1,9 @@
 package com.github.cao.awa.apricot.network.packet.recevied.poke;
 
 import com.github.cao.awa.apricot.event.receive.accomplish.poke.*;
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.server.*;
 
 public class PokeReceivedPacket extends ReadonlyPacket {
@@ -24,27 +24,27 @@ public class PokeReceivedPacket extends ReadonlyPacket {
     }
 
     public MessageType getType() {
-        return type;
+        return this.type;
     }
 
     public long getCauserId() {
-        return causerId;
+        return this.causerId;
     }
 
     public long getBotId() {
-        return botId;
+        return this.botId;
     }
 
     public long getTargetId() {
-        return targetId;
+        return this.targetId;
     }
 
     public long getResponseId() {
-        return responseId;
+        return this.responseId;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     /**

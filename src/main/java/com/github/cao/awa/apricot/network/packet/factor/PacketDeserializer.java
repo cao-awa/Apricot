@@ -14,18 +14,34 @@ public class PacketDeserializer {
 
     @NotNull
     public ReadonlyPacket deserializer(ApricotServer server, JSONObject request) {
-        String name;
         try {
+            String name;
             PacketFactor factor = null;
             if (request.containsKey("post_type")) {
-                name = request.getString("post_type");
+                name = request.getString("post_type")
+                              .replace(
+                                      "_",
+                                      "-"
+                              );
+                String subtype = request.containsKey("sub_type") ?
+                                 request.getString("sub_type")
+                                        .replace(
+                                                "_",
+                                                "-"
+                                        ) :
+                                 null;
                 if ("message".equals(name)) {
                     factor = handleMessagePost(
                             request.getString("message_type"),
-                            request.getString("sub_type")
+                            subtype
+                    );
+                } else if ("notice".equals(name)) {
+                    factor = handleNoticePost(
+                            request.getString("notice_type"),
+                            subtype
                     );
                 } else {
-                    name = request.getString("post_type") + "-" + request.getString("sub_type");
+                    name = request.getString("post_type") + (subtype == null ? "" : "-" + subtype);
                 }
             } else {
                 request = request.getJSONObject("echo");
@@ -48,6 +64,14 @@ public class PacketDeserializer {
 
     private PacketFactor handleMessagePost(String messageType, String subType) {
         String name = "message-" + messageType + "-" + subType;
+        return this.factors.get(name);
+    }
+
+    private PacketFactor handleNoticePost(String noticeType, @Nullable String subType) {
+        String name = "notice-" + noticeType.replace(
+                "_",
+                "-"
+        ) + (subType == null ? "" : ("-" + subType));
         return this.factors.get(name);
     }
 

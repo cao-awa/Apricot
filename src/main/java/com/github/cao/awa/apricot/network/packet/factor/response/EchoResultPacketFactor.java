@@ -9,7 +9,10 @@ import com.github.cao.awa.apricot.server.*;
 public class EchoResultPacketFactor extends PacketFactor {
     @Override
     public ReadonlyPacket create(ApricotServer server, JSONObject request) {
-        return new EchoResultPacket(request.getString("id"));
+        return new EchoResultPacket(
+                request.getString("id"),
+                request
+        );
     }
 
     @Override

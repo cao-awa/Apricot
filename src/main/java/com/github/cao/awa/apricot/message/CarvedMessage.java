@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.message;
 
+import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 
 import java.util.*;

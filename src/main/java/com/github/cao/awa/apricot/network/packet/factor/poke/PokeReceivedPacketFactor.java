@@ -1,10 +1,10 @@
 package com.github.cao.awa.apricot.network.packet.factor.poke;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.recevied.poke.*;
-import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.server.*;
 
 public class PokeReceivedPacketFactor extends PacketFactor {
@@ -25,6 +25,6 @@ public class PokeReceivedPacketFactor extends PacketFactor {
 
     @Override
     public String getName() {
-        return "notice-poke";
+        return "notice-notify-poke";
     }
 }

@@ -13,9 +13,11 @@ public class TrafficCounter implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("TrafficCounter");
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     private final List<Traffic> traffics = new CopyOnWriteArrayList<>();
-    private String name;
+    private long totalIn = 0;
+    private long totalOut = 0;
+    private final String name;
     private long current = 0;
-    private int interval = 1000;
+    private int interval = 10000;
 
     public TrafficCounter(String name, int interval) {
         this.name = name;
@@ -28,23 +30,12 @@ public class TrafficCounter implements ConcurrentService {
         update();
     }
 
-    public static void main(String[] args) {
-//        TrafficCounter traffic = new TrafficCounter(10000);
-//        Random random = new Random();
-//        while (true) {
-//            traffic.in(random.nextInt(
-//                    0,
-//                    200
-//            ));
-//            traffic.out(random.nextInt(
-//                    0,
-//                    200
-//            ));
-//            TimeUtil.coma(random.nextInt(
-//                    0,
-//                    10
-//            ));
-//        }
+    public long getTotalIn() {
+        return this.totalIn;
+    }
+
+    public long getTotalOut() {
+        return this.totalOut;
     }
 
     public void in(long in) {
@@ -53,6 +44,7 @@ public class TrafficCounter implements ConcurrentService {
                 in,
                 true
         ));
+        this.totalIn += in;
     }
 
     public void out(long out) {
@@ -61,6 +53,7 @@ public class TrafficCounter implements ConcurrentService {
                 out,
                 false
         ));
+        this.totalOut += out;
     }
 
     public Legacy<Long, Long> current() {
@@ -82,9 +75,9 @@ public class TrafficCounter implements ConcurrentService {
     }
 
     private void update() {
-//        Legacy<Long, Long> result = current();
-//
-//        LOGGER.info("Counter '{}' received {} in counts and {} out counts", this.name, result.newly(), result.stale());
+        //        Legacy<Long, Long> result = current();
+        //
+        //        LOGGER.info("Counter '{}' received {} in counts and {} out counts", this.name, result.newly(), result.stale());
 
         this.current = LowPrecisionClock.millions();
 

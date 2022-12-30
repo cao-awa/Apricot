@@ -49,8 +49,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) {
         this.server.getTrafficsCounter()
-                   .in(frame.content()
-                            .array().length);
+                   .in(frame.content().writerIndex());
         this.server.getPacketsCounter()
                    .in(1);
         handleFragment(frame);
@@ -84,6 +83,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
 
     public void handleRequest(TextWebSocketFrame frame) {
         final String text = frame.text();
+        LOGGER.info(text);
         this.server.submitTask(() -> {
             final ReadonlyPacket packet = this.server.createPacket(JSONObject.parseObject(text));
             packet.fireEvent(
@@ -93,12 +93,12 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
         });
     }
 
-    public void send(Packet packet, Runnable callback) {
+    public void send(WritablePacket packet, Runnable callback) {
         send(packet);
         callback.run();
     }
 
-    public void send(Packet packet) {
+    public void send(WritablePacket packet) {
         this.server.echo(
                 packet,
                 DO_NO_HANDLE_ECHO
@@ -106,7 +106,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
         packet.writeAndFlush(this.writer);
     }
 
-    public void send(Packet packet, Consumer<EchoResultPacket> echo) {
+    public void send(WritablePacket packet, Consumer<EchoResultPacket> echo) {
         this.server.echo(
                 packet,
                 echo
@@ -114,7 +114,7 @@ public class ApricotRequestHandler extends SimpleChannelInboundHandler<WebSocket
         packet.writeAndFlush(this.writer);
     }
 
-    public void send(Packet packet, Consumer<EchoResultPacket> echo, Runnable callback) {
+    public void send(WritablePacket packet, Consumer<EchoResultPacket> echo, Runnable callback) {
         this.server.echo(
                 packet,
                 echo

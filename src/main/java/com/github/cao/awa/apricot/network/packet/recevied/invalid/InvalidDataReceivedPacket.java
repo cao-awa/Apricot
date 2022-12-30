@@ -15,8 +15,12 @@ public class InvalidDataReceivedPacket extends ReadonlyPacket {
         this.handleFailed = handleFailed;
     }
 
+    public boolean isHandleFailed() {
+        return this.handleFailed;
+    }
+
     public JSONObject getRequest() {
-        return request;
+        return this.request;
     }
 
     /**

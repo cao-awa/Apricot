@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.recevied.response;
 
+import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.response.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
@@ -8,13 +9,18 @@ import org.jetbrains.annotations.*;
 
 public class EchoResultPacket extends ReadonlyPacket {
     private final String identifier;
+    private final JSONObject response;
 
-    public EchoResultPacket(String identifier) {
+    public EchoResultPacket(String identifier, JSONObject response) {
         this.identifier = identifier;
+        this.response = response;
+    }
+
+    public JSONObject getResponse() {
+        return this.response;
     }
 
     @Nullable
-    @Override
     public String getIdentifier() {
         return this.identifier;
     }
@@ -31,6 +37,9 @@ public class EchoResultPacket extends ReadonlyPacket {
      */
     @Override
     public void fireEvent(ApricotServer server, ApricotProxy proxy) {
-        server.fireEvent(new EchoResultEvent(proxy, this));
+        server.fireEvent(new EchoResultEvent(
+                proxy,
+                this
+        ));
     }
 }

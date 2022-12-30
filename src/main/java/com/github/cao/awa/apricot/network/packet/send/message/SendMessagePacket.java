@@ -2,12 +2,14 @@ package com.github.cao.awa.apricot.network.packet.send.message;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.send.message.group.*;
+import com.github.cao.awa.apricot.network.packet.send.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
 
 import java.util.function.*;
 
-public class SendMessagePacket extends Packet {
+public class SendMessagePacket extends WritablePacket {
     private MessageType type;
     private long userId;
     private long groupId;
@@ -131,7 +133,7 @@ public class SendMessagePacket extends Packet {
         } else {
             new SendGroupMessagePacket(
                     this.message,
-                    this.userId,
+                    this.groupId,
                     this.autoEscape
             ).write(writer);
         }

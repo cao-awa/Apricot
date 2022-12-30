@@ -16,11 +16,11 @@ public class ApricotProxy {
         this.server = server;
     }
 
-    public void send(Packet packet) {
+    public void send(WritablePacket packet) {
         this.handler.send(packet);
     }
 
-    public void send(Packet packet, Runnable runnable) {
+    public void send(WritablePacket packet, Runnable runnable) {
         this.handler.send(
                 packet,
                 runnable
@@ -32,14 +32,14 @@ public class ApricotProxy {
         return server;
     }
 
-    public void send(@NotNull Packet packet, Consumer<EchoResultPacket> echo) {
+    public void send(@NotNull WritablePacket packet, Consumer<EchoResultPacket> echo) {
         this.handler.send(
                 packet,
                 echo
         );
     }
 
-    public void send(@NotNull Packet packet, Consumer<EchoResultPacket> echo, Runnable runnable) {
+    public void send(@NotNull WritablePacket packet, Consumer<EchoResultPacket> echo, Runnable runnable) {
         this.handler.send(
                 packet,
                 echo,

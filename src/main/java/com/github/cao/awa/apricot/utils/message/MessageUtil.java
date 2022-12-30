@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.utils.message;
 
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.text.*;
@@ -64,19 +65,20 @@ public class MessageUtil {
             // Update cursors
             cursor = endPos + 1;
         }
-        // It means have more information can be precessed to text element
-        if (cursor < content.length()) {
-            String source = content.substring(cursor);
-            String result = stripAndTrim(
-                    server,
-                    source
-            );
-            elements.add(result.length() > 0 ? new TextMessageElement(result) : new TextMessageElement(source));
-        }
 
         // It means have CQ codes is unsupported
         if (elements.size() == 0) {
             elements.add(new TextMessageElement(content));
+        } else {
+            // It means have more information can be precessed to text element
+            if (cursor < content.length()) {
+                String source = content.substring(cursor);
+                String result = stripAndTrim(
+                        server,
+                        source
+                );
+                elements.add(result.length() > 0 ? new TextMessageElement(result) : new TextMessageElement(source));
+            }
         }
 
         // Let all prepared element participate in message

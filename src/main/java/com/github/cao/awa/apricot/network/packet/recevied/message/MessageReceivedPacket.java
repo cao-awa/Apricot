@@ -15,5 +15,9 @@ public abstract class MessageReceivedPacket extends ReadonlyPacket {
 
     public abstract long getTimestamp();
 
-    public abstract String getMessageId();
+    public abstract long getMessageId();
+
+    public abstract long getBotId();
+
+    public abstract MessageType getType();
 }

@@ -4,18 +4,22 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.config.*;
 import com.github.cao.awa.apricot.devlop.clazz.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
-import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.message.cq.factor.*;
-import com.github.cao.awa.apricot.message.cq.factor.at.*;
-import com.github.cao.awa.apricot.message.cq.factor.image.*;
-import com.github.cao.awa.apricot.message.cq.factor.poke.*;
-import com.github.cao.awa.apricot.message.cq.factor.replay.*;
+import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.at.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.image.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.poke.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.replay.*;
 import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.invalid.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.group.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.personal.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.recall.gruop.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.recall.personal.*;
+import com.github.cao.awa.apricot.network.packet.factor.name.card.*;
+import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
@@ -179,7 +183,11 @@ public class ApricotServer {
         // Setup packet deserializers
         this.packetDeserializers.register(new GroupNormalMessagePacketFactor());
         this.packetDeserializers.register(new GroupAnonymousMessagePacketFactor());
+        this.packetDeserializers.register(new GroupMessageRecallPacketFactor());
+        this.packetDeserializers.register(new GroupNameChangedReceivedPacketFactor());
+        this.packetDeserializers.register(new GroupTitleChangedReceivedPacketFactor());
         this.packetDeserializers.register(new PrivateFriendMessagePacketFactor());
+        this.packetDeserializers.register(new PrivateMessageRecallPacketFactor());
         this.packetDeserializers.register(new EchoResultPacketFactor());
         this.packetDeserializers.register(new InvalidDataReceivedPacketFactor());
         this.packetDeserializers.register(new PokeReceivedPacketFactor());
@@ -235,7 +243,7 @@ public class ApricotServer {
         this.eventManager.fireEvent(event);
     }
 
-    public void echo(Packet packet, Consumer<EchoResultPacket> action) {
+    public void echo(WritablePacket packet, Consumer<EchoResultPacket> action) {
         echo(
                 packet.getIdentifier(),
                 action

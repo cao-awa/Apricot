@@ -1,14 +1,16 @@
 package com.github.cao.awa.apricot.network.packet.send.poke;
 
-import com.github.cao.awa.apricot.message.cq.element.poke.*;
+import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.element.cq.element.poke.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.send.message.*;
+import com.github.cao.awa.apricot.network.packet.send.message.group.*;
+import com.github.cao.awa.apricot.network.packet.send.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
 
 import java.util.function.*;
 
-public class SendPokePacket extends Packet {
+public class SendPokePacket extends WritablePacket {
     private MessageType type;
     private long targetId;
     private long botId;

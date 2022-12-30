@@ -15,32 +15,6 @@ import com.github.cao.awa.apricot.server.*;
  */
 public abstract class ReadonlyPacket extends Packet {
     /**
-     * Write data to buffer and flush the buffer.
-     *
-     * @param writer
-     *         writer
-     * @author 草二号机
-     * @since 1.0.0
-     */
-    @Override
-    public void writeAndFlush(PacketJSONBufWriter writer) {
-        // Receiver packet do not write anything.
-    }
-
-    /**
-     * Write data to buffer.
-     *
-     * @param writer
-     *         writer
-     * @author cao_awa
-     * @since 1.0.0
-     */
-    @Override
-    public void write(PacketJSONBufWriter writer) {
-        // Receiver packet do not write anything.
-    }
-
-    /**
      * Let an event of this packet be fired.
      *
      * @param server
@@ -51,9 +25,4 @@ public abstract class ReadonlyPacket extends Packet {
      * @since 1.0.0
      */
     public abstract void fireEvent(ApricotServer server, ApricotProxy proxy);
-
-    @Override
-    public boolean shouldEcho() {
-        return false;
-    }
 }

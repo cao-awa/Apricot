@@ -12,9 +12,9 @@ public class PrivateFriendMessageReceivedPacket extends PrivateMessageReceivedPa
     private final MessageSender sender;
     private final long responseId;
     private final long timestamp;
-    private final String messageId;
+    private final long messageId;
 
-    public PrivateFriendMessageReceivedPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, String messageId) {
+    public PrivateFriendMessageReceivedPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, long messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
@@ -23,20 +23,12 @@ public class PrivateFriendMessageReceivedPacket extends PrivateMessageReceivedPa
         this.messageId = messageId;
     }
 
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     public long getBotId() {
         return this.botId;
     }
 
-    public long getResponseId() {
-        return this.responseId;
+    public MessageSender getSender() {
+        return this.sender;
     }
 
     public AssembledMessage getMessage() {
@@ -47,8 +39,16 @@ public class PrivateFriendMessageReceivedPacket extends PrivateMessageReceivedPa
         return this.sender.getUserId();
     }
 
-    public MessageSender getSender() {
-        return sender;
+    public long getResponseId() {
+        return this.responseId;
+    }
+
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+
+    public long getMessageId() {
+        return this.messageId;
     }
 
     /**

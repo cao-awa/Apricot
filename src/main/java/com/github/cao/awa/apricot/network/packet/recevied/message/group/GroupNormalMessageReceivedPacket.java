@@ -13,23 +13,15 @@ public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket
     private final MessageSender sender;
     private final long responseId;
     private final long timestamp;
-    private final String messageId;
+    private final long messageId;
 
-    public GroupNormalMessageReceivedPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, String messageId) {
+    public GroupNormalMessageReceivedPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, long messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
         this.responseId = responseId;
         this.timestamp = timestamp;
         this.messageId = messageId;
-    }
-
-    public String getMessageId() {
-        return messageId;
-    }
-
-    public long getTimestamp() {
-        return timestamp;
     }
 
     public long getBotId() {
@@ -50,6 +42,14 @@ public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket
 
     public long getResponseId() {
         return this.responseId;
+    }
+
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+
+    public long getMessageId() {
+        return this.messageId;
     }
 
     /**

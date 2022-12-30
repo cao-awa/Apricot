@@ -2,13 +2,13 @@ package com.github.cao.awa.apricot.network.packet.factor.message.group;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.group.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.sender.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.sender.anonymous.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.message.*;
 
-public class GroupAnonymousMessagePacketFactor extends GroupMessageReceivedFactor {
+public class GroupAnonymousMessagePacketFactor extends PacketFactor {
     @Override
     public ReadonlyPacket create(ApricotServer server, JSONObject request) {
         return new GroupAnonymousMessageReceivedPacket(
@@ -20,7 +20,7 @@ public class GroupAnonymousMessagePacketFactor extends GroupMessageReceivedFacto
                 AnonymousMessageSender.create(request.getJSONObject("anonymous"), request.getJSONObject("sender")),
                 request.getLong("group_id"),
                 request.getLong("time"),
-                request.getString("message_id")
+                request.getLong("message_id")
         );
     }
 
