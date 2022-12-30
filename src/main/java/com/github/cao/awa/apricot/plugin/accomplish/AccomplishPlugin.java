@@ -18,13 +18,13 @@ public abstract class AccomplishPlugin extends Plugin {
     }
 
     public void registerHandler(AccomplishEventHandler handler) {
-        if (! this.handlers.containsKey(handler.getName())) {
+        if (! this.handlers.containsKey(handler.getType())) {
             this.handlers.put(
-                    handler.getName(),
+                    handler.getType(),
                     new LinkedList<>()
             );
         }
-        this.handlers.get(handler.getName())
+        this.handlers.get(handler.getType())
                      .add(handler);
     }
 
@@ -38,10 +38,14 @@ public abstract class AccomplishPlugin extends Plugin {
      * @since 1.0.0
      */
     public void fireEvent(Event<?> event) {
-        List<AccomplishEventHandler> handlers = this.handlers.get(event.getName());
-        if (handlers != null) {
-            handlers.forEach(event::fireAccomplish);
-        }
+        event.pipeline()
+             .forEach(type -> this.getServer()
+                                  .submitTask(() -> {
+                                      List<AccomplishEventHandler> handlers = this.handlers.get(type);
+                                      if (handlers != null) {
+                                          handlers.forEach(event::fireAccomplish);
+                                      }
+                                  }));
     }
 
     @Override

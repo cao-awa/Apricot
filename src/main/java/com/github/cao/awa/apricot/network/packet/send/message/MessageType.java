@@ -2,16 +2,16 @@ package com.github.cao.awa.apricot.network.packet.send.message;
 
 import com.github.cao.awa.apricot.anntations.*;
 
-public enum SendMessageType {
+public enum MessageType {
     PRIVATE("private"), GROUP("group"), @Unsupported GUILD("guild");
 
     private final String name;
 
-    SendMessageType(String name) {
+    MessageType(String name) {
         this.name = name;
     }
 
-    public static SendMessageType of(String name) {
+    public static MessageType of(String name) {
         return switch (name.toLowerCase()) {
             case "private" -> PRIVATE;
             case "group" -> GROUP;

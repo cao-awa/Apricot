@@ -1,23 +1,20 @@
 package com.github.cao.awa.apricot.network.packet.recevied.poke;
 
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.poke.*;
-import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.sender.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.server.*;
 
 public class PokeReceivedPacket extends ReadonlyPacket {
-    private final SendMessageType type;
+    private final MessageType type;
     private final long causerId;
     private final long botId;
     private final long targetId;
     private final long responseId;
     private final long timestamp;
 
-    public PokeReceivedPacket(SendMessageType type, long causerId, long targetId, long botId, long responseId, long timestamp) {
+    public PokeReceivedPacket(MessageType type, long causerId, long targetId, long botId, long responseId, long timestamp) {
         this.type = type;
         this.botId = botId;
         this.causerId = causerId;
@@ -26,7 +23,7 @@ public class PokeReceivedPacket extends ReadonlyPacket {
         this.targetId = targetId;
     }
 
-    public SendMessageType getType() {
+    public MessageType getType() {
         return type;
     }
 

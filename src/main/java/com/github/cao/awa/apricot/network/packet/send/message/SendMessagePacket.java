@@ -8,20 +8,20 @@ import org.jetbrains.annotations.*;
 import java.util.function.*;
 
 public class SendMessagePacket extends Packet {
-    private SendMessageType type;
+    private MessageType type;
     private long userId;
     private long groupId;
     private AssembledMessage message;
     private boolean autoEscape = false;
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId, long groupId) {
+    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId, long groupId) {
         this.type = type;
         this.userId = userId;
         this.groupId = groupId;
         this.message = message;
     }
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId, long groupId, boolean autoEscape) {
+    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId, long groupId, boolean autoEscape) {
         this.type = type;
         this.userId = userId;
         this.groupId = groupId;
@@ -29,28 +29,28 @@ public class SendMessagePacket extends Packet {
         this.autoEscape = autoEscape;
     }
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId) {
+    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId) {
         this.type = type;
         this.userId = userId;
         this.message = message;
     }
 
-    public SendMessagePacket(@NotNull SendMessageType type, @NotNull AssembledMessage message, long userId, boolean autoEscape) {
+    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId, boolean autoEscape) {
         this.type = type;
         this.userId = userId;
         this.message = message;
         this.autoEscape = autoEscape;
     }
 
-    public void compoundType(Function<SendMessageType, SendMessageType> function) {
+    public void compoundType(Function<MessageType, MessageType> function) {
         setType(function.apply(getType()));
     }
 
-    private SendMessageType getType() {
+    private MessageType getType() {
         return type;
     }
 
-    private void setType(SendMessageType type) {
+    private void setType(MessageType type) {
         this.type = type;
     }
 
@@ -121,7 +121,7 @@ public class SendMessagePacket extends Packet {
                       "action",
                       "send_msg"
               );
-        if (this.type == SendMessageType.PRIVATE) {
+        if (this.type == MessageType.PRIVATE) {
             new SendPrivateMessagePacket(
                     this.message,
                     this.userId,

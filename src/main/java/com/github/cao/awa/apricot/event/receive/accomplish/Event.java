@@ -5,6 +5,8 @@ import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
 
+import java.util.*;
+
 public abstract class Event<T extends ReadonlyPacket> {
     private final ApricotProxy proxy;
     private final T packet;
@@ -23,10 +25,10 @@ public abstract class Event<T extends ReadonlyPacket> {
     }
 
     public String toString() {
-        return getName() + "(" + super.toString() + ")";
+        return pipeline() + "(" + super.toString() + ")";
     }
 
-    public abstract String getName();
+    public abstract Set<String> pipeline();
 
     /**
      * Fire event, let event entrust handler to process self.

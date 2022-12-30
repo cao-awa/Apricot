@@ -14,7 +14,8 @@ import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.invalid.*;
-import com.github.cao.awa.apricot.network.packet.factor.message.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.group.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
@@ -176,7 +177,9 @@ public class ApricotServer {
     public void setupNetwork() {
         LOGGER.info("Startup apricot bot server network");
         // Setup packet deserializers
-        this.packetDeserializers.register(new MessageReceivedPacketFactor());
+        this.packetDeserializers.register(new GroupNormalMessagePacketFactor());
+        this.packetDeserializers.register(new GroupAnonymousMessagePacketFactor());
+        this.packetDeserializers.register(new PrivateFriendMessagePacketFactor());
         this.packetDeserializers.register(new EchoResultPacketFactor());
         this.packetDeserializers.register(new InvalidDataReceivedPacketFactor());
         this.packetDeserializers.register(new PokeReceivedPacketFactor());

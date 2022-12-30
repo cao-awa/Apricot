@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.receive.accomplish.response.*;
 
 public abstract class EchoResultEventHandler extends AccomplishEventHandler {
     @Override
-    public final String getName() {
+    public final String getType() {
         return "echo-result";
     }
 

@@ -7,22 +7,34 @@ import com.github.cao.awa.apricot.event.handler.firewall.filter.poke.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.poke.*;
+import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+
+import java.util.*;
 
 public class PokeReceivedEvent extends Event<PokeReceivedPacket> {
+    private static final Set<String> TARGETS = EntrustEnvironment.operation(
+            ApricotCollectionFactor.newHashSet(),
+            set -> set.add("notice-poke")
+    );
+
     public PokeReceivedEvent(ApricotProxy proxy, PokeReceivedPacket packet) {
-        super(proxy, packet);
+        super(
+                proxy,
+                packet
+        );
     }
 
     @Override
-    public String getName() {
-        return "notice-poke";
+    public final Set<String> pipeline() {
+        return TARGETS;
     }
 
     /**
      * Fire event, let event entrust handler to process self.
      *
-     * @param handler handler
-     *
+     * @param handler
+     *         handler
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -37,8 +49,8 @@ public class PokeReceivedEvent extends Event<PokeReceivedPacket> {
     /**
      * Fire event, let event entrust handler to process self.
      *
-     * @param handler handler
-     *
+     * @param handler
+     *         handler
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0

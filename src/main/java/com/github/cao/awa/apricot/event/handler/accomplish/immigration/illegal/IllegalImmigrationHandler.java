@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.receive.accomplish.immigration.illegal.*
 
 public abstract class IllegalImmigrationHandler extends AccomplishEventHandler {
     @Override
-    public final String getName() {
+    public final String getType() {
         return "illegal-immigration";
     }
 

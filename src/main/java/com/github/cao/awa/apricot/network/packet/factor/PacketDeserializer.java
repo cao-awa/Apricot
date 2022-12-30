@@ -16,18 +16,24 @@ public class PacketDeserializer {
     public ReadonlyPacket deserializer(ApricotServer server, JSONObject request) {
         String name;
         try {
+            PacketFactor factor = null;
             if (request.containsKey("post_type")) {
                 name = request.getString("post_type");
-                if (request.containsKey("sub_type")) {
-                    name = name + "-" + request.getString("sub_type");
+                if ("message".equals(name)) {
+                    factor = handleMessagePost(
+                            request.getString("message_type"),
+                            request.getString("sub_type")
+                    );
+                } else {
+                    name = request.getString("post_type") + "-" + request.getString("sub_type");
                 }
             } else {
                 request = request.getJSONObject("echo");
                 name = request.getString("type");
             }
-            PacketFactor factor = this.factors.containsKey(name) ?
-                                  this.factors.get(name) :
-                                  this.factors.get("invalid-data");
+            if (factor == null) {
+                factor = this.factors.containsKey(name) ? this.factors.get(name) : this.factors.get("invalid-data");
+            }
             return factor.create(
                     server,
                     request
@@ -38,6 +44,11 @@ public class PacketDeserializer {
                     true
             );
         }
+    }
+
+    private PacketFactor handleMessagePost(String messageType, String subType) {
+        String name = "message-" + messageType + "-" + subType;
+        return this.factors.get(name);
     }
 
     public void register(PacketFactor factor) {

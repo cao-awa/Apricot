@@ -17,7 +17,8 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public void onInitialize() {
-        registerHandler(new InternalAwa());
+        registerHandler(new InternalGroupHandler());
+        registerHandler(new InternalPrivateHandler());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new InternalIllegalImmigrationHandler());
         registerHandler(new PokeReciprocity());

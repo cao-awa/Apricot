@@ -1,6 +1,5 @@
 package com.github.cao.awa.apricot.network.packet.send.poke;
 
-import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.cq.element.poke.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
@@ -10,27 +9,27 @@ import org.jetbrains.annotations.*;
 import java.util.function.*;
 
 public class SendPokePacket extends Packet {
-    private SendMessageType type;
+    private MessageType type;
     private long targetId;
     private long botId;
     private long responseId;
 
-    public SendPokePacket(@NotNull SendMessageType type, long targetId, long botId, long responseId) {
+    public SendPokePacket(@NotNull MessageType type, long targetId, long botId, long responseId) {
         this.type = type;
         this.targetId = targetId;
         this.botId = botId;
         this.responseId = responseId;
     }
 
-    public void compoundType(Function<SendMessageType, SendMessageType> function) {
+    public void compoundType(Function<MessageType, MessageType> function) {
         setType(function.apply(getType()));
     }
 
-    private SendMessageType getType() {
+    private MessageType getType() {
         return type;
     }
 
-    private void setType(SendMessageType type) {
+    private void setType(MessageType type) {
         this.type = type;
     }
 
@@ -66,7 +65,7 @@ public class SendPokePacket extends Packet {
                       "action",
                       "send_msg"
               );
-        if (this.type == SendMessageType.PRIVATE) {
+        if (this.type == MessageType.PRIVATE) {
             new SendPrivateMessagePacket(
                     new PokeMessageElement(
                             this.targetId,

@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 import com.github.cao.awa.apricot.event.handler.accomplish.immigration.illegal.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.immigration.illegal.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.*;
+import com.github.cao.awa.apricot.network.packet.recevied.message.group.*;
 import org.apache.logging.log4j.*;
 
 public class InternalIllegalImmigrationHandler extends IllegalImmigrationHandler {
@@ -21,7 +21,7 @@ public class InternalIllegalImmigrationHandler extends IllegalImmigrationHandler
     @Override
     public void onIllegalImmigration(IllegalImmigrationEvent event) {
         Packet packet = event.getIllegalEvent().getPacket();
-        if (packet instanceof MessageReceivedPacket messageReceived) {
+        if (packet instanceof GroupNormalMessageReceivedPacket messageReceived) {
             LOGGER.info("Illegal message, will not be process: {}", messageReceived.getMessage().toPlainText());
         }
     }

@@ -20,6 +20,6 @@ public class ApricotBootstrap {
             e.printStackTrace();
         }
 
-        System.out.println("Done in " + TimeUtil.processMillion(start));
+        System.out.println("Apricot server startup done in " + TimeUtil.processMillion(start));
     }
 }

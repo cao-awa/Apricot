@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.receive.accomplish.poke.*;
 
 public abstract class PokeReceivedEventHandler extends AccomplishEventHandler {
     @Override
-    public final String getName() {
+    public final String getType() {
         return "notice-poke";
     }
 

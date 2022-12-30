@@ -1,7 +1,6 @@
 package com.github.cao.awa.apricot.event.handler.firewall.filter.poke;
 
 import com.github.cao.awa.apricot.event.handler.firewall.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.poke.*;
 
 public abstract class PokeReceivedFilter extends FirewallEventHandler {

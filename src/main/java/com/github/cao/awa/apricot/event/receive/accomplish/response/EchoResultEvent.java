@@ -6,15 +6,27 @@ import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
+import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+
+import java.util.*;
 
 public class EchoResultEvent extends Event<EchoResultPacket> {
+    private static final Set<String> TARGETS = EntrustEnvironment.operation(
+            ApricotCollectionFactor.newHashSet(),
+            set -> set.add("echo-result")
+    );
+
     public EchoResultEvent(ApricotProxy proxy, EchoResultPacket packet) {
-        super(proxy, packet);
+        super(
+                proxy,
+                packet
+        );
     }
 
     @Override
-    public String getName() {
-        return "echo-result";
+    public final Set<String> pipeline() {
+        return TARGETS;
     }
 
     /**
