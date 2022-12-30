@@ -38,6 +38,7 @@ import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
 import com.github.cao.awa.apricot.utils.io.*;
+import com.github.cao.awa.apricot.utils.times.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;
@@ -61,6 +62,9 @@ public class ApricotServer {
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
     private final boolean active = true;
+
+    public static final ThreadLocal<Long> performance = new ThreadLocal<>();
+
     public ApricotServer() {
     }
 
@@ -76,12 +80,14 @@ public class ApricotServer {
         return this.packetsCounter;
     }
 
-    public void startup() throws Exception {
+    public void startup() {
+        performance.set(TimeUtil.millions());
         LOGGER.info("Startup apricot bot server");
         setupConfig();
         setupServer();
         setupPlugins();
         setupNetwork();
+        LOGGER.info("Startup done, time elapsed {} seconds", TimeUtil.processMillion(performance.get()) / 1000D);
     }
 
     public void setupPlugins() {
@@ -130,26 +136,30 @@ public class ApricotServer {
 
     public void setupConfig() {
         this.configs.init(() -> EntrustEnvironment.receptacle(receptacle -> {
-            File config = new File("configs/bot-server.conf");
-            if (! config.isFile()) {
-                LOGGER.warn("Config not found, generating default config");
+            try {
+                File config = new File("configs/bot-server.conf");
+                if (! config.isFile()) {
+                    LOGGER.warn("Config not found, generating default config");
 
-                EntrustEnvironment.trys(() -> config.getParentFile()
-                                                    .mkdirs());
+                    EntrustEnvironment.trys(() -> config.getParentFile()
+                                                        .mkdirs());
 
-                receptacle.set(IOUtil.read(ResourcesLoader.getResource("default-config.conf")));
+                    receptacle.set(IOUtil.read(ResourcesLoader.getResource("default-config.conf")));
 
-                EntrustEnvironment.operation(
-                        new BufferedWriter(new FileWriter(config)),
-                        writer -> IOUtil.write(
-                                writer,
-                                receptacle.get()
-                        )
-                );
-            }
+                    EntrustEnvironment.operation(
+                            new BufferedWriter(new FileWriter(config)),
+                            writer -> IOUtil.write(
+                                    writer,
+                                    receptacle.get()
+                            )
+                    );
+                }
 
-            if (receptacle.get() == null) {
-                receptacle.set(IOUtil.read(new BufferedReader(new FileReader(config))));
+                if (receptacle.get() == null) {
+                    receptacle.set(IOUtil.read(new BufferedReader(new FileReader(config))));
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }));
 

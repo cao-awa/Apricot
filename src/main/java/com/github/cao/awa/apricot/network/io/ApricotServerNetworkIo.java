@@ -33,7 +33,6 @@ public class ApricotServerNetworkIo {
     );
 
     private final ApricotChannelInitializer channelInitializer;
-
     private final ApricotServer server;
     private final List<ChannelFuture> channels = new CopyOnWriteArrayList<>();
 
@@ -66,6 +65,10 @@ public class ApricotServerNetworkIo {
                                        .group(
                                                boss,
                                                worker
+                                       )
+                                       .option(
+                                               ChannelOption.SO_BACKLOG,
+                                               256
                                        )
                                        .option(
                                                // Real-time response is necessary

@@ -12,7 +12,7 @@ public class ApricotHandshakeHandler extends RequestHandler {
         super(dispenser);
     }
 
-    public void handlePacket(ReadonlyPacket packet) {
+    public synchronized void handlePacket(ReadonlyPacket packet) {
         if (packet instanceof ProxyConnectPacket connect) {
             getDispenser().setId(connect.getId());
             getDispenser().setConnectTime(connect.getTimestamp());
