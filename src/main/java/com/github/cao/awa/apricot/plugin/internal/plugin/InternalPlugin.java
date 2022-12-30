@@ -19,7 +19,7 @@ public class InternalPlugin extends AccomplishPlugin {
     public void onInitialize() {
         registerHandler(new InternalGroupHandler());
 //        registerHandler(new InternalPrivateHandler());
-        registerHandler(new TappingTitleChanges());
+        registerHandler(new ListenBotDied());
         registerHandler(new RecallNotice());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new InternalIllegalImmigrationHandler());

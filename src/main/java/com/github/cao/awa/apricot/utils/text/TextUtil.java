@@ -216,4 +216,8 @@ public class TextUtil {
 
         return List.of(list);
     }
+
+    public static String underlineDash(String source) {
+        return source.replace("_", "-");
+    }
 }

@@ -5,12 +5,12 @@ import com.github.cao.awa.apricot.network.packet.writer.*;
 
 import java.util.function.*;
 
-public class SendSetGroupNameCardPacket extends WritablePacket {
+public class SetGroupNameCardPacket extends WritablePacket {
     private String cardName;
     private long groupId;
     private long userId;
 
-    public SendSetGroupNameCardPacket(String cardName, long groupId, long userId) {
+    public SetGroupNameCardPacket(String cardName, long groupId, long userId) {
         this.cardName = cardName;
         this.groupId = groupId;
         this.userId = userId;

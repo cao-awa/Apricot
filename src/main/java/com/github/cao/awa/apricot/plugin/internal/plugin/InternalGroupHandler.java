@@ -5,12 +5,12 @@ import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
-import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.forward.*;
 import com.github.cao.awa.apricot.network.packet.send.message.recall.*;
 import com.github.cao.awa.apricot.network.packet.send.name.card.*;
+import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.utils.collection.*;
@@ -38,9 +38,9 @@ public class InternalGroupHandler extends MessageReceivedEventHandler {
         MessageReceivedPacket packet = event.getPacket();
 
 //        if (packet.getMessage().toPlainText().startsWith("[CQ:forward")) {
-            LOGGER.info("GROUP * " + packet.getSender()
-                                           .getName() + ": " + packet.getMessage()
-                                                                     .toPlainText());
+//            LOGGER.info("GROUP * " + packet.getSender()
+//                                           .getName() + ": " + packet.getMessage()
+//                                                                     .toPlainText());
 //        }
 
         if (event.getPacket()
@@ -151,7 +151,7 @@ public class InternalGroupHandler extends MessageReceivedEventHandler {
         }
 
         if (event.getPacket().getMessage().toPlainText().equals(".change_name")) {
-            proxy.send(new SendSetGroupNameCardPacket(String.valueOf(TimeUtil.millions()), packet.getResponseId(), packet.getSenderId()));
+            proxy.send(new SetGroupNameCardPacket(String.valueOf(TimeUtil.millions()), packet.getResponseId(), packet.getSenderId()));
         }
     }
 }

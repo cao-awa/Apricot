@@ -1,8 +1,8 @@
 package com.github.cao.awa.apricot.event.receive.accomplish;
 
 import com.github.cao.awa.apricot.event.handler.firewall.*;
-import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class NoFirewallEvent extends Event<ReadonlyPacket> {
     public NoFirewallEvent(ApricotProxy proxy, ReadonlyPacket packet) {

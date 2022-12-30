@@ -73,7 +73,7 @@ public class ApricotServerNetworkIo {
                                                ChannelOption.TCP_NODELAY,
                                                true
                                        )
-                                       .childHandler(channelInitializer)
+                                       .childHandler(this.channelInitializer)
                                        .bind(port)
                                        .syncUninterruptibly()
                                        .channel()

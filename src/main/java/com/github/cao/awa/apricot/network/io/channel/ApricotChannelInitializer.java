@@ -1,6 +1,8 @@
 package com.github.cao.awa.apricot.network.io.channel;
 
+import com.github.cao.awa.apricot.network.connection.*;
 import com.github.cao.awa.apricot.network.handler.*;
+import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
 import io.netty.channel.socket.*;
@@ -42,6 +44,7 @@ public class ApricotChannelInitializer extends ChannelInitializer<SocketChannel>
                 65536 * 16
         ));
         // Do handle
-        pipeline.addLast(new ApricotRequestHandler(this.server));
+        pipeline.addLast(new ApricotRequestRouter(this.server));
+
     }
 }

@@ -2,9 +2,8 @@ package com.github.cao.awa.apricot.network.packet.recevied.message.group;
 
 import com.github.cao.awa.apricot.event.receive.accomplish.message.group.*;
 import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.network.handler.*;
-import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.sender.*;
+import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 
 public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket {

@@ -5,8 +5,8 @@ import com.github.cao.awa.apricot.event.handler.accomplish.message.group.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.message.group.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
-import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.group.*;
+import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class GroupMessageReceivedEvent<T extends GroupMessageReceivedPacket> extends MessageReceivedEvent<T> {
     public GroupMessageReceivedEvent(ApricotProxy proxy, T packet) {

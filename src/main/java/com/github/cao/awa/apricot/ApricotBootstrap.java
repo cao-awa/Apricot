@@ -1,7 +1,5 @@
 package com.github.cao.awa.apricot;
 
-import com.github.cao.awa.apricot.plugin.internal.firewall.*;
-import com.github.cao.awa.apricot.plugin.internal.plugin.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.times.*;
 

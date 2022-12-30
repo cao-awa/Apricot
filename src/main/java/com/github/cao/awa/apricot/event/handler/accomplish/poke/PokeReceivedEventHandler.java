@@ -4,6 +4,12 @@ import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.poke.*;
 
 public abstract class PokeReceivedEventHandler extends AccomplishEventHandler {
+    /**
+     * Which type event is target of this handler.
+     *
+     * @author cao_awa
+     * @since 1.0.0
+     */
     @Override
     public final String getType() {
         return "notice-poke";

@@ -5,8 +5,8 @@ import com.github.cao.awa.apricot.event.handler.accomplish.message.personal.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.message.personal.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
-import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.personal.*;
+import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class PrivateMessageReceivedEvent<T extends PrivateMessageReceivedPacket> extends MessageReceivedEvent<T> {
     public PrivateMessageReceivedEvent(ApricotProxy proxy, T packet) {

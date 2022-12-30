@@ -14,10 +14,16 @@ import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.factor.invalid.*;
+import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.bot.*;
+import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.kick.*;
+import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.leave.*;
+import com.github.cao.awa.apricot.network.packet.factor.member.change.increase.approve.*;
+import com.github.cao.awa.apricot.network.packet.factor.member.change.increase.invite.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.group.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.recall.gruop.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.recall.personal.*;
+import com.github.cao.awa.apricot.network.packet.factor.meta.lifecycle.*;
 import com.github.cao.awa.apricot.network.packet.factor.name.card.*;
 import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
@@ -54,9 +60,12 @@ public class ApricotServer {
     private EchoManager echoManager;
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
-    private boolean active = true;
-
+    private final boolean active = true;
     public ApricotServer() {
+    }
+
+    public ApricotServerNetworkIo getNetworkIo() {
+        return networkIo;
     }
 
     public TrafficCounter getTrafficsCounter() {
@@ -181,10 +190,17 @@ public class ApricotServer {
     public void setupNetwork() {
         LOGGER.info("Startup apricot bot server network");
         // Setup packet deserializers
+        this.packetDeserializers.register(new ProxyConnectPacketFactor());
+        this.packetDeserializers.register(new ProxyDisconnectPacketFactor());
         this.packetDeserializers.register(new GroupNormalMessagePacketFactor());
         this.packetDeserializers.register(new GroupAnonymousMessagePacketFactor());
         this.packetDeserializers.register(new GroupMessageRecallPacketFactor());
         this.packetDeserializers.register(new GroupNameChangedReceivedPacketFactor());
+        this.packetDeserializers.register(new GroupMemberApprovedPacketFactor());
+        this.packetDeserializers.register(new GroupMemberInvitedPacketFactor());
+        this.packetDeserializers.register(new GroupMemberLeavedPacketFactor());
+        this.packetDeserializers.register(new GroupMemberKickedPacketFactor());
+        this.packetDeserializers.register(new BotDiedFromGroupPacketFactor());
         this.packetDeserializers.register(new GroupTitleChangedReceivedPacketFactor());
         this.packetDeserializers.register(new PrivateFriendMessagePacketFactor());
         this.packetDeserializers.register(new PrivateMessageRecallPacketFactor());

@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.receive.accomplish.immigration.illegal;
 import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.handler.accomplish.immigration.illegal.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
-import com.github.cao.awa.apricot.network.handler.*;
+import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 

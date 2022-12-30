@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.recevied.invalid.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.utils.text.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -18,30 +19,36 @@ public class PacketDeserializer {
             String name;
             PacketFactor factor = null;
             if (request.containsKey("post_type")) {
-                name = request.getString("post_type")
-                              .replace(
-                                      "_",
-                                      "-"
-                              );
+                String postType = TextUtil.underlineDash(request.getString("post_type"));
+                name = postType;
                 String subtype = request.containsKey("sub_type") ?
-                                 request.getString("sub_type")
-                                        .replace(
-                                                "_",
-                                                "-"
-                                        ) :
+                                 TextUtil.underlineDash(request.getString("sub_type")) :
                                  null;
-                if ("message".equals(name)) {
-                    factor = handleMessagePost(
-                            request.getString("message_type"),
-                            subtype
-                    );
-                } else if ("notice".equals(name)) {
-                    factor = handleNoticePost(
-                            request.getString("notice_type"),
-                            subtype
-                    );
-                } else {
-                    name = request.getString("post_type") + (subtype == null ? "" : "-" + subtype);
+                switch (postType) {
+                    case "message" -> {
+                        String messageType = TextUtil.underlineDash(request.getString("message_type"));
+                        factor = handleMessagePost(
+                                messageType,
+                                subtype
+                        );
+                    }
+                    case "notice" -> {
+                        String noticeType = TextUtil.underlineDash(request.getString("notice_type"));
+                        factor = handleNoticePost(
+                                noticeType,
+                                subtype
+                        );
+                    }
+                    case "meta-event" -> {
+                        String metaEventType = TextUtil.underlineDash(request.getString("meta_event_type"));
+                        factor = handleMetaEvent(
+                                metaEventType,
+                                subtype
+                        );
+                    }
+                    default -> {
+                        name = postType + (subtype == null ? "" : "-" + subtype);
+                    }
                 }
             } else {
                 request = request.getJSONObject("echo");
@@ -55,6 +62,7 @@ public class PacketDeserializer {
                     request
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return new InvalidDataReceivedPacket(
                     request,
                     true
@@ -69,6 +77,14 @@ public class PacketDeserializer {
 
     private PacketFactor handleNoticePost(String noticeType, @Nullable String subType) {
         String name = "notice-" + noticeType.replace(
+                "_",
+                "-"
+        ) + (subType == null ? "" : ("-" + subType));
+        return this.factors.get(name);
+    }
+
+    private PacketFactor handleMetaEvent(String metaEventType, @Nullable String subType) {
+        String name = "meta-" + metaEventType.replace(
                 "_",
                 "-"
         ) + (subType == null ? "" : ("-" + subType));

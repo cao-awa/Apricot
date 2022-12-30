@@ -35,7 +35,7 @@ public class SendPokePacket extends WritablePacket {
         this.type = type;
     }
 
-    public void compoundId(Function<Long, Long> function) {
+    public void compoundTargetId(Function<Long, Long> function) {
         setTargetId(function.apply(getTargetId()));
     }
 
@@ -47,12 +47,28 @@ public class SendPokePacket extends WritablePacket {
         this.targetId = targetId;
     }
 
+    public void compoundBotId(Function<Long, Long> function) {
+        setBotId(function.apply(getBotId()));
+    }
+
     public long getBotId() {
         return this.botId;
     }
 
     public void setBotId(long botId) {
         this.botId = botId;
+    }
+
+    public void compoundResponseId(Function<Long, Long> function) {
+        setResponseId(function.apply(getResponseId()));
+    }
+
+    public long getResponseId() {
+        return responseId;
+    }
+
+    public void setResponseId(long responseId) {
+        this.responseId = responseId;
     }
 
     @Override
