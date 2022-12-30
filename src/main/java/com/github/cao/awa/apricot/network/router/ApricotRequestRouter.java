@@ -55,6 +55,7 @@ public class ApricotRequestRouter extends NetworkRouter {
         super.channelActive(context);
         this.context = context;
         this.channel = context.channel();
+        this.dispenser.channelActive(context);
     }
 
     public void handleRequest(JSONObject request) {

@@ -22,14 +22,19 @@ public class ApricotUniqueDispenser {
     private RequestHandler handler;
     private long id;
     private long connectTime;
-    private final PacketJSONBufWriter writer;
-    private final Channel channel;
+    private PacketJSONBufWriter writer;
+    private ChannelHandlerContext context;
+    private Channel channel;
     private String disconnectReason = "";
 
     public ApricotUniqueDispenser(ApricotServer server, ApricotRequestRouter router) {
         this.server = server;
         this.router = router;
-        this.channel = router.getChannel();
+    }
+
+    public void channelActive(ChannelHandlerContext context) {
+        this.context = context;
+        this.channel = context.channel();
 
         this.writer = new PacketJSONBufWriter(
                 this.server,
