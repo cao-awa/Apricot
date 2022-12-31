@@ -7,7 +7,7 @@ import java.util.concurrent.*;
 
 public class ApricotCollectionFactor {
     public static <K, V> Map<K, V> newHashMap() {
-        // return new HashMap<>();
+//         return new HashMap<>();
         return new Object2ObjectOpenHashMap<>();
     }
 
@@ -20,7 +20,7 @@ public class ApricotCollectionFactor {
     }
 
     public static <V> List<V> newArrayList(int capacity) {
-        // return new ArrayList<>(capacity);
+//         return new ArrayList<>(capacity);
         return new ObjectArrayList<>(capacity);
     }
 
@@ -29,7 +29,7 @@ public class ApricotCollectionFactor {
     }
 
     public static <V> Set<V> newHashSet() {
-        // return new HashSet<>();
+//         return new HashSet<>();
          return new ObjectOpenHashSet<>();
     }
 }

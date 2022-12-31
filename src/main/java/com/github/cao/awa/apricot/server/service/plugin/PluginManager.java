@@ -4,16 +4,22 @@ import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
+import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
+import com.github.cao.awa.apricot.server.service.plugin.loader.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
+import org.reflections.*;
+import org.reflections.scanners.*;
+import org.reflections.util.*;
 
+import java.io.*;
+import java.net.*;
+import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
-
-import static com.github.cao.awa.apricot.server.ApricotServer.CLAZZ_SCANNER;
 
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
@@ -60,18 +66,44 @@ public class PluginManager implements ConcurrentService {
         if (this.active) {
             LOGGER.info("Loading apricot bot plugins");
 
-            List<Class<?>> classList = CLAZZ_SCANNER.getTypesAnnotatedWith(AutoPlugin.class);
+            Set<Class<?>> plugins = Objects.requireNonNull(EntrustEnvironment.trys(() -> {
+                File apricotJar = new File(URLDecoder.decode(
+                        ResourcesLoader.class.getProtectionDomain()
+                                             .getCodeSource()
+                                             .getLocation()
+                                             .getPath(),
+                        StandardCharsets.UTF_8
+                ));
+
+                Set<Class<?>> results = ApricotCollectionFactor.newHashSet();
+
+                File pluginDir = new File("plugins");
+                AnnotatedClassFinder finder = new AnnotatedClassFinder(
+                        pluginDir,
+                        AutoPlugin.class
+                );
+                results.addAll(finder.getClasses()
+                                     .values());
+
+                results.addAll(apricotJar.isFile() ?
+                               new Reflections(new ConfigurationBuilder().addUrls(apricotJar.toURI()
+                                                                                            .toURL())
+                                                                         .addScanners(Scanners.TypesAnnotated)).getTypesAnnotatedWith(AutoPlugin.class) :
+                               new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(""))
+                                                                         .addScanners(Scanners.TypesAnnotated)).getTypesAnnotatedWith(AutoPlugin.class));
+                return results;
+            }));
 
             boolean shouldAsync = server.shouldAsyncLoadPlugins();
 
             List<Plugin> blockLoading = ApricotCollectionFactor.newArrayList();
 
-            for (Class<?> clazz : classList) {
+            for (Class<?> clazz : plugins) {
                 EntrustEnvironment.trys(
                         () -> {
                             Plugin plugin = (Plugin) clazz.getDeclaredConstructor()
                                                           .newInstance();
-                            if (shouldAsync && plugin.shouldAsync()) {
+                            if (shouldAsync && plugin.canAsync()) {
                                 this.executor.execute(() -> loadPlugin(plugin));
                             } else {
                                 blockLoading.add(plugin);

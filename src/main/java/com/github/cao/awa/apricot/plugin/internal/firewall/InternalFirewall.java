@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.firewall;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 
@@ -22,7 +23,7 @@ public class InternalFirewall extends FirewallPlugin {
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "Internal Firewall";
     }
 }

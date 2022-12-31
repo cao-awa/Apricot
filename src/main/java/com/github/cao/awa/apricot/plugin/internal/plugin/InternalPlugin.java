@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 
@@ -17,7 +18,7 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public void onInitialize() {
-        registerHandler(new InternalGroupHandler());
+        registerHandler(new InternalMessageHandler());
 //        registerHandler(new InternalPrivateHandler());
         registerHandler(new ListenBotDied());
         registerHandler(new RecallNotice());
@@ -32,7 +33,7 @@ public class InternalPlugin extends AccomplishPlugin {
     }
 
     @Override
-    public String getName() {
+    public @NotNull String getName() {
         return "Internal Plugin";
     }
 }

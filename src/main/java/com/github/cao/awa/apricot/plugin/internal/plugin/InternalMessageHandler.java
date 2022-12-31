@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
@@ -20,7 +21,7 @@ import org.apache.logging.log4j.*;
 
 import java.util.*;
 
-public class InternalGroupHandler extends MessageReceivedEventHandler {
+public class InternalMessageHandler extends MessageReceivedEventHandler {
     private static final Logger LOGGER = LogManager.getLogger("InternalGroup");
 
     /**
@@ -37,11 +38,12 @@ public class InternalGroupHandler extends MessageReceivedEventHandler {
         ApricotProxy proxy = event.getProxy();
         MessageReceivedPacket packet = event.getPacket();
 
-//        if (packet.getMessage().toPlainText().startsWith("[CQ:forward")) {
-//            LOGGER.info("GROUP * " + packet.getSender()
-//                                           .getName() + ": " + packet.getMessage()
-//                                                                     .toPlainText());
-//        }
+        LOGGER.info((packet.getType() == MessageType.GROUP ? "GROUP({}) * {}: {}" : "PRIVATE({}) * {}: {}"),
+                    packet.getResponseId(),
+                    packet.getSender()
+                          .getName(),
+                    packet.getMessage()
+                          .toPlainText());
 
         if (event.getPacket()
                  .getMessage()
@@ -116,8 +118,6 @@ public class InternalGroupHandler extends MessageReceivedEventHandler {
                                  packet.getResponseId()
                          ),
                          result -> {
-                             System.out.println(result.getIdentifier());
-                             System.out.println(result.getResponse());
                          }
                  );
         }
@@ -132,7 +132,7 @@ public class InternalGroupHandler extends MessageReceivedEventHandler {
                     packet.getSenderId(),
                     packet.getSender()
                           .getName(),
-                    new TextMessageElement("草了").toMessage()
+                    new TextMessageElement("草").toMessage()
             ));
 
             event.getProxy()
@@ -144,14 +144,19 @@ public class InternalGroupHandler extends MessageReceivedEventHandler {
                                  packet.getResponseId()
                          ),
                          result -> {
-                             System.out.println(result.getIdentifier());
-                             System.out.println(result.getResponse());
                          }
                  );
         }
 
-        if (event.getPacket().getMessage().toPlainText().equals(".change_name")) {
-            proxy.send(new SetGroupNameCardPacket(String.valueOf(TimeUtil.millions()), packet.getResponseId(), packet.getSenderId()));
+        if (event.getPacket()
+                 .getMessage()
+                 .toPlainText()
+                 .equals(".change_name")) {
+            proxy.send(new SetGroupNameCardPacket(
+                    String.valueOf(TimeUtil.millions()),
+                    packet.getResponseId(),
+                    packet.getSenderId()
+            ));
         }
     }
 }

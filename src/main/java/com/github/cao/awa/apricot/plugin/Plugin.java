@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 
+import java.nio.charset.*;
 import java.util.*;
 
 /**
@@ -64,11 +65,16 @@ public abstract class Plugin implements Comparable<Plugin> {
         return getUuid().compareTo(o.getUuid());
     }
 
-    public abstract UUID getUuid();
+    public UUID getUuid() {
+        return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
+    }
+
+    @NotNull
+    public abstract String getName();
 
     public abstract void onInitialize();
 
-    public abstract String getName();
-
-    public abstract boolean shouldAsync();
+    public boolean canAsync() {
+        return true;
+    }
 }

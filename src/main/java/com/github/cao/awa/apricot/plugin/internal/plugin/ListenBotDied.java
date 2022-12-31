@@ -18,7 +18,7 @@ public class ListenBotDied extends ProxyDisconnectEventHandler {
      */
     @Override
     public void onDisconnect(ProxyDisconnectEvent event) {
-        LOGGER.info("Bot '{}' was died, connect timestamp is '{}'", event.getPacket().getId(), event.getPacket().getTimestamp());
+        LOGGER.info("Bot '{}' was died(disconnect), connect timestamp is '{}'", event.getPacket().getId(), event.getPacket().getTimestamp());
 //        LOGGER.info("Bot '{}' was die(kicked) by '{}'", event.getPacket().getUserId(), event.getPacket().getOperatorId());
     }
 }

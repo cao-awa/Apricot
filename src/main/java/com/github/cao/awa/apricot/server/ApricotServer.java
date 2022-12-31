@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.server;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.config.*;
-import com.github.cao.awa.apricot.devlop.clazz.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
@@ -29,7 +28,6 @@ import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
-import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.resources.loader.*;
@@ -46,24 +44,23 @@ import org.jetbrains.annotations.*;
 import java.io.*;
 import java.util.*;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 public class ApricotServer {
-    public static final ClazzScanner CLAZZ_SCANNER = new ClazzScanner(Plugin.class);
+    public static final AtomicLong performance = new AtomicLong();
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
+    private final boolean active = true;
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
     private Executor taskExecutor = Executors.newCachedThreadPool();
     private ApricotServerNetworkIo networkIo;
-    private final boolean active = true;
-
-    public static final ThreadLocal<Long> performance = new ThreadLocal<>();
 
     public ApricotServer() {
     }
@@ -83,11 +80,16 @@ public class ApricotServer {
     public void startup() {
         performance.set(TimeUtil.millions());
         LOGGER.info("Startup apricot bot server");
+        setupDirectories();
         setupConfig();
         setupServer();
         setupPlugins();
         setupNetwork();
-        LOGGER.info("Startup done, time elapsed {} seconds", TimeUtil.processMillion(performance.get()) / 1000D);
+    }
+
+    public void setupDirectories() {
+        boolean config = new File("configs").mkdirs();
+        boolean plugins = new File("plugins").mkdirs();
     }
 
     public void setupPlugins() {
@@ -227,7 +229,13 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        submitTask(() -> EntrustEnvironment.trys(() -> this.networkIo.start(configs.getInteger("server.port"))));
+        submitTask(() -> EntrustEnvironment.trys(
+                () -> this.networkIo.start(configs.getInteger("server.port")),
+                ex -> {
+                    LOGGER.error("Apricot network failed to startup", ex);
+                    shutdown();
+                }
+        ));
     }
 
     public void submitTask(Runnable runnable) {

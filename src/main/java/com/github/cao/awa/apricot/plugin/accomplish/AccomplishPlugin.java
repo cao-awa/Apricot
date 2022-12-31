@@ -49,7 +49,7 @@ public abstract class AccomplishPlugin extends Plugin {
     }
 
     @Override
-    public boolean shouldAsync() {
+    public boolean canAsync() {
         return true;
     }
 }

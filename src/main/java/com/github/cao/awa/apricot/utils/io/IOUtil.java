@@ -217,7 +217,7 @@ public class IOUtil {
      * @since 1.0.0
      */
     public static byte[] readBytes(InputStream input) throws IOException {
-        return readBytes(new InputStreamReader(input));
+        return input.readAllBytes();
     }
 
     /**

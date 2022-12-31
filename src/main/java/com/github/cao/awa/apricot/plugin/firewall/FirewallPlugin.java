@@ -38,7 +38,7 @@ public abstract class FirewallPlugin extends Plugin {
     }
 
     @Override
-    public boolean shouldAsync() {
+    public boolean canAsync() {
         return false;
     }
 }

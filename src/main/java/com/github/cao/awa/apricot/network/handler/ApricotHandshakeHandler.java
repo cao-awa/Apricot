@@ -12,20 +12,29 @@ public class ApricotHandshakeHandler extends RequestHandler {
         super(dispenser);
     }
 
-    public synchronized void handlePacket(ReadonlyPacket packet) {
-        if (packet instanceof ProxyConnectPacket connect) {
-            getDispenser().setId(connect.getId());
-            getDispenser().setConnectTime(connect.getTimestamp());
-            LOGGER.info(
-                    "Proxy '{}' login susses, timestamp is '{}'",
-                    connect.getId(),
-                    connect.getTimestamp()
-            );
-            getDispenser().setHandler(new ApricotBotRequestHandler(getDispenser()));
-            getDispenser().handle(packet);
-        } else {
-            LOGGER.info("An proxy try to connect, but authenticate failed");
-            getDispenser().disconnect("Authenticate failed");
+    public void handlePacket(ReadonlyPacket packet) {
+        synchronized (this) {
+            if (packet instanceof ProxyConnectPacket connect) {
+                // Process authenticate packet.
+                getDispenser().setId(connect.getId());
+                getDispenser().setConnectTime(connect.getTimestamp());
+                LOGGER.info(
+                        "Proxy '{}' login susses, timestamp is '{}'",
+                        connect.getId(),
+                        connect.getTimestamp()
+                );
+                getDispenser().setHandler(new ApricotBotRequestHandler(getDispenser()));
+                getDispenser().handle(packet);
+            } else {
+                if (getDispenser().getHandler() == this) {
+                    // Proxy are not done authenticate, disconnect.
+                    LOGGER.info("An proxy try to connect, but authenticate failed");
+                    getDispenser().disconnect("Authenticate failed");
+                } else {
+                    // Should not entrust to here, let it go back.
+                    getDispenser().handle(packet);
+                }
+            }
         }
     }
 }
