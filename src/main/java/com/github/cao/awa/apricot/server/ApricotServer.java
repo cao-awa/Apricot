@@ -56,11 +56,12 @@ public class ApricotServer {
     private final Configure configs = new Configure(() -> "");
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
-    private final boolean active = true;
+    private boolean active = true;
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
     private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
+    private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
     private ApricotServerNetworkIo networkIo;
 
     public ApricotServer() {
@@ -254,6 +255,7 @@ public class ApricotServer {
 
     public synchronized void shutdown() {
         if (this.active) {
+            this.active = false;
             LOGGER.info("Apricot bot server shutting down");
             this.networkIo.shutdown();
             this.eventManager.shutdown();
@@ -262,6 +264,25 @@ public class ApricotServer {
             LOGGER.info("Apricot bot server is shutdown");
             System.exit(0);
         }
+    }
+
+    public void submitTask(String entrust, long delay, TimeUnit unit, Runnable runnable) {
+        this.scheduleExecutor.schedule(
+                entrust,
+                delay,
+                unit,
+                runnable
+        );
+    }
+
+    public void submitTask(String entrust, long delay, long interval, TimeUnit unit, Runnable runnable) {
+        this.scheduleExecutor.schedule(
+                entrust,
+                delay,
+                interval,
+                unit,
+                runnable
+        );
     }
 
     @NotNull
