@@ -53,16 +53,16 @@ Bot被踢：BotDiedFromGroupEventHandler
 ```
 被禁言：IssueGroupMuteEventHandler
 
-全员禁言：IssueGroupAllMuteEventHandler
+全员禁言：IssueGroupAllMuteEventHandler\
 单独禁言：IssueGroupPersonalMuteEventHandler
 
 被解除禁言：LiftGroupMuteEventHandler
 
-全员禁言被解除： LiftGroupAllMuteEventHandler
+全员禁言被解除： LiftGroupAllMuteEventHandler\
 单独禁言被解除：LiftGroupPersonalMuteEventHandler
 
 # 申请入群
-申请入群：AddGroupEventHandler
+申请入群：AddGroupEventHandler\
 邀请入群：InviteGroupEventHandler
 
 # 申请加好友
