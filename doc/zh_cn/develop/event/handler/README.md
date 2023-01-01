@@ -1,5 +1,5 @@
 # 事件处理器
-见 [Event](/doc/zh_cn/developevelop/event/README.md)
+见 [Event](/doc/zh_cn/develop/event/README.md)
 
 ## 收到消息
 收到任何消息：MessageReceivedEventHandler

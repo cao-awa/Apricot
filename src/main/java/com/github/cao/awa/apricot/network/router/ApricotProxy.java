@@ -8,10 +8,10 @@ import org.jetbrains.annotations.*;
 import java.util.function.*;
 
 public class ApricotProxy {
-    private final @NotNull ApricotRequestRouter router;
+    private final @NotNull ApricotRouter router;
     private final @NotNull ApricotServer server;
 
-    public ApricotProxy(@NotNull ApricotRequestRouter router, @NotNull ApricotServer server) {
+    public ApricotProxy(@NotNull ApricotRouter router, @NotNull ApricotServer server) {
         this.router = router;
         this.server = server;
     }

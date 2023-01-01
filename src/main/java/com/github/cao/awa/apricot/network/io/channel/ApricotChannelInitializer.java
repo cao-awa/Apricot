@@ -42,6 +42,6 @@ public class ApricotChannelInitializer extends ChannelInitializer<SocketChannel>
                 65536 * 16
         ));
         // Do handle
-        pipeline.addLast(new ApricotRequestRouter(this.server));
+        pipeline.addLast(new ApricotRouter(this.server));
     }
 }

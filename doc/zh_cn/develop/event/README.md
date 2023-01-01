@@ -29,7 +29,7 @@ public class NameOfHandler extends XxxEventHandler {
 }
 ```
 
-以下是提前准备好的插件的onInitialize方法(见[Plugins](/doc/zh_cn/develop/plugins/plugins/README.md))
+以下是提前准备好的插件的onInitialize方法(见[Plugins](/doc/zh_cn/develop/plugins/README.md))
 
 ```java
 @Override
@@ -83,3 +83,6 @@ public void onInitialize() {
 ```
 
 随后使用其他账号对bot进行戳一戳，bot将会反馈一次戳一戳
+
+# 事件
+见：[Handler](/doc/zh_cn/develop/event/handler/README.md)

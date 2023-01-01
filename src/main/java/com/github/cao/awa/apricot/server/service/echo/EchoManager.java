@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.server.service.echo;
 
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.server.service.*;
+import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;
@@ -13,11 +14,11 @@ import java.util.function.*;
 public class EchoManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("EchoManager");
     private final Map<String, Consumer<EchoResultPacket>> echos = ApricotCollectionFactor.newHashMap();
-    private final Executor executor;
+    private final ExecutorEntrust executor;
     private boolean active = true;
 
     public EchoManager(Executor executor) {
-        this.executor = executor;
+        this.executor = new ExecutorEntrust(executor);
     }
 
     public synchronized void echo(@Nullable String identifier, @NotNull Consumer<EchoResultPacket> action) {
@@ -43,7 +44,10 @@ public class EchoManager implements ConcurrentService {
             }
             if (this.echos.containsKey(identifier)) {
                 Consumer<EchoResultPacket> action = this.echos.get(identifier);
-                this.executor.execute(() -> action.accept(packet));
+                this.executor.execute(
+                        "EchoManager",
+                        () -> action.accept(packet)
+                );
                 this.echos.remove(identifier);
             } else {
                 LOGGER.warn("Echo identifier not found, ignored this echo");
@@ -54,7 +58,7 @@ public class EchoManager implements ConcurrentService {
     @Override
     public void shutdown() {
         this.active = false;
-        if (this.executor instanceof ThreadPoolExecutor threadPool) {
+        if (this.executor.getExecutor() instanceof ThreadPoolExecutor threadPool) {
             threadPool.shutdown();
         }
     }

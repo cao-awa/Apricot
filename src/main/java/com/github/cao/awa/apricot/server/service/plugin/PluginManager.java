@@ -8,6 +8,7 @@ import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.plugin.loader.*;
+import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
@@ -26,12 +27,12 @@ public class PluginManager implements ConcurrentService {
     private final ApricotServer server;
     private final Map<UUID, AccomplishPlugin> accomplishPlugins = new ConcurrentHashMap<>();
     private final Map<UUID, FirewallPlugin> firewallPlugins = new ConcurrentHashMap<>();
-    private final Executor executor;
+    private final ExecutorEntrust executor;
     private boolean active = true;
 
     public PluginManager(ApricotServer server, Executor executor) {
         this.server = server;
-        this.executor = executor;
+        this.executor = new ExecutorEntrust(executor);
     }
 
     public ApricotServer getServer() {
@@ -57,7 +58,7 @@ public class PluginManager implements ConcurrentService {
     @Override
     public void shutdown() {
         this.active = false;
-        if (this.executor instanceof ThreadPoolExecutor threadPool) {
+        if (this.executor.getExecutor() instanceof ThreadPoolExecutor threadPool) {
             threadPool.shutdown();
         }
     }
@@ -104,7 +105,8 @@ public class PluginManager implements ConcurrentService {
                             Plugin plugin = (Plugin) clazz.getDeclaredConstructor()
                                                           .newInstance();
                             if (shouldAsync && plugin.canAsync()) {
-                                this.executor.execute(() -> loadPlugin(plugin));
+                                this.executor.execute("PluginManager",
+                                                      () -> loadPlugin(plugin));
                             } else {
                                 blockLoading.add(plugin);
                             }

@@ -7,6 +7,7 @@ import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.utils.thread.*;
 import io.netty.channel.*;
 import org.apache.logging.log4j.*;
 
@@ -18,7 +19,7 @@ public class ApricotUniqueDispenser {
     private static final Consumer<EchoResultPacket> DO_NO_HANDLE_ECHO = result -> {
     };
     private final ApricotServer server;
-    private final ApricotRequestRouter router;
+    private final ApricotRouter router;
     private RequestHandler handler;
     private long id;
     private long connectTime;
@@ -27,7 +28,7 @@ public class ApricotUniqueDispenser {
     private Channel channel;
     private String disconnectReason = "";
 
-    public ApricotUniqueDispenser(ApricotServer server, ApricotRequestRouter router) {
+    public ApricotUniqueDispenser(ApricotServer server, ApricotRouter router) {
         this.server = server;
         this.router = router;
     }
@@ -61,7 +62,7 @@ public class ApricotUniqueDispenser {
         return this.server;
     }
 
-    public ApricotRequestRouter getRouter() {
+    public ApricotRouter getRouter() {
         return this.router;
     }
 

@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.utils.thread.*;
 
 import java.util.*;
 
@@ -40,12 +41,15 @@ public abstract class AccomplishPlugin extends Plugin {
     public void fireEvent(Event<?> event) {
         event.pipeline()
              .forEach(type -> this.getServer()
-                                  .submitTask(() -> {
-                                      List<AccomplishEventHandler> handlers = this.handlers.get(type);
-                                      if (handlers != null) {
-                                          handlers.forEach(event::fireAccomplish);
-                                      }
-                                  }));
+                                  .submitTask(
+                                          getName(),
+                                          () -> {
+                                              List<AccomplishEventHandler> handlers = this.handlers.get(type);
+                                              if (handlers != null) {
+                                                  handlers.forEach(event::fireAccomplish);
+                                              }
+                                          }
+                                  ));
     }
 
     @Override

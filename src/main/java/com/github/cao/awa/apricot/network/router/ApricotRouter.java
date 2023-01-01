@@ -6,6 +6,7 @@ import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.utils.thread.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
@@ -19,8 +20,8 @@ import java.util.function.*;
  * @author 草二号机
  * @since 1.0.0
  */
-public class ApricotRequestRouter extends NetworkRouter {
-    private static final Logger LOGGER = LogManager.getLogger("ApricotRequestHandler");
+public class ApricotRouter extends NetworkRouter {
+    private static final Logger LOGGER = LogManager.getLogger("ApricotRouter");
     private final @NotNull ApricotServer server;
     private final @NotNull ApricotProxy proxy;
     private final @NotNull StringBuilder fragment = new StringBuilder();
@@ -28,7 +29,7 @@ public class ApricotRequestRouter extends NetworkRouter {
     private ChannelHandlerContext context;
     private Channel channel;
 
-    public ApricotRequestRouter(@NotNull ApricotServer server) {
+    public ApricotRouter(@NotNull ApricotServer server) {
         this.server = server;
         this.proxy = new ApricotProxy(
                 this,
@@ -58,10 +59,6 @@ public class ApricotRequestRouter extends NetworkRouter {
         this.dispenser.channelActive(context);
     }
 
-    public void handleRequest(JSONObject request) {
-        this.server.submitTask(() -> this.dispenser.handle(this.server.createPacket(request)));
-    }
-
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) {
         this.server.getTrafficsCounter()
@@ -75,7 +72,7 @@ public class ApricotRequestRouter extends NetworkRouter {
     private void handleFragment(WebSocketFrame frame) {
         if (frame instanceof TextWebSocketFrame textFrame) {
             if (frame.isFinalFragment()) {
-                handleFeame(textFrame);
+                handleFrame(textFrame);
                 LOGGER.debug("Handled single fragment packet");
             } else {
                 if (this.fragment.length() == 0) {
@@ -89,7 +86,7 @@ public class ApricotRequestRouter extends NetworkRouter {
             LOGGER.debug("Fragment appended");
 
             if (continuationFrame.isFinalFragment()) {
-                handleFeame(new TextWebSocketFrame(this.fragment.toString()));
+                handleFrame(new TextWebSocketFrame(this.fragment.toString()));
                 this.fragment.setLength(0);
             }
         } else {
@@ -97,8 +94,15 @@ public class ApricotRequestRouter extends NetworkRouter {
         }
     }
 
-    public void handleFeame(TextWebSocketFrame frame) {
+    public void handleFrame(TextWebSocketFrame frame) {
         handleRequest(JSONObject.parseObject(frame.text()));
+    }
+
+    public void handleRequest(JSONObject request) {
+        this.server.submitTask(
+                "ApricotRouter",
+                () -> this.dispenser.handle(this.server.createPacket(request))
+        );
     }
 
     public void send(WritablePacket packet, Runnable callback) {

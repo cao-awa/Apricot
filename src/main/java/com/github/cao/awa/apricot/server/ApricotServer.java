@@ -35,6 +35,7 @@ import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
+import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.cao.awa.apricot.utils.times.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
@@ -59,7 +60,7 @@ public class ApricotServer {
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
-    private Executor taskExecutor = Executors.newCachedThreadPool();
+    private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
     private ApricotServerNetworkIo networkIo;
 
     public ApricotServer() {
@@ -124,9 +125,9 @@ public class ApricotServer {
         }
 
         if (this.configs.getBoolean("task.threadpool.enable")) {
-            this.taskExecutor = Executors.newCachedThreadPool();
+            this.taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
         } else {
-            this.taskExecutor = Executors.newSingleThreadExecutor();
+            this.taskExecutor = new ExecutorEntrust(Executors.newSingleThreadExecutor());
         }
 
         if (this.configs.getBoolean("echo.threadpool.enable")) {
@@ -229,17 +230,38 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        submitTask(() -> EntrustEnvironment.trys(
-                () -> this.networkIo.start(configs.getInteger("server.port")),
-                ex -> {
-                    LOGGER.error("Apricot network failed to startup", ex);
-                    shutdown();
-                }
-        ));
+        submitTask(
+                "ApricotNetwork",
+                () -> EntrustEnvironment.trys(
+                        () -> this.networkIo.start(configs.getInteger("server.port")),
+                        ex -> {
+                            LOGGER.error(
+                                    "Apricot network failed to startup",
+                                    ex
+                            );
+                            shutdown();
+                        }
+                )
+        );
     }
 
-    public void submitTask(Runnable runnable) {
-        this.taskExecutor.execute(runnable);
+    public void submitTask(String entrust, Runnable runnable) {
+        this.taskExecutor.execute(
+                entrust,
+                runnable
+        );
+    }
+
+    public synchronized void shutdown() {
+        if (this.active) {
+            LOGGER.info("Apricot bot server shutting down");
+            this.networkIo.shutdown();
+            this.eventManager.shutdown();
+            this.echoManager.shutdown();
+            this.plugins.shutdown();
+            LOGGER.info("Apricot bot server is shutdown");
+            System.exit(0);
+        }
     }
 
     @NotNull
@@ -309,17 +331,5 @@ public class ApricotServer {
 
     public boolean shouldAsyncLoadPlugins() {
         return this.configs.getBoolean("plugin.async.enable");
-    }
-
-    public synchronized void shutdown() {
-        if (this.active) {
-            LOGGER.info("Apricot bot server shutting down");
-            this.networkIo.shutdown();
-            this.eventManager.shutdown();
-            this.echoManager.shutdown();
-            this.plugins.shutdown();
-            LOGGER.info("Apricot bot server is shutdown");
-            System.exit(0);
-        }
     }
 }

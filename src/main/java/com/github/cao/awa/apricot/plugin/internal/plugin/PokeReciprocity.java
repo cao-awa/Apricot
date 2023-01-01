@@ -20,7 +20,7 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
     public void onPoke(PokeReceivedEvent event) {
         PokeReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
-        if (packet.getTargetId() == packet.getBotId()) {
+        if (packet.getTargetId() == packet.getBotId() && ! (packet.getCauserId() == packet.getBotId())) {
             proxy.send(new SendPokePacket(
                     packet.getType(),
                     packet.getCauserId(),
