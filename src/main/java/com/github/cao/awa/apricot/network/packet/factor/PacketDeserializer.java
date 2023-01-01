@@ -46,16 +46,24 @@ public class PacketDeserializer {
                                 subtype
                         );
                     }
-                    default -> {
-                        name = postType + (subtype == null ? "" : "-" + subtype);
+                    case "request" -> {
+                        String metaEventType = TextUtil.underlineDash(request.getString("request_type"));
+                        factor = handleRequest(
+                                metaEventType,
+                                subtype
+                        );
                     }
+                    default -> name = postType + (subtype == null ? "" : "-" + subtype);
                 }
             } else {
                 request = request.getJSONObject("echo");
                 name = request.getString("type");
             }
             if (factor == null) {
-                factor = this.factors.containsKey(name) ? this.factors.get(name) : this.factors.get("invalid-data");
+                factor = this.factors.getOrDefault(
+                        name,
+                        this.factors.get("invalid-data")
+                );
             }
             return factor.create(
                     server,
@@ -88,6 +96,26 @@ public class PacketDeserializer {
                 "-"
         ) + (subType == null ? "" : ("-" + subType));
         return this.factors.get(name);
+    }
+
+    private PacketFactor handleRequest(String metaEventType, @Nullable String subType) {
+        String name = "request-" + metaEventType.replace(
+                "_",
+                "-"
+        ) + (subType == null ? "" : ("-" + subType));
+        return this.factors.get(name);
+    }
+
+    @NotNull
+    public ReadonlyPacket deserializer(String name, ApricotServer server, JSONObject request) {
+        return this.factors.getOrDefault(
+                           name,
+                           this.factors.get("invalid-data")
+                   )
+                           .create(
+                                   server,
+                                   request
+                           );
     }
 
     public void register(PacketFactor factor) {

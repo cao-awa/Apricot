@@ -6,12 +6,13 @@ import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.recevied.response.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.utils.thread.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;
 
+import java.util.*;
 import java.util.function.*;
 
 /**
@@ -26,6 +27,7 @@ public class ApricotRouter extends NetworkRouter {
     private final @NotNull ApricotProxy proxy;
     private final @NotNull StringBuilder fragment = new StringBuilder();
     private final ApricotUniqueDispenser dispenser;
+//    private final Set<ReadonlyPacket> broadcasts = ApricotCollectionFactor.newHashSet();
     private ChannelHandlerContext context;
     private Channel channel;
 
@@ -101,8 +103,23 @@ public class ApricotRouter extends NetworkRouter {
     public void handleRequest(JSONObject request) {
         this.server.submitTask(
                 "ApricotRouter",
-                () -> this.dispenser.handle(this.server.createPacket(request))
+                () -> handleRequest(this.server.createPacket(request))
         );
+        LOGGER.info(request);
+    }
+
+    public void handleRequest(ReadonlyPacket request) {
+        this.dispenser.handle(request);
+    }
+
+    public void broadcast(ReadonlyPacket packet) {
+//        if (this.broadcasts.contains(packet)) {
+//            this.broadcasts.remove(packet);
+//            LOGGER.warn("Failed broadcast packet {}, because it already broadcast", packet);
+//        } else {
+//            this.broadcasts.add(packet);
+            handleRequest(packet);
+//        }
     }
 
     public void send(WritablePacket packet, Runnable callback) {

@@ -5,8 +5,6 @@ import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
 
-import java.util.function.*;
-
 public class SendGroupMessagePacket extends WritablePacket {
     private long groupId;
     private @NotNull AssembledMessage message;
@@ -23,10 +21,6 @@ public class SendGroupMessagePacket extends WritablePacket {
         this.autoEscape = autoEscape;
     }
 
-    public void compoundAutoEscape(Function<Boolean, Boolean> function) {
-        setAutoEscape(function.apply(isAutoEscape()));
-    }
-
     public boolean isAutoEscape() {
         return autoEscape;
     }
@@ -35,20 +29,12 @@ public class SendGroupMessagePacket extends WritablePacket {
         this.autoEscape = autoEscape;
     }
 
-    public void compoundId(Function<Long, Long> function) {
-        setGroupId(function.apply(getGroupId()));
-    }
-
     private long getGroupId() {
         return this.groupId;
     }
 
     private void setGroupId(long groupId) {
         this.groupId = groupId;
-    }
-
-    public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
-        setMessage(function.apply(getMessage()));
     }
 
     @NotNull

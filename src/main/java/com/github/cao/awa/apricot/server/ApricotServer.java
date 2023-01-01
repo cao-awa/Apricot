@@ -12,6 +12,8 @@ import com.github.cao.awa.apricot.message.element.cq.factor.replay.*;
 import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
+import com.github.cao.awa.apricot.network.packet.factor.add.friend.*;
+import com.github.cao.awa.apricot.network.packet.factor.add.group.*;
 import com.github.cao.awa.apricot.network.packet.factor.invalid.*;
 import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.bot.*;
 import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.kick.*;
@@ -23,6 +25,12 @@ import com.github.cao.awa.apricot.network.packet.factor.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.recall.gruop.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.recall.personal.*;
 import com.github.cao.awa.apricot.network.packet.factor.meta.lifecycle.*;
+import com.github.cao.awa.apricot.network.packet.factor.mute.issue.*;
+import com.github.cao.awa.apricot.network.packet.factor.mute.issue.all.*;
+import com.github.cao.awa.apricot.network.packet.factor.mute.issue.personal.*;
+import com.github.cao.awa.apricot.network.packet.factor.mute.lift.*;
+import com.github.cao.awa.apricot.network.packet.factor.mute.lift.all.*;
+import com.github.cao.awa.apricot.network.packet.factor.mute.lift.personal.*;
 import com.github.cao.awa.apricot.network.packet.factor.name.card.*;
 import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
@@ -204,23 +212,34 @@ public class ApricotServer {
     public void setupNetwork() {
         LOGGER.info("Startup apricot bot server network");
         // Setup packet deserializers
-        this.packetDeserializers.register(new ProxyConnectPacketFactor());
-        this.packetDeserializers.register(new ProxyDisconnectPacketFactor());
-        this.packetDeserializers.register(new GroupNormalMessagePacketFactor());
-        this.packetDeserializers.register(new GroupAnonymousMessagePacketFactor());
-        this.packetDeserializers.register(new GroupMessageRecallPacketFactor());
-        this.packetDeserializers.register(new GroupNameChangedReceivedPacketFactor());
-        this.packetDeserializers.register(new GroupMemberApprovedPacketFactor());
-        this.packetDeserializers.register(new GroupMemberInvitedPacketFactor());
-        this.packetDeserializers.register(new GroupMemberLeavedPacketFactor());
-        this.packetDeserializers.register(new GroupMemberKickedPacketFactor());
-        this.packetDeserializers.register(new BotDiedFromGroupPacketFactor());
-        this.packetDeserializers.register(new GroupTitleChangedReceivedPacketFactor());
-        this.packetDeserializers.register(new PrivateFriendMessagePacketFactor());
-        this.packetDeserializers.register(new PrivateMessageRecallPacketFactor());
-        this.packetDeserializers.register(new EchoResultPacketFactor());
-        this.packetDeserializers.register(new InvalidDataReceivedPacketFactor());
-        this.packetDeserializers.register(new PokeReceivedPacketFactor());
+        EntrustEnvironment.operation(this.packetDeserializers, deserializer -> {
+            deserializer.register(new ProxyConnectPacketFactor());
+            deserializer.register(new ProxyDisconnectPacketFactor());
+            deserializer.register(new GroupNormalMessagePacketFactor());
+            deserializer.register(new GroupAnonymousMessagePacketFactor());
+            deserializer.register(new GroupMessageRecallPacketFactor());
+            deserializer.register(new GroupNameChangedReceivedPacketFactor());
+            deserializer.register(new GroupMemberApprovedPacketFactor());
+            deserializer.register(new GroupMemberInvitedPacketFactor());
+            deserializer.register(new GroupMemberLeavedPacketFactor());
+            deserializer.register(new GroupMemberKickedPacketFactor());
+            deserializer.register(new AddGroupReceivedPacketFactor());
+            deserializer.register(new InviteGroupReceivedPacketFactor());
+            deserializer.register(new AddFriendReceivedPacketFactor());
+            deserializer.register(new IssueGroupMuteReceivedPacketFactor());
+            deserializer.register(new IssueGroupAllMuteReceivedPacketFactor());
+            deserializer.register(new IssueGroupPersonalMuteReceivedPacketFactor());
+            deserializer.register(new LiftGroupMuteReceivedPacketFactor());
+            deserializer.register(new LiftGroupAllMuteReceivedPacketFactor());
+            deserializer.register(new LiftGroupPersonalMuteReceivedPacketFactor());
+            deserializer.register(new BotDiedFromGroupPacketFactor());
+            deserializer.register(new GroupTitleChangedReceivedPacketFactor());
+            deserializer.register(new PrivateFriendMessagePacketFactor());
+            deserializer.register(new PrivateMessageRecallPacketFactor());
+            deserializer.register(new EchoResultPacketFactor());
+            deserializer.register(new InvalidDataReceivedPacketFactor());
+            deserializer.register(new PokeReceivedPacketFactor());
+        });
 
         // Setup CQ deserializers
         this.cqDeserializers.register(new CqImageFactor());
@@ -288,6 +307,15 @@ public class ApricotServer {
     @NotNull
     public ReadonlyPacket createPacket(JSONObject json) {
         return this.packetDeserializers.deserializer(
+                this,
+                json
+        );
+    }
+
+    @NotNull
+    public ReadonlyPacket createPacket(String name, JSONObject json) {
+        return this.packetDeserializers.deserializer(
+                name,
                 this,
                 json
         );

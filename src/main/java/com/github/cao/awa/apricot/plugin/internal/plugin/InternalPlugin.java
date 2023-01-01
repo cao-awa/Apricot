@@ -20,11 +20,15 @@ public class InternalPlugin extends AccomplishPlugin {
     public void onInitialize() {
         registerHandler(new InternalMessageHandler());
 //        registerHandler(new InternalPrivateHandler());
-        registerHandler(new ListenBotDied());
+        registerHandler(new ListenMute());
+        registerHandler(new ListenLiftMute());
+        registerHandler(new ListenAddGroup());
         registerHandler(new RecallNotice());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new InternalIllegalImmigrationHandler());
         registerHandler(new PokeReciprocity());
+
+        TestPl.xxx();
     }
 
     @Override

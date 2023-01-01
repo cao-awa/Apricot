@@ -5,32 +5,21 @@ import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 
-import java.util.function.*;
-
 @Deprecated
 @Unsupported
 public class ForwardMessagesRequestPacket extends WritablePacket {
-    private String messageId;
+    private long messageId;
 
-    public ForwardMessagesRequestPacket(String messageId) {
+    public ForwardMessagesRequestPacket(long messageId) {
         this.messageId = messageId;
     }
 
-    public void compoundId(Function<String, String> function) {
-        setMessageId(function.apply(getMessageId()));
-    }
-
-    public String getMessageId() {
+    public long getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(String messageId) {
+    public void setMessageId(long messageId) {
         this.messageId = messageId;
-    }
-
-    @Override
-    public boolean shouldEcho() {
-        return true;
     }
 
     @Override
@@ -47,5 +36,10 @@ public class ForwardMessagesRequestPacket extends WritablePacket {
                               this.messageId
                       )
               );
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
     }
 }

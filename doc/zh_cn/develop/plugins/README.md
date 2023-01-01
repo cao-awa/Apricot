@@ -1,7 +1,8 @@
 # 示例
 以下是一个最简单化的插件，它会自动注册但不会处理任何事件
 
-要处理事件，请看： [Event](/doc/zh_cn/develop/event/README.md)
+要处理事件，请看： [Event](/doc/zh_cn/develop/event/README.md)\
+要发送数据包，情看：[Packet](/doc/zh_cn/develop/packet/README.md)
 ```java
 /**
  * An example plugin.

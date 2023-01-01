@@ -20,7 +20,7 @@ public class EchoResultPacket extends ReadonlyPacket {
         return this.response;
     }
 
-    @Nullable
+    @NotNull
     public String getIdentifier() {
         return this.identifier;
     }

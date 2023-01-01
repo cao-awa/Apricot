@@ -81,6 +81,12 @@ public class AnnotatedClassFinder extends ClassLoader {
                             data.length,
                             null
                     );
+                    try {
+                        //
+                        Class.forName(className, true, this);
+                    } catch (ClassNotFoundException e) {
+                        e.printStackTrace();
+                    }
                 } else {
                     result = target;
                 }
@@ -93,10 +99,6 @@ public class AnnotatedClassFinder extends ClassLoader {
 
     public Map<String, Class<?>> getClasses() {
         return this.classes;
-    }
-
-    public Class<?> loadClass(String className) {
-        return findClass(className);
     }
 
     public Class<?> findClass(String className) {

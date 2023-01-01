@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.plugin;
 
+import com.github.cao.awa.apricot.plugin.requirement.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 
@@ -76,5 +77,9 @@ public abstract class Plugin implements Comparable<Plugin> {
 
     public boolean canAsync() {
         return true;
+    }
+
+    public PluginRequirements requirements() {
+        return PluginRequirements.of();
     }
 }

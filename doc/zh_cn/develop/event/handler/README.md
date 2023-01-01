@@ -46,3 +46,24 @@ Bot被踢：BotDiedFromGroupEventHandler
 此 @Warning 仅针对 CQ-HTTP，Mirai可以忽略此
 ```
 变更：GroupNameChangedReceivedEventHandler
+
+# 禁言
+```
+禁言时间结束后不会触发解除禁言事件
+```
+被禁言：IssueGroupMuteEventHandler
+
+全员禁言：IssueGroupAllMuteEventHandler
+单独禁言：IssueGroupPersonalMuteEventHandler
+
+被解除禁言：LiftGroupMuteEventHandler
+
+全员禁言被解除： LiftGroupAllMuteEventHandler
+单独禁言被解除：LiftGroupPersonalMuteEventHandler
+
+# 申请入群
+申请入群：AddGroupEventHandler
+邀请入群：InviteGroupEventHandler
+
+# 申请加好友
+申请加好友：AddFriendEventHandler

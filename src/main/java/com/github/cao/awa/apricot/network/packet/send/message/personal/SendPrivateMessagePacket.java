@@ -5,8 +5,6 @@ import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
 
-import java.util.function.*;
-
 public class SendPrivateMessagePacket extends WritablePacket {
     private long userId;
     private long groupId = - 1;
@@ -37,20 +35,12 @@ public class SendPrivateMessagePacket extends WritablePacket {
         this.autoEscape = autoEscape;
     }
 
-    public void compoundAutoEscape(Function<Boolean, Boolean> function) {
-        setAutoEscape(function.apply(isAutoEscape()));
-    }
-
     public boolean isAutoEscape() {
         return autoEscape;
     }
 
     public void setAutoEscape(boolean autoEscape) {
         this.autoEscape = autoEscape;
-    }
-
-    public void compoundUserId(Function<Long, Long> function) {
-        setUserId(function.apply(getUserId()));
     }
 
     private long getUserId() {
@@ -61,20 +51,12 @@ public class SendPrivateMessagePacket extends WritablePacket {
         this.userId = id;
     }
 
-    public void compoundGroupId(Function<Long, Long> function) {
-        setUserId(function.apply(getUserId()));
-    }
-
     private long getGroupId() {
         return this.groupId;
     }
 
     private void setGroupId(long id) {
         this.groupId = id;
-    }
-
-    public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
-        setMessage(function.apply(getMessage()));
     }
 
     @NotNull

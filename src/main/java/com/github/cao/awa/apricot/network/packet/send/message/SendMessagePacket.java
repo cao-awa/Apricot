@@ -7,8 +7,6 @@ import com.github.cao.awa.apricot.network.packet.send.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
 import org.jetbrains.annotations.*;
 
-import java.util.function.*;
-
 public class SendMessagePacket extends WritablePacket {
     private MessageType type;
     private long userId;
@@ -44,20 +42,12 @@ public class SendMessagePacket extends WritablePacket {
         this.autoEscape = autoEscape;
     }
 
-    public void compoundType(Function<MessageType, MessageType> function) {
-        setType(function.apply(getType()));
-    }
-
     private MessageType getType() {
         return type;
     }
 
     private void setType(MessageType type) {
         this.type = type;
-    }
-
-    public void compoundAutoEscape(Function<Boolean, Boolean> function) {
-        setAutoEscape(function.apply(isAutoEscape()));
     }
 
     public boolean isAutoEscape() {
@@ -68,20 +58,12 @@ public class SendMessagePacket extends WritablePacket {
         this.autoEscape = autoEscape;
     }
 
-    public void compoundId(Function<Long, Long> function) {
-        setUserId(function.apply(getUserId()));
-    }
-
     private long getUserId() {
         return this.userId;
     }
 
     private void setUserId(long userId) {
         this.userId = userId;
-    }
-
-    public void compoundMessage(Function<AssembledMessage, AssembledMessage> function) {
-        setMessage(function.apply(getMessage()));
     }
 
     private AssembledMessage getMessage() {

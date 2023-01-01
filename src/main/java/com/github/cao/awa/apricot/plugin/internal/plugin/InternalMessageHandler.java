@@ -2,15 +2,17 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
-import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.recevied.message.*;
+import com.github.cao.awa.apricot.network.packet.send.forward.*;
+import com.github.cao.awa.apricot.network.packet.send.group.name.card.*;
+import com.github.cao.awa.apricot.network.packet.send.group.recall.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.forward.*;
 import com.github.cao.awa.apricot.network.packet.send.message.recall.*;
-import com.github.cao.awa.apricot.network.packet.send.name.card.*;
+import com.github.cao.awa.apricot.network.packet.send.recall.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
@@ -38,12 +40,12 @@ public class InternalMessageHandler extends MessageReceivedEventHandler {
         ApricotProxy proxy = event.getProxy();
         MessageReceivedPacket packet = event.getPacket();
 
-        LOGGER.info((packet.getType() == MessageType.GROUP ? "GROUP({}) * {}: {}" : "PRIVATE({}) * {}: {}"),
-                    packet.getResponseId(),
-                    packet.getSender()
-                          .getName(),
-                    packet.getMessage()
-                          .toPlainText());
+//        LOGGER.info((packet.getType() == MessageType.GROUP ? "GROUP({}) * {}: {}" : "PRIVATE({}) * {}: {}"),
+//                    packet.getResponseId(),
+//                    packet.getSender()
+//                          .getName(),
+//                    packet.getMessage()
+//                          .toPlainText());
 
         if (event.getPacket()
                  .getMessage()
