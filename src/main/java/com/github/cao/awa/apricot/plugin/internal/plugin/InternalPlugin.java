@@ -20,6 +20,7 @@ public class InternalPlugin extends AccomplishPlugin {
     public void onInitialize() {
         registerHandler(new InternalMessageHandler());
 //        registerHandler(new InternalPrivateHandler());
+        registerHandler(new ApricotInformation());
         registerHandler(new ListenMute());
         registerHandler(new ListenLiftMute());
         registerHandler(new ListenAddGroup());
@@ -27,8 +28,11 @@ public class InternalPlugin extends AccomplishPlugin {
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new InternalIllegalImmigrationHandler());
         registerHandler(new PokeReciprocity());
+    }
 
-        TestPl.xxx();
+    @Override
+    public String version() {
+        return "0.0.2";
     }
 
     @Override

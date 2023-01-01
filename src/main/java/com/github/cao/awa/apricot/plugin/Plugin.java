@@ -82,4 +82,6 @@ public abstract class Plugin implements Comparable<Plugin> {
     public PluginRequirements requirements() {
         return PluginRequirements.of();
     }
+
+    public abstract String version();
 }

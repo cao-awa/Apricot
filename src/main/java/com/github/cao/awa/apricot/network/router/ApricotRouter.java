@@ -105,7 +105,6 @@ public class ApricotRouter extends NetworkRouter {
                 "ApricotRouter",
                 () -> handleRequest(this.server.createPacket(request))
         );
-        LOGGER.info(request);
     }
 
     public void handleRequest(ReadonlyPacket request) {

@@ -57,19 +57,20 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 public class ApricotServer {
-    public static final AtomicLong performance = new AtomicLong();
+    public static final String VERSION = "1.0.0";
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
+    private final AtomicLong starpupPerformance = new AtomicLong();
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
+    private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
     private boolean active = true;
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
     private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
-    private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
     private ApricotServerNetworkIo networkIo;
 
     public ApricotServer() {
@@ -88,7 +89,7 @@ public class ApricotServer {
     }
 
     public void startup() {
-        performance.set(TimeUtil.millions());
+        starpupPerformance.set(TimeUtil.millions());
         LOGGER.info("Startup apricot bot server");
         setupDirectories();
         setupConfig();
@@ -212,34 +213,37 @@ public class ApricotServer {
     public void setupNetwork() {
         LOGGER.info("Startup apricot bot server network");
         // Setup packet deserializers
-        EntrustEnvironment.operation(this.packetDeserializers, deserializer -> {
-            deserializer.register(new ProxyConnectPacketFactor());
-            deserializer.register(new ProxyDisconnectPacketFactor());
-            deserializer.register(new GroupNormalMessagePacketFactor());
-            deserializer.register(new GroupAnonymousMessagePacketFactor());
-            deserializer.register(new GroupMessageRecallPacketFactor());
-            deserializer.register(new GroupNameChangedReceivedPacketFactor());
-            deserializer.register(new GroupMemberApprovedPacketFactor());
-            deserializer.register(new GroupMemberInvitedPacketFactor());
-            deserializer.register(new GroupMemberLeavedPacketFactor());
-            deserializer.register(new GroupMemberKickedPacketFactor());
-            deserializer.register(new AddGroupReceivedPacketFactor());
-            deserializer.register(new InviteGroupReceivedPacketFactor());
-            deserializer.register(new AddFriendReceivedPacketFactor());
-            deserializer.register(new IssueGroupMuteReceivedPacketFactor());
-            deserializer.register(new IssueGroupAllMuteReceivedPacketFactor());
-            deserializer.register(new IssueGroupPersonalMuteReceivedPacketFactor());
-            deserializer.register(new LiftGroupMuteReceivedPacketFactor());
-            deserializer.register(new LiftGroupAllMuteReceivedPacketFactor());
-            deserializer.register(new LiftGroupPersonalMuteReceivedPacketFactor());
-            deserializer.register(new BotDiedFromGroupPacketFactor());
-            deserializer.register(new GroupTitleChangedReceivedPacketFactor());
-            deserializer.register(new PrivateFriendMessagePacketFactor());
-            deserializer.register(new PrivateMessageRecallPacketFactor());
-            deserializer.register(new EchoResultPacketFactor());
-            deserializer.register(new InvalidDataReceivedPacketFactor());
-            deserializer.register(new PokeReceivedPacketFactor());
-        });
+        EntrustEnvironment.operation(
+                this.packetDeserializers,
+                deserializer -> {
+                    deserializer.register(new ProxyConnectPacketFactor());
+                    deserializer.register(new ProxyDisconnectPacketFactor());
+                    deserializer.register(new GroupNormalMessagePacketFactor());
+                    deserializer.register(new GroupAnonymousMessagePacketFactor());
+                    deserializer.register(new GroupMessageRecallPacketFactor());
+                    deserializer.register(new GroupNameChangedReceivedPacketFactor());
+                    deserializer.register(new GroupMemberApprovedPacketFactor());
+                    deserializer.register(new GroupMemberInvitedPacketFactor());
+                    deserializer.register(new GroupMemberLeavedPacketFactor());
+                    deserializer.register(new GroupMemberKickedPacketFactor());
+                    deserializer.register(new AddGroupReceivedPacketFactor());
+                    deserializer.register(new InviteGroupReceivedPacketFactor());
+                    deserializer.register(new AddFriendReceivedPacketFactor());
+                    deserializer.register(new IssueGroupMuteReceivedPacketFactor());
+                    deserializer.register(new IssueGroupAllMuteReceivedPacketFactor());
+                    deserializer.register(new IssueGroupPersonalMuteReceivedPacketFactor());
+                    deserializer.register(new LiftGroupMuteReceivedPacketFactor());
+                    deserializer.register(new LiftGroupAllMuteReceivedPacketFactor());
+                    deserializer.register(new LiftGroupPersonalMuteReceivedPacketFactor());
+                    deserializer.register(new BotDiedFromGroupPacketFactor());
+                    deserializer.register(new GroupTitleChangedReceivedPacketFactor());
+                    deserializer.register(new PrivateFriendMessagePacketFactor());
+                    deserializer.register(new PrivateMessageRecallPacketFactor());
+                    deserializer.register(new EchoResultPacketFactor());
+                    deserializer.register(new InvalidDataReceivedPacketFactor());
+                    deserializer.register(new PokeReceivedPacketFactor());
+                }
+        );
 
         // Setup CQ deserializers
         this.cqDeserializers.register(new CqImageFactor());
@@ -283,6 +287,10 @@ public class ApricotServer {
             LOGGER.info("Apricot bot server is shutdown");
             System.exit(0);
         }
+    }
+
+    public long getStartupTime() {
+        return starpupPerformance.get();
     }
 
     public void submitTask(String entrust, long delay, TimeUnit unit, Runnable runnable) {
@@ -380,5 +388,9 @@ public class ApricotServer {
 
     public boolean shouldAsyncLoadPlugins() {
         return this.configs.getBoolean("plugin.async.enable");
+    }
+
+    public Collection<AccomplishPlugin> getPlugins() {
+        return this.plugins.getAccomplishPlugins();
     }
 }

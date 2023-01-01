@@ -29,7 +29,7 @@ public class ApricotProxy {
 
     @NotNull
     public ApricotServer getServer() {
-        return server;
+        return this.server;
     }
 
     public void send(@NotNull WritablePacket packet, Consumer<EchoResultPacket> echo) {
