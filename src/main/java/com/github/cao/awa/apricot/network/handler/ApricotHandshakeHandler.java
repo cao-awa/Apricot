@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.handler;
 
-import com.github.cao.awa.apricot.network.connection.*;
+import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.recevied.meta.lifecycle.*;
 import org.apache.logging.log4j.*;
@@ -23,7 +23,9 @@ public class ApricotHandshakeHandler extends RequestHandler {
                         connect.getId(),
                         connect.getTimestamp()
                 );
+                // Switch to the request handler
                 getDispenser().setHandler(new ApricotBotRequestHandler(getDispenser()));
+                // Let events handle authenticate packet
                 getDispenser().handle(packet);
             } else {
                 if (getDispenser().getHandler() == this) {

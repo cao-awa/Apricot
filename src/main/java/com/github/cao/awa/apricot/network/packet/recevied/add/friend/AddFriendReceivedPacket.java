@@ -1,10 +1,11 @@
 package com.github.cao.awa.apricot.network.packet.recevied.add.friend;
 
 import com.github.cao.awa.apricot.event.receive.accomplish.add.friend.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.add.group.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.send.add.friend.approve.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import org.jetbrains.annotations.*;
 
 public class AddFriendReceivedPacket extends ReadonlyPacket {
     private final String comment;
@@ -39,6 +40,14 @@ public class AddFriendReceivedPacket extends ReadonlyPacket {
 
     public String getFlag() {
         return this.flag;
+    }
+
+    public void rapid(ApricotProxy proxy, boolean approve, @Nullable String remark) {
+        proxy.send(new SendFriendApprovalPacket(
+                this.flag,
+                approve,
+                remark
+        ));
     }
 
     /**

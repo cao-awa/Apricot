@@ -59,7 +59,7 @@ import java.util.function.*;
 public class ApricotServer {
     public static final String VERSION = "1.0.0";
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
-    private final AtomicLong starpupPerformance = new AtomicLong();
+    private final AtomicLong startupPerformance = new AtomicLong();
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
@@ -89,7 +89,7 @@ public class ApricotServer {
     }
 
     public void startup() {
-        starpupPerformance.set(TimeUtil.millions());
+        startupPerformance.set(TimeUtil.millions());
         LOGGER.info("Startup apricot bot server");
         setupDirectories();
         setupConfig();
@@ -290,7 +290,7 @@ public class ApricotServer {
     }
 
     public long getStartupTime() {
-        return starpupPerformance.get();
+        return startupPerformance.get();
     }
 
     public void submitTask(String entrust, long delay, TimeUnit unit, Runnable runnable) {

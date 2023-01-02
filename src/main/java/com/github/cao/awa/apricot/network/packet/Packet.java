@@ -14,7 +14,7 @@ public abstract class Packet implements Comparable<Packet> {
     private final @NotNull String identifier;
 
     public Packet() {
-        this.identifier = RandomIdentifier.randomIdentifier(32);
+        this.identifier = RandomIdentifier.create(32);
     }
 
     @NotNull

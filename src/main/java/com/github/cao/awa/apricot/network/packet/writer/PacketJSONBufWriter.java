@@ -38,14 +38,15 @@ public class PacketJSONBufWriter {
             LOGGER.trace("Has an occurs not completed writing, ignored");
             return;
         }
-        TextWebSocketFrame frame = new TextWebSocketFrame(this.json.toString());
-        this.server.getTrafficsCounter().out(frame.content().array().length);
+        String information = this.json.toString();
+        TextWebSocketFrame frame = new TextWebSocketFrame(information);
+        this.server.getTrafficsCounter().out(information.length());
         this.server.getPacketsCounter().out(1);
         this.channel.writeAndFlush(frame);
-        create();
+        flush();
     }
 
-    public void create() {
+    public void flush() {
         this.json = new JSONObject();
     }
 }

@@ -3,8 +3,10 @@ package com.github.cao.awa.apricot.network.packet.recevied.add.group;
 import com.github.cao.awa.apricot.approval.group.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.add.group.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.send.add.group.approve.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import org.jetbrains.annotations.*;
 
 public class InviteGroupReceivedPacket extends ReadonlyPacket {
     private final String comment;
@@ -49,6 +51,14 @@ public class InviteGroupReceivedPacket extends ReadonlyPacket {
 
     public ApprovalType getApprovalType() {
         return ApprovalType.INVITE;
+    }
+
+    public void rapid(ApricotProxy proxy, boolean approve, @Nullable String rejectReason) {
+        proxy.send(new SendInviteGroupApprovalPacket(
+                this.flag,
+                approve,
+                rejectReason
+        ));
     }
 
     /**

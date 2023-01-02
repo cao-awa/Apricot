@@ -48,7 +48,7 @@ public class ApricotServerNetworkIo {
         LOGGER.info(expectEpoll ?
                     epoll ?
                     "Apricot network io using Epoll" :
-                    "Apricot network io expected epoll, but Epoll is not available, switch to NIO" :
+                    "Apricot network io expected Epoll, but Epoll is not available, switch to NIO" :
                     "Apricot network io using NIO");
 
         Supplier<? extends EventLoopGroup> lazy = epoll ? EPOLL_CHANNEL : DEFAULT_CHANNEL;
@@ -72,7 +72,7 @@ public class ApricotServerNetworkIo {
                                        )
                                        .option(
                                                // Real-time response is necessary
-                                               // Enable TCP No delay to improve response speeds
+                                               // Enable TCP no delay to improve response speeds
                                                ChannelOption.TCP_NODELAY,
                                                true
                                        )
