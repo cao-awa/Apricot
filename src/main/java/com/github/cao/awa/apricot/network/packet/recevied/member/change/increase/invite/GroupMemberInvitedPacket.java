@@ -21,23 +21,23 @@ public class GroupMemberInvitedPacket extends GroupMemberIncreasedPacket {
     }
 
     public long getOperatorId() {
-        return operatorId;
+        return this.operatorId;
     }
 
     public long getBotId() {
-        return botId;
+        return this.botId;
     }
 
     public long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public long getGroupId() {
-        return groupId;
+        return this.groupId;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     /**

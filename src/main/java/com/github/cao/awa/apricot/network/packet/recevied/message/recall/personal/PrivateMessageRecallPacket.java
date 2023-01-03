@@ -19,11 +19,11 @@ public class PrivateMessageRecallPacket extends MessageRecallPacket {
     }
 
     public long getMessageId() {
-        return messageId;
+        return this.messageId;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     public long getBotId() {

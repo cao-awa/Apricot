@@ -64,7 +64,7 @@ public class InternalMessageHandler extends MessageReceivedEventHandler {
                  .toPlainText()
                  .equals(".traffic")) {
 
-            ApricotServer server = proxy.getServer();
+            ApricotServer server = proxy.server();
 
             TrafficCounter traffics = server.getTrafficsCounter();
             TrafficCounter packets = server.getPacketsCounter();

@@ -85,38 +85,38 @@ public class GroupMessageSender implements MessageSender {
     }
 
     public String getArea() {
-        return area;
+        return this.area;
     }
 
     public String getLevel() {
-        return level;
+        return this.level;
     }
 
     public String getRole() {
-        return role;
+        return this.role;
     }
 
     public String getCard() {
-        return card;
+        return this.card;
     }
 
     public String getTitle() {
-        return title;
+        return this.title;
     }
 
     public int getAge() {
-        return age;
+        return this.age;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getSex() {
-        return sex;
+        return this.sex;
     }
 
     public long getUserId() {
-        return userId;
+        return this.userId;
     }
 }

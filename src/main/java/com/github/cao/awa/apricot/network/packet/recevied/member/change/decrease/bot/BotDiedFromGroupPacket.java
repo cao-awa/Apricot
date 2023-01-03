@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.network.packet.recevied.member.change.decrease.kick;
+package com.github.cao.awa.apricot.network.packet.recevied.member.change.decrease.bot;
 
 import com.github.cao.awa.apricot.event.receive.accomplish.member.change.decrease.bot.*;
 import com.github.cao.awa.apricot.network.packet.recevied.member.change.decrease.*;
@@ -21,23 +21,23 @@ public class BotDiedFromGroupPacket extends GroupMemberDecreasedPacket {
     }
 
     public long getOperatorId() {
-        return operatorId;
+        return this.operatorId;
     }
 
     public long getBotId() {
-        return botId;
+        return this.botId;
     }
 
     public long getUserId() {
-        return userId;
+        return this.userId;
     }
 
     public long getGroupId() {
-        return groupId;
+        return this.groupId;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     /**

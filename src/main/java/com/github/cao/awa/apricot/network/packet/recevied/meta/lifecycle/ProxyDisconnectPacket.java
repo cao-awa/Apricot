@@ -17,15 +17,15 @@ public class ProxyDisconnectPacket extends ReadonlyPacket {
     }
 
     public String getDisconnectReason() {
-        return disconnectReason;
+        return this.disconnectReason;
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     /**

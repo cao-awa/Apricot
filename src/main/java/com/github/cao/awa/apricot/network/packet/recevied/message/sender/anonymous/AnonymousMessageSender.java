@@ -52,38 +52,30 @@ public class AnonymousMessageSender implements MessageSender {
     }
 
     public Anonymous getAnonymous() {
-        return anonymous;
+        return this.anonymous;
     }
 
     public String getArea() {
-        return area;
-    }
-
-    public void setArea(String area) {
-        this.area = area;
+        return this.area;
     }
 
     public String getLevel() {
-        return level;
-    }
-
-    public void setLevel(String level) {
-        this.level = level;
+        return this.level;
     }
 
     public int getAge() {
-        return age;
+        return this.age;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getSex() {
-        return sex;
+        return this.sex;
     }
 
     public long getUserId() {
-        return userId;
+        return this.userId;
     }
 }

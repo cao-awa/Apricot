@@ -15,11 +15,11 @@ public class ProxyConnectPacket extends ReadonlyPacket {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public long getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     /**

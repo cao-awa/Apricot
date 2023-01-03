@@ -77,6 +77,7 @@ public class ApricotRouter extends NetworkRouter {
             } else {
                 if (this.fragment.length() == 0) {
                     this.fragment.append(textFrame.text());
+                    LOGGER.debug("Handled multi fragment packet");
                 } else {
                     LOGGER.warn("Occurs unexpected fragment appended");
                 }
@@ -86,6 +87,7 @@ public class ApricotRouter extends NetworkRouter {
             LOGGER.debug("Fragment appended");
 
             if (continuationFrame.isFinalFragment()) {
+                LOGGER.debug("Fragment appends done");
                 handleFrame(new TextWebSocketFrame(this.fragment.toString()));
                 this.fragment.setLength(0);
             }
@@ -94,7 +96,7 @@ public class ApricotRouter extends NetworkRouter {
         }
     }
 
-    public void handleFrame(TextWebSocketFrame frame) {
+    private void handleFrame(TextWebSocketFrame frame) {
         handleRequest(JSONObject.parseObject(frame.text()));
     }
 

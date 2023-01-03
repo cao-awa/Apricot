@@ -22,14 +22,14 @@ public class Anonymous {
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getFlag() {
-        return flag;
+        return this.flag;
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 }

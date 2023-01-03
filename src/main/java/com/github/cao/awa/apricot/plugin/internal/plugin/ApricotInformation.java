@@ -32,7 +32,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
                    .append(ApricotServer.VERSION)
                    .append("\n");
             builder.append("Plugins: \n");
-            proxy.getServer()
+            proxy.server()
                  .getPlugins()
                  .forEach(plugin -> {
                      builder.append(plugin.getName())
@@ -40,7 +40,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
                             .append(plugin.version())
                             .append("\n");
                  });
-            long millions = TimeUtil.processMillion(proxy.getServer()
+            long millions = TimeUtil.processMillion(proxy.server()
                                                          .getStartupTime());
             long seconds = (millions / 1000) % 60;
             long minutes = (millions / 1000 / 60) % 60;

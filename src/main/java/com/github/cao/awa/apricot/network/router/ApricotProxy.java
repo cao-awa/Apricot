@@ -7,10 +7,7 @@ import org.jetbrains.annotations.*;
 
 import java.util.function.*;
 
-public class ApricotProxy {
-    private final @NotNull ApricotRouter router;
-    private final @NotNull ApricotServer server;
-
+public record ApricotProxy(@NotNull ApricotRouter router, @NotNull ApricotServer server) {
     public ApricotProxy(@NotNull ApricotRouter router, @NotNull ApricotServer server) {
         this.router = router;
         this.server = server;
@@ -25,11 +22,6 @@ public class ApricotProxy {
                 packet,
                 runnable
         );
-    }
-
-    @NotNull
-    public ApricotServer getServer() {
-        return this.server;
     }
 
     public void send(@NotNull WritablePacket packet, Consumer<EchoResultPacket> echo) {

@@ -25,19 +25,19 @@ public class PrivateMessageSender implements MessageSender {
     }
 
     public int getAge() {
-        return age;
+        return this.age;
     }
 
     public String getName() {
-        return name;
+        return this.name;
     }
 
     public String getSex() {
-        return sex;
+        return this.sex;
     }
 
     public long getUserId() {
-        return userId;
+        return this.userId;
     }
 }
 
