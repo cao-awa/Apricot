@@ -17,7 +17,7 @@ public class TrafficCounter implements ConcurrentService {
     private long totalOut = 0;
     private final String name;
     private long current = 0;
-    private int interval = 10000;
+    private int interval = 1000;
 
     public TrafficCounter(String name, int interval) {
         this.name = name;

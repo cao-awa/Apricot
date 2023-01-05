@@ -9,35 +9,19 @@ import org.jetbrains.annotations.*;
 
 public class SendMessagePacket extends WritablePacket {
     private MessageType type;
-    private long userId;
-    private long groupId;
+    private long responseId;
     private AssembledMessage message;
     private boolean autoEscape = false;
 
-    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId, long groupId) {
+    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long responseId) {
         this.type = type;
-        this.userId = userId;
-        this.groupId = groupId;
+        this.responseId = responseId;
         this.message = message;
     }
 
-    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId, long groupId, boolean autoEscape) {
+    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long responseId, boolean autoEscape) {
         this.type = type;
-        this.userId = userId;
-        this.groupId = groupId;
-        this.message = message;
-        this.autoEscape = autoEscape;
-    }
-
-    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId) {
-        this.type = type;
-        this.userId = userId;
-        this.message = message;
-    }
-
-    public SendMessagePacket(@NotNull MessageType type, @NotNull AssembledMessage message, long userId, boolean autoEscape) {
-        this.type = type;
-        this.userId = userId;
+        this.responseId = responseId;
         this.message = message;
         this.autoEscape = autoEscape;
     }
@@ -58,12 +42,12 @@ public class SendMessagePacket extends WritablePacket {
         this.autoEscape = autoEscape;
     }
 
-    private long getUserId() {
-        return this.userId;
+    private long getResponseId() {
+        return this.responseId;
     }
 
-    private void setUserId(long userId) {
-        this.userId = userId;
+    private void setResponseId(long responseId) {
+        this.responseId = responseId;
     }
 
     private AssembledMessage getMessage() {
@@ -72,14 +56,6 @@ public class SendMessagePacket extends WritablePacket {
 
     private void setMessage(AssembledMessage message) {
         this.message = message;
-    }
-
-    public long getGroupId() {
-        return groupId;
-    }
-
-    public void setGroupId(long groupId) {
-        this.groupId = groupId;
     }
 
     @Override
@@ -95,8 +71,7 @@ public class SendMessagePacket extends WritablePacket {
             new SendMessagePacket(
                     this.type,
                     message,
-                    this.userId,
-                    this.groupId,
+                    this.responseId,
                     this.autoEscape
             ).write(writer);
         });
@@ -108,14 +83,14 @@ public class SendMessagePacket extends WritablePacket {
         if (this.type == MessageType.PRIVATE) {
             new SendPrivateMessagePacket(
                     this.message,
-                    this.userId,
-                    this.groupId,
+                    this.responseId,
+                    -1,
                     this.autoEscape
             ).write(writer);
         } else {
             new SendGroupMessagePacket(
                     this.message,
-                    this.groupId,
+                    this.responseId,
                     this.autoEscape
             ).write(writer);
         }

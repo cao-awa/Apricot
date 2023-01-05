@@ -21,7 +21,12 @@ public class PacketJSONBufWriter {
     }
 
     public JSONObject take() {
-        return this.json.get();
+        JSONObject json = this.json.get();
+        if (json == null) {
+            json = new JSONObject();
+            this.json.set(json);
+        }
+        return json;
     }
 
     public JSONObject take(String key) {

@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
+import com.github.cao.awa.apricot.plugin.internal.plugin.message.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -18,21 +19,22 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public void onInitialize() {
-        registerHandler(new InternalMessageHandler());
-//        registerHandler(new InternalPrivateHandler());
+        registerHandler(new AboutApricot());
         registerHandler(new ApricotInformation());
         registerHandler(new ListenMute());
         registerHandler(new ListenLiftMute());
         registerHandler(new ListenAddGroup());
         registerHandler(new RecallNotice());
         registerHandler(new InternalEchoResultHandler());
-        registerHandler(new InternalIllegalImmigrationHandler());
         registerHandler(new PokeReciprocity());
+        registerHandler(new Jrrp());
+        registerHandler(new MessageStorage());
+        registerHandler(new MessageExport());
     }
 
     @Override
     public String version() {
-        return "0.0.2";
+        return "0.0.3";
     }
 
     @Override
@@ -42,6 +44,6 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public @NotNull String getName() {
-        return "Internal Plugin";
+        return "生草机";
     }
 }

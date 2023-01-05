@@ -20,7 +20,7 @@ import org.apache.logging.log4j.*;
 
 import java.util.*;
 
-public class InternalMessageHandler extends MessageReceivedEventHandler {
+public class AboutApricot extends MessageReceivedEventHandler {
     private static final Logger LOGGER = LogManager.getLogger("InternalGroup");
 
     /**
@@ -63,7 +63,6 @@ public class InternalMessageHandler extends MessageReceivedEventHandler {
                  .getMessage()
                  .toPlainText()
                  .equals(".traffic")) {
-
             ApricotServer server = proxy.server();
 
             TrafficCounter traffics = server.getTrafficsCounter();
@@ -90,7 +89,7 @@ public class InternalMessageHandler extends MessageReceivedEventHandler {
                    .append("\n");
             Legacy<Long, Long> trafficsOneSecond = traffics.current();
             Legacy<Long, Long> packetsOneSecond = packets.current();
-            builder.append("--Traffic (10s)--")
+            builder.append("--Traffic (1s)--")
                    .append("\n");
             builder.append("In: ")
                    .append(trafficsOneSecond.newly())
@@ -100,7 +99,7 @@ public class InternalMessageHandler extends MessageReceivedEventHandler {
                    .append(trafficsOneSecond.stale())
                    .append(" Bytes")
                    .append("\n");
-            builder.append("--Packets (10s)--")
+            builder.append("--Packets (1s)--")
                    .append("\n");
             builder.append("In: ")
                    .append(packetsOneSecond.newly())
@@ -113,7 +112,6 @@ public class InternalMessageHandler extends MessageReceivedEventHandler {
                          new SendMessagePacket(
                                  packet.getType(),
                                  new TextMessageElement(builder.toString()).toMessage(),
-                                 packet.getResponseId(),
                                  packet.getResponseId()
                          ),
                          result -> {

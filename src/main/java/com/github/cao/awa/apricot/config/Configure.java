@@ -70,7 +70,7 @@ public class Configure {
                                     0,
                                     note
                             );
-                            LOGGER.warn("The '#' should not be appear in properties line, ignored it");
+                            LOGGER.warn("The '#' should not be appeared in properties line, ignored it");
                         }
                         int delimiter = line.indexOf("=");
                         if (delimiter == - 1) {

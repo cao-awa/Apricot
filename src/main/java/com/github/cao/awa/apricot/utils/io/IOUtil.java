@@ -1,5 +1,8 @@
 package com.github.cao.awa.apricot.utils.io;
 
+import com.github.cao.awa.apricot.utils.file.*;
+import it.unimi.dsi.fastutil.io.*;
+
 import java.io.*;
 
 /**
@@ -107,6 +110,22 @@ public class IOUtil {
      * @since 1.0.0
      */
     public static void write0(Writer writer, String input) throws IOException {
+        writer.write(input);
+    }
+
+    /**
+     * Write string to output.
+     *
+     * @param writer
+     *         Writer
+     * @param input
+     *         Input
+     * @throws IOException
+     *         Happened IO error
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public static void write0(OutputStream writer, byte[] input) throws IOException {
         writer.write(input);
     }
 
@@ -282,5 +301,18 @@ public class IOUtil {
         }
         input.close();
         return builder.toString().toCharArray();
+    }
+
+    public static void copy(String from, String to) throws IOException {
+        FileUtil.mkdirsParent(new File(to));
+        FastBufferedInputStream input = new FastBufferedInputStream(new FileInputStream(from));
+        FastBufferedOutputStream output = new FastBufferedOutputStream(new FileOutputStream(to));
+        byte[] buff = new byte[8192];
+        int length;
+        while ((length = input.read(buff, 0, buff.length)) != - 1) {
+            output.write(buff, 0, length);
+        }
+        input.close();
+        output.close();
     }
 }

@@ -2,6 +2,9 @@ package com.github.cao.awa.apricot.server;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.config.*;
+import com.github.cao.awa.apricot.database.*;
+import com.github.cao.awa.apricot.database.empty.*;
+import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
@@ -48,6 +51,9 @@ import com.github.cao.awa.apricot.utils.io.*;
 import com.github.cao.awa.apricot.utils.times.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
+import org.apache.logging.log4j.Logger;
+import org.iq80.leveldb.*;
+import org.iq80.leveldb.impl.*;
 import org.jetbrains.annotations.*;
 
 import java.io.*;
@@ -72,6 +78,7 @@ public class ApricotServer {
     private EchoManager echoManager;
     private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
     private ApricotServerNetworkIo networkIo;
+    private ApricotDatabase<String, String> messagesHeadOffice;
 
     public ApricotServer() {
     }
@@ -95,7 +102,22 @@ public class ApricotServer {
         setupConfig();
         setupServer();
         setupPlugins();
+        setupDatabase();
         setupNetwork();
+    }
+
+    public void setupDatabase() {
+        try {
+            this.messagesHeadOffice = new MessageDatabase(new Iq80DBFactory().open(
+                    new File("databases/message/head_office"),
+                    new Options().createIfMissing(true)
+                                 .writeBufferSize(0xF000000)
+                                 .compressionType(CompressionType.SNAPPY)
+            ));
+        } catch (Exception e) {
+            this.messagesHeadOffice = new EmptyDatabase();
+            LOGGER.warn("Failed setup databases");
+        }
     }
 
     public void setupDirectories() {
@@ -287,6 +309,23 @@ public class ApricotServer {
             LOGGER.info("Apricot bot server is shutdown");
             System.exit(0);
         }
+    }
+
+    public ApricotDatabase<String, String> getMessagesHeadOffice() {
+        return this.messagesHeadOffice;
+    }
+
+    public ApricotDatabase<String, String> getMsgDatabase(String path) {
+        return EntrustEnvironment.trys(
+                () -> {
+                    return new MessageDatabase(new Iq80DBFactory().open(
+                            new File(path),
+                            new Options().createIfMissing(true)
+                                         .compressionType(CompressionType.SNAPPY)
+                    ));
+                },
+                EmptyDatabase::new
+        );
     }
 
     public long getStartupTime() {

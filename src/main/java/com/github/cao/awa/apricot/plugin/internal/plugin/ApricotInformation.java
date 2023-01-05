@@ -9,6 +9,8 @@ import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.times.*;
 
+import java.nio.charset.*;
+
 public class ApricotInformation extends MessageReceivedEventHandler {
     /**
      * Process event.
@@ -24,13 +26,21 @@ public class ApricotInformation extends MessageReceivedEventHandler {
         MessageReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
 
-        if (packet.getMessage()
-                  .toPlainText()
-                  .equals(".apricot")) {
+        String command = packet.getMessage()
+                               .toPlainText();
+
+        if (! (command.startsWith(".") || command.startsWith("。") || command.startsWith("/"))) {
+            return;
+        }
+
+        command = command.substring(1);
+
+        if (command.equals("apricot") || command.equals("bot")) {
             StringBuilder builder = new StringBuilder();
             builder.append("Apricot v")
                    .append(ApricotServer.VERSION)
-                   .append("\n");
+                   .append(" By 草awa\n");
+            builder.append("https://github.com/cao-awa/Apricot\n");
             builder.append("Plugins: \n");
             proxy.server()
                  .getPlugins()
@@ -47,21 +57,25 @@ public class ApricotInformation extends MessageReceivedEventHandler {
             long hours = (millions / 1000 / 60 / 60) % 60;
             long days = millions / 1000 / 60 / 60 / 24;
             builder.append("Uptime: ");
-            appendNoZero(builder,
-                         days,
-                         "d,"
+            appendNoZero(
+                    builder,
+                    days,
+                    "d,"
             );
-            appendNoZero(builder,
-                         hours,
-                         "h,"
+            appendNoZero(
+                    builder,
+                    hours,
+                    "h,"
             );
-            appendNoZero(builder,
-                         minutes,
-                         "m,"
+            appendNoZero(
+                    builder,
+                    minutes,
+                    "m,"
             );
-            appendNoZero(builder,
-                         seconds,
-                         "s"
+            appendNoZero(
+                    builder,
+                    seconds,
+                    "s"
             );
 
 
@@ -70,7 +84,6 @@ public class ApricotInformation extends MessageReceivedEventHandler {
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     new TextMessageElement(builder.toString()).toMessage(),
-                    packet.getResponseId(),
                     packet.getResponseId()
             ));
         }
@@ -80,8 +93,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
         if (num == 0) {
             return;
         }
-        builder
-               .append(num)
+        builder.append(num)
                .append(suffix);
     }
 }

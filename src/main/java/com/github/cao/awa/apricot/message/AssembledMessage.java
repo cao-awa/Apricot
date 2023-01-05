@@ -79,4 +79,12 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
         }
         this.elements.add(element);
     }
+
+    public void forEach(Consumer<MessageElement> consumer) {
+        this.incinerate.forEach(message -> {
+            message.forEach(consumer);
+        });
+
+        this.elements.forEach(consumer::accept);
+    }
 }

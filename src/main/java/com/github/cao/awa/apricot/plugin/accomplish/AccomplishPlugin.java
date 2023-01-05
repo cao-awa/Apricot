@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.thread.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
 import java.util.*;
 
@@ -46,7 +47,10 @@ public abstract class AccomplishPlugin extends Plugin {
                                           () -> {
                                               List<AccomplishEventHandler> handlers = this.handlers.get(type);
                                               if (handlers != null) {
-                                                  handlers.forEach(event::fireAccomplish);
+                                                  handlers.forEach(handler -> EntrustEnvironment.trys(
+                                                          () -> event.fireAccomplish(handler),
+                                                          Throwable::printStackTrace
+                                                  ));
                                               }
                                           }
                                   ));
