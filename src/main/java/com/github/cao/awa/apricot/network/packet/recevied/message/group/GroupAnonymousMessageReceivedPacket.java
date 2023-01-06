@@ -23,10 +23,6 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
         this.messageId = messageId;
     }
 
-    public long getBotId() {
-        return this.botId;
-    }
-
     public MessageSender getSender() {
         return this.sender;
     }
@@ -49,6 +45,10 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
 
     public long getMessageId() {
         return this.messageId;
+    }
+
+    public long getBotId() {
+        return this.botId;
     }
 
     /**

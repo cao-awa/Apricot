@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.clock;
 
 import com.github.cao.awa.apricot.anntations.*;
-import com.github.cao.awa.apricot.utils.times.*;
+import com.github.cao.awa.apricot.utils.time.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 
 import java.util.concurrent.*;

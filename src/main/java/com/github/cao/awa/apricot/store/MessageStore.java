@@ -7,21 +7,24 @@ import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.message.*;
 
 public class MessageStore {
-    private final Message<?, ?> message;
+    private final AssembledMessage message;
     private final long senderId;
     private final long groupId;
+    private final long messageId;
 
-    public MessageStore(Message<?, ?> message, long senderId, long groupId) {
+    public MessageStore(AssembledMessage message, long senderId, long groupId, long messageId) {
         this.message = message;
         this.senderId = senderId;
         this.groupId = groupId;
+        this.messageId = messageId;
     }
 
     public static MessageStore fromPacket(MessageReceivedPacket packet) {
         return new MessageStore(
                 packet.getMessage(),
                 packet.getSenderId(),
-                packet.getType() == MessageType.GROUP ? packet.getResponseId() : - 1
+                packet.getType() == MessageType.GROUP ? packet.getResponseId() : - 1,
+                packet.getMessageId()
         );
     }
 
@@ -32,9 +35,26 @@ public class MessageStore {
                         json.getString("m")
                 ),
                 json.getLong("s"),
-                json.containsKey("g") ? json.getLong("g") : - 1
+                json.containsKey("g") ? json.getLong("g") : - 1,
+                json.getLong("ri")
         );
         return store;
+    }
+
+    public AssembledMessage getMessage() {
+        return this.message;
+    }
+
+    public long getSenderId() {
+        return this.senderId;
+    }
+
+    public long getGroupId() {
+        return this.groupId;
+    }
+
+    public long getMessageId() {
+        return this.messageId;
     }
 
     public JSONObject toJSONObject() {
@@ -46,6 +66,10 @@ public class MessageStore {
         json.fluentPut(
                 "s",
                 this.senderId
+        );
+        json.fluentPut(
+                "ri",
+                this.messageId
         );
         if (this.groupId != - 1) {
             json.fluentPut(

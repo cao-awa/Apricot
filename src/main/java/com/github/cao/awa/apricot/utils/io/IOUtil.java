@@ -186,6 +186,21 @@ public class IOUtil {
         return read(new InputStreamReader(input));
     }
 
+
+    /**
+     * Read input.
+     *
+     * @param input
+     *         Input
+     * @throws IOException
+     *         Happened IO error
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public static int read0(InputStream input, byte[] bytes) throws IOException {
+        return input.read(bytes);
+    }
+
     /**
      * Read input.
      *

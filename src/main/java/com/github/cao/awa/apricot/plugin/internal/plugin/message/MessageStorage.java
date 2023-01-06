@@ -1,7 +1,5 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin.message;
 
-import com.alibaba.fastjson2.*;
-import com.github.cao.awa.apricot.database.simple.*;
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.message.element.cq.element.image.*;
@@ -35,16 +33,17 @@ public class MessageStorage extends MessageReceivedEventHandler {
         ApricotProxy proxy = event.getProxy();
         ApricotServer server = proxy.server();
 
-        String messageId = String.valueOf(packet.getMessageId());
-
         MessageStore store = MessageStore.fromPacket(packet);
 
         server.getMessagesHeadOffice()
-              .put(
-                      messageId,
+              .set(
+                      String.valueOf(packet.getOwnId()),
                       store.toJSONObject()
                            .toString()
               );
+
+        server.getRelationalDatabase("databases/message/relational/" + packet.getResponseId() + ".db")
+              .append(packet.getOwnId());
 
         packet.getMessage()
               .forEach(message -> {
@@ -61,24 +60,15 @@ public class MessageStorage extends MessageReceivedEventHandler {
                       );
                   }
               });
-        JSONObject des = JSONObject.parse(server.getMessagesHeadOffice()
-                                                .get(messageId));
-        SerialLongKvDatabase database = new SerialLongKvDatabase("databases/message/relational/" + packet.getResponseId() + ".db");
-
-        database.append(packet.getMessageId());
-
-        LOGGER.info(
-                "id={},sender={},message={}",
-                messageId,
-                des.getLong("s"),
-                des
-        );
     }
 
     public static void downloadImg(String url, String fileName, String savePath) {
         File saveDir = new File(savePath);
         FileUtil.mkdirs(saveDir);
         File saveFile = new File(saveDir + "/" + fileName);
+        if (saveFile.isFile()) {
+            return;
+        }
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();
             connection.setConnectTimeout(3000);
@@ -91,7 +81,7 @@ public class MessageStorage extends MessageReceivedEventHandler {
 
             FileOutputStream output = new FileOutputStream(saveFile);
 
-            byte[] buffer = new byte[1024];
+            byte[] buffer = new byte[4096];
             int length;
             while ((length = input.read(buffer)) != - 1) {
                 output.write(

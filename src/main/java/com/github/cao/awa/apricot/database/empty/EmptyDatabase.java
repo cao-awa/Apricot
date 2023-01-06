@@ -11,12 +11,17 @@ public class EmptyDatabase extends ApricotDatabase<String, String> {
     }
 
     @Override
-    public void put(String key, String value) {
+    public void set(String key, String value) {
 
     }
 
     @Override
     public String get(String key) {
+        return "";
+    }
+
+    @Override
+    public String delete(String key) {
         return "";
     }
 }

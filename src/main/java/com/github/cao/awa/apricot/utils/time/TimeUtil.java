@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.utils.times;
+package com.github.cao.awa.apricot.utils.time;
 
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
@@ -27,5 +27,9 @@ public class TimeUtil {
 
     public static void coma(long millions) {
         EntrustEnvironment.trys(() -> Thread.sleep(millions));
+    }
+
+    public static long nanoId() {
+        return nano() / 100;
     }
 }

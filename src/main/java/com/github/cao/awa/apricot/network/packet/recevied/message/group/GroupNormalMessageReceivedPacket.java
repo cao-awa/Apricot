@@ -23,10 +23,6 @@ public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket
         this.messageId = messageId;
     }
 
-    public long getBotId() {
-        return this.botId;
-    }
-
     public MessageSender getSender() {
         return this.sender;
     }
@@ -49,6 +45,10 @@ public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket
 
     public long getMessageId() {
         return this.messageId;
+    }
+
+    public long getBotId() {
+        return this.botId;
     }
 
     /**

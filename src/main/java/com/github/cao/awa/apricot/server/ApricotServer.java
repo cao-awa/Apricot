@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.config.*;
 import com.github.cao.awa.apricot.database.*;
 import com.github.cao.awa.apricot.database.empty.*;
 import com.github.cao.awa.apricot.database.message.store.*;
+import com.github.cao.awa.apricot.database.simple.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
@@ -47,8 +48,9 @@ import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
 import com.github.cao.awa.apricot.thread.pool.*;
+import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.io.*;
-import com.github.cao.awa.apricot.utils.times.*;
+import com.github.cao.awa.apricot.utils.time.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 import org.apache.logging.log4j.Logger;
@@ -72,6 +74,7 @@ public class ApricotServer {
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
     private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
+    private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.newHashMap();
     private boolean active = true;
     private PluginManager plugins;
     private EventManager eventManager;
@@ -315,16 +318,10 @@ public class ApricotServer {
         return this.messagesHeadOffice;
     }
 
-    public ApricotDatabase<String, String> getMsgDatabase(String path) {
-        return EntrustEnvironment.trys(
-                () -> {
-                    return new MessageDatabase(new Iq80DBFactory().open(
-                            new File(path),
-                            new Options().createIfMissing(true)
-                                         .compressionType(CompressionType.SNAPPY)
-                    ));
-                },
-                EmptyDatabase::new
+    public synchronized SerialLongKvDatabase getRelationalDatabase(String path) {
+        return this.relationalDatabases.getOrDefault(
+                path,
+                new SerialLongKvDatabase(path)
         );
     }
 

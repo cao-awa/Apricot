@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.thread.pool;
 
 import com.github.cao.awa.apricot.utils.thread.*;
-import com.github.cao.awa.apricot.utils.times.*;
+import com.github.cao.awa.apricot.utils.time.*;
 
 import java.util.concurrent.*;
 

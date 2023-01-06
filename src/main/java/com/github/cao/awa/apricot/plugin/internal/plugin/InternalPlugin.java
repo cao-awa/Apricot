@@ -19,17 +19,18 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public void onInitialize() {
-        registerHandler(new AboutApricot());
-        registerHandler(new ApricotInformation());
-        registerHandler(new ListenMute());
-        registerHandler(new ListenLiftMute());
-        registerHandler(new ListenAddGroup());
-        registerHandler(new RecallNotice());
+//        registerHandler(new AboutApricot());
+//        registerHandler(new ApricotInformation());
+//        registerHandler(new ListenMute());
+//        registerHandler(new ListenLiftMute());
+//        registerHandler(new ListenAddGroup());
+//        registerHandler(new RecallNotice());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new PokeReciprocity());
-        registerHandler(new Jrrp());
+//        registerHandler(new Jrrp());
         registerHandler(new MessageStorage());
         registerHandler(new MessageExport());
+        registerHandler(new MessageReproduce());
     }
 
     @Override

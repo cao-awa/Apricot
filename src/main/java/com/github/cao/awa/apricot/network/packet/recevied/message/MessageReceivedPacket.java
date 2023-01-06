@@ -20,4 +20,6 @@ public abstract class MessageReceivedPacket extends ReadonlyPacket {
     public abstract long getBotId();
 
     public abstract MessageType getType();
+
+    public abstract long getOwnId();
 }

@@ -29,7 +29,7 @@ public class MessageDatabase extends ApricotDatabase<String, String> {
         });
     }
 
-    public void put(String key, String value) {
+    public void set(String key, String value) {
         this.db.put(
                 key.getBytes(StandardCharsets.UTF_8),
                 value.getBytes(StandardCharsets.UTF_8)
@@ -41,5 +41,12 @@ public class MessageDatabase extends ApricotDatabase<String, String> {
                 this.db.get(key.getBytes(StandardCharsets.UTF_8)),
                 StandardCharsets.UTF_8
         );
+    }
+
+    @Override
+    public String delete(String key) {
+        String result = get(key);
+        this.db.delete(key.getBytes(StandardCharsets.UTF_8));
+        return result;
     }
 }
