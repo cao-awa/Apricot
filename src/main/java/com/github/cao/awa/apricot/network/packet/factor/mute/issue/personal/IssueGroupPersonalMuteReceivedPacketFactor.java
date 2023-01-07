@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.network.packet.factor.mute.issue.personal;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
-import com.github.cao.awa.apricot.network.packet.recevied.mute.issue.personal.*;
+import com.github.cao.awa.apricot.network.packet.receive.mute.issue.personal.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 

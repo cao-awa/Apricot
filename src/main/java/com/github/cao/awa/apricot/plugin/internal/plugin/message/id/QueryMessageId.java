@@ -1,0 +1,85 @@
+package com.github.cao.awa.apricot.plugin.internal.plugin.message.id;
+
+import com.github.cao.awa.apricot.database.message.store.*;
+import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
+import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.cq.element.at.*;
+import com.github.cao.awa.apricot.message.element.cq.element.replay.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.*;
+import com.github.cao.awa.apricot.network.packet.send.message.*;
+import com.github.cao.awa.apricot.network.router.*;
+import com.github.cao.awa.apricot.server.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+
+public class QueryMessageId extends MessageReceivedEventHandler {
+    /**
+     * Process event.
+     *
+     * @param event
+     *         event
+     * @author cao_awa
+     * @author 草二号机
+     * @since 1.0.0
+     */
+    @Override
+    public void onMessageReceived(MessageReceivedEvent<?> event) {
+        MessageReceivedPacket packet = event.getPacket();
+        ApricotProxy proxy = event.getProxy();
+        ApricotServer server = proxy.server();
+        try {
+            ReplyMessageElement at = packet.getMessage()
+                                           .get(
+                                                   0,
+                                                   ReplyMessageElement.class
+                                           );
+            if (packet.getMessage()
+                      .handleMessage(
+                              (element) -> {
+                                  if (element instanceof TextMessageElement text) {
+                                      return text.toPlainText()
+                                                 .equals(".id");
+                                  }
+                                  return false;
+                              },
+                              1
+                      ) || packet.getMessage()
+                                 .handleMessage(
+                                         (element) -> {
+                                             if (element instanceof TextMessageElement text) {
+                                                 return text.toPlainText()
+                                                            .equals(".id");
+                                             }
+                                             return false;
+                                         },
+                                         2
+                                 )) {
+                try {
+                    MessageDatabase messageDatabase = (MessageDatabase) server.getMessagesHeadOffice();
+
+                    AssembledMessage message = new AssembledMessage();
+                    message.participate(new ReplyMessageElement(packet.getMessageId()));
+                    message.participate(new TextMessageElement("目标消息的id为: " + at.getMessageId() + "(永久id: " + messageDatabase.getConvert(at.getMessageId()) + ")\n"));
+                    message.participate(new TextMessageElement("查询语句的id为: " + packet.getMessageId() + "(永久id: " + packet.getOwnId() + ")"));
+
+                    proxy.send(new SendMessagePacket(
+                            packet.getType(),
+                            message,
+                            packet.getResponseId()
+                    ));
+                } catch (Exception e) {
+                    AssembledMessage message = new AssembledMessage();
+                    message.participate(new ReplyMessageElement(packet.getMessageId()));
+                    message.participate(new TextMessageElement("发生了一些错误导致无法查到此消息的id, 或许是未被记录"));
+                    proxy.send(new SendMessagePacket(
+                            packet.getType(),
+                            message,
+                            packet.getResponseId()
+                    ));
+                }
+            }
+        } catch (Exception e) {
+        }
+    }
+}

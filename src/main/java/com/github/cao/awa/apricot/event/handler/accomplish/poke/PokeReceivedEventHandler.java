@@ -24,5 +24,5 @@ public abstract class PokeReceivedEventHandler extends AccomplishEventHandler {
      * @author 草二号机
      * @since 1.0.0
      */
-    public abstract void onPoke(PokeReceivedEvent event);
+    public abstract void onPoke(PokeReceivedEvent<?> event);
 }

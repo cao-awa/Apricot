@@ -5,29 +5,15 @@ import com.github.cao.awa.apricot.event.handler.accomplish.poke.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.poke.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
-import com.github.cao.awa.apricot.network.packet.recevied.poke.*;
+import com.github.cao.awa.apricot.network.packet.receive.poke.*;
 import com.github.cao.awa.apricot.network.router.*;
-import com.github.cao.awa.apricot.utils.collection.*;
-import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
-import java.util.*;
-
-public class PokeReceivedEvent extends Event<PokeReceivedPacket> {
-    private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
-            set -> set.add("notice-poke")
-    );
-
-    public PokeReceivedEvent(ApricotProxy proxy, PokeReceivedPacket packet) {
+public abstract class PokeReceivedEvent<T extends PokeReceivedPacket> extends Event<T> {
+    public PokeReceivedEvent(ApricotProxy proxy, T packet) {
         super(
                 proxy,
                 packet
         );
-    }
-
-    @Override
-    public final Set<String> pipeline() {
-        return TARGETS;
     }
 
     /**
@@ -41,8 +27,8 @@ public class PokeReceivedEvent extends Event<PokeReceivedPacket> {
      */
     @Override
     public void fireAccomplish(AccomplishEventHandler handler) {
-        if (handler instanceof PokeReceivedEventHandler messageReceivedHandler) {
-            messageReceivedHandler.onPoke(this);
+        if (handler instanceof PokeReceivedEventHandler poke) {
+            poke.onPoke(this);
         }
     }
 
@@ -57,8 +43,8 @@ public class PokeReceivedEvent extends Event<PokeReceivedPacket> {
      */
     @Override
     public boolean fireFirewall(FirewallEventHandler handler) {
-        if (handler instanceof PokeReceivedFilter messageFilter) {
-            return messageFilter.legitimate(this);
+        if (handler instanceof PokeReceivedFilter filter) {
+            return filter.legitimate(this);
         }
         return true;
     }

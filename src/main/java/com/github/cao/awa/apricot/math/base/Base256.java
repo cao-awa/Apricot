@@ -14,7 +14,20 @@ public class Base256 {
      * @return Bytes result
      */
     public static byte[] longToBuf(long l) {
-        byte[] buf = new byte[8];
+        return longToBuf(
+                l,
+                new byte[8]
+        );
+    }
+
+    /**
+     * Convert a long to 8 bytes.
+     *
+     * @param l
+     *         Long input
+     * @return Bytes result
+     */
+    public static byte[] longToBuf(long l, byte[] buf) {
         buf[0] = (byte) (l >>> 56);
         buf[1] = (byte) (l >>> 48);
         buf[2] = (byte) (l >>> 40);
@@ -45,7 +58,20 @@ public class Base256 {
      * @return Bytes result
      */
     public static byte[] intToBuf(int i) {
-        byte[] buf = new byte[4];
+        return intToBuf(
+                i,
+                new byte[4]
+        );
+    }
+
+    /**
+     * Convert an integer to 4 bytes.
+     *
+     * @param i
+     *         Integer input
+     * @return Bytes result
+     */
+    public static byte[] intToBuf(int i, byte[] buf) {
         buf[0] = (byte) (i >>> 24);
         buf[1] = (byte) (i >>> 16);
         buf[2] = (byte) (i >>> 8);

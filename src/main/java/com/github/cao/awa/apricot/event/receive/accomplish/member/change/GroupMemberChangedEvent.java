@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.handler.accomplish.member.change.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.member.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
-import com.github.cao.awa.apricot.network.packet.recevied.member.change.*;
+import com.github.cao.awa.apricot.network.packet.receive.member.change.*;
 import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class GroupMemberChangedEvent<T extends GroupMemberChangedPacket> extends Event<T> {

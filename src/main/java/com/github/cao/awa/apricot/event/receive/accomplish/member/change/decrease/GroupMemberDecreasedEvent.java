@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.handler.accomplish.member.change.decreas
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.member.change.decrease.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.member.change.*;
-import com.github.cao.awa.apricot.network.packet.recevied.member.change.decrease.*;
+import com.github.cao.awa.apricot.network.packet.receive.member.change.decrease.*;
 import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class GroupMemberDecreasedEvent<T extends GroupMemberDecreasedPacket> extends GroupMemberChangedEvent<T> {

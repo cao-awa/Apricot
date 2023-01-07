@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.network.handler;
 
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.recevied.meta.lifecycle.*;
+import com.github.cao.awa.apricot.network.packet.receive.meta.lifecycle.*;
 import org.apache.logging.log4j.*;
 
 public class ApricotHandshakeHandler extends RequestHandler {

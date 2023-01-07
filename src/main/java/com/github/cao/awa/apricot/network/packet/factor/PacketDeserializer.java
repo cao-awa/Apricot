@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.network.packet.factor;
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.recevied.invalid.*;
+import com.github.cao.awa.apricot.network.packet.receive.invalid.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.text.*;
@@ -29,6 +29,13 @@ public class PacketDeserializer {
                     case "message" -> {
                         String messageType = TextUtil.underlineDash(request.getString("message_type"));
                         factor = handleMessagePost(
+                                messageType,
+                                subtype
+                        );
+                    }
+                    case "message-sent" -> {
+                        String messageType = TextUtil.underlineDash(request.getString("message_type"));
+                        factor = handleMessageSent(
                                 messageType,
                                 subtype
                         );
@@ -71,6 +78,7 @@ public class PacketDeserializer {
                     request
             );
         } catch (Exception e) {
+            e.printStackTrace();
             return new InvalidDataReceivedPacket(
                     request,
                     true
@@ -79,7 +87,18 @@ public class PacketDeserializer {
     }
 
     private PacketFactor handleMessagePost(String messageType, String subType) {
-        String name = "message-" + messageType + "-" + subType;
+        String name = "message-" + messageType.replace(
+                "_",
+                "-"
+        ) + (subType == null ? "" : ("-" + subType));
+        return this.factors.get(name);
+    }
+
+    private PacketFactor handleMessageSent(String messageType, String subType) {
+        String name = "message-sent-" + messageType.replace(
+                "_",
+                "-"
+        ) + (subType == null ? "" : ("-" + subType));
         return this.factors.get(name);
     }
 

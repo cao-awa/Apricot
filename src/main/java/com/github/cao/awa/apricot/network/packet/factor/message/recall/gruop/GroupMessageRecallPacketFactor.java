@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.network.packet.factor.message.recall.gruop;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.recall.group.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.recall.group.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 

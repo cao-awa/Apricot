@@ -4,12 +4,12 @@ import com.github.cao.awa.apricot.database.*;
 import com.github.cao.awa.apricot.math.base.*;
 import com.github.cao.awa.apricot.utils.file.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import org.jetbrains.annotations.*;
 
 import java.io.*;
 import java.util.function.*;
 
 public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
+    private final byte[] buf = new byte[8];
     private final RandomAccessFile file;
     private long id = 0;
 
@@ -37,11 +37,10 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                 long length = this.file.length();
                 long key = 0;
                 while (length > this.file.getFilePointer()) {
-                    byte[] value = new byte[8];
-                    this.file.read(value);
+                    this.file.read(this.buf);
                     action.accept(
                             key,
-                            Base256.longFromBuf(value)
+                            Base256.longFromBuf(this.buf)
                     );
                     key++;
                 }
@@ -57,9 +56,9 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                 if (key < 0) {
                     return;
                 }
-                byte[] bytes = Base256.longToBuf(value);
+                Base256.longToBuf(value, this.buf);
                 this.file.seek(key * 8);
-                this.file.write(bytes);
+                this.file.write(this.buf);
             } catch (Exception e) {
             }
         }

@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.server.service.echo;
 
-import com.github.cao.awa.apricot.network.packet.recevied.response.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.utils.collection.*;

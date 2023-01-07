@@ -1,9 +1,8 @@
 package com.github.cao.awa.apricot.network.packet.factor.mute.lift.personal;
 
 import com.alibaba.fastjson2.*;
-import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
-import com.github.cao.awa.apricot.network.packet.recevied.mute.lift.personal.*;
+import com.github.cao.awa.apricot.network.packet.receive.mute.lift.personal.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 

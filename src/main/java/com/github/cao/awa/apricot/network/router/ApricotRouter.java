@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
-import com.github.cao.awa.apricot.network.packet.recevied.response.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
@@ -69,9 +69,8 @@ public class ApricotRouter extends NetworkRouter {
      *         the message to handle
      * @throws Exception
      *         is thrown if an error occurred
-     *
-     * @since 1.0.0
      * @author cao_awa
+     * @since 1.0.0
      */
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
@@ -86,10 +85,10 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle fragments and handle the final frame.
      *
-     * @param frame the message
-     *
-     * @since 1.0.0
+     * @param frame
+     *         the message
      * @author cao_awa
+     * @since 1.0.0
      */
     private void handleFragment(WebSocketFrame frame) {
         if (frame instanceof TextWebSocketFrame textFrame) {
@@ -140,10 +139,10 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle the frame, frame should be final fragment.
      *
-     * @param frame the message
-     *
-     * @since 1.0.0
+     * @param frame
+     *         the message
      * @author cao_awa
+     * @since 1.0.0
      */
     private void handleFrame(TextWebSocketFrame frame) {
         handleRequest(JSONObject.parseObject(frame.text()));
@@ -152,13 +151,14 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle the json format message to packet form and handle it.
      *
-     * @param request the request
-     *
-     * @since 1.0.0
+     * @param request
+     *         the request
      * @author 草二号机
      * @author cao_awa
+     * @since 1.0.0
      */
     public void handleRequest(JSONObject request) {
+        System.out.println(request.toString());
         this.server.submitTask(
                 "ApricotRouter",
                 () -> handleRequest(this.server.createPacket(request))
@@ -168,10 +168,10 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle the packet.
      *
-     * @param request the request
-     *
-     * @since 1.0.0
+     * @param request
+     *         the request
      * @author cao_awa
+     * @since 1.0.0
      */
     public void handleRequest(ReadonlyPacket request) {
         this.dispenser.handle(request);
@@ -180,10 +180,10 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Broadcast packet for repeat handle.
      *
-     * @param packet the packet
-     *
-     * @since 1.0.0
+     * @param packet
+     *         the packet
      * @author 草二号机
+     * @since 1.0.0
      */
     public void broadcast(ReadonlyPacket packet) {
         handleRequest(packet);
@@ -218,8 +218,8 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Disconnect.
      *
-     * @since 1.0.0
      * @author cao_awa
+     * @since 1.0.0
      */
     public void disconnect() {
         this.dispenser.disconnect();
@@ -228,10 +228,10 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Disconnect with reason.
      *
-     * @param reason disconnect reason
-     *
-     * @since 1.0.0
+     * @param reason
+     *         disconnect reason
      * @author cao_awa
+     * @since 1.0.0
      */
     public void disconnect(String reason) {
         this.dispenser.disconnect(reason);

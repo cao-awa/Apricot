@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.event.handler.firewall.filter.message;
 
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.personal.*;
 
 public abstract class MessageReceivedFilter extends FirewallEventHandler {
     /**

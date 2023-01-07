@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.network.packet.factor.member.change.increase.
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
-import com.github.cao.awa.apricot.network.packet.recevied.member.change.increase.invite.*;
+import com.github.cao.awa.apricot.network.packet.receive.member.change.increase.invite.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 

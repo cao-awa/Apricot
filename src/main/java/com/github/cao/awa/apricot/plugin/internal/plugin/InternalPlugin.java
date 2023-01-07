@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
 import com.github.cao.awa.apricot.plugin.internal.plugin.message.*;
+import com.github.cao.awa.apricot.plugin.internal.plugin.recall.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -19,23 +20,27 @@ public class InternalPlugin extends AccomplishPlugin {
 
     @Override
     public void onInitialize() {
-//        registerHandler(new AboutApricot());
-//        registerHandler(new ApricotInformation());
+        registerHandler(new Tests());
+        registerHandler(new ApricotInformation());
 //        registerHandler(new ListenMute());
 //        registerHandler(new ListenLiftMute());
 //        registerHandler(new ListenAddGroup());
-        registerHandler(new RecallMessage());
+        registerHandler(new HandleRecallMessage());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new PokeReciprocity());
 //        registerHandler(new Jrrp());
-        registerHandler(new MessageStorage());
+        registerHandler(new OtherMessageStorage());
+        registerHandler(new SelfMessageStore());
         registerHandler(new MessageExport());
-        registerHandler(new MessageReproduce());
+//        registerHandler(new MessageReproduce());
+//        registerHandler(new Shutdown());
+        registerHandler(new RecallNotice());
+//        registerHandler(new QueryMessageId());
     }
 
     @Override
     public String version() {
-        return "0.0.3";
+        return "0.0.4";
     }
 
     @Override

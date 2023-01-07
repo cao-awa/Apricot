@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin.message;
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.utils.file.*;
 import com.github.cao.awa.apricot.utils.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;

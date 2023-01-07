@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.handler.accomplish.mute.lift.personal.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.mute.lift.personal.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.mute.lift.*;
-import com.github.cao.awa.apricot.network.packet.recevied.mute.lift.personal.*;
+import com.github.cao.awa.apricot.network.packet.receive.mute.lift.personal.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;

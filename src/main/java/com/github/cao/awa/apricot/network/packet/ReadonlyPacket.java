@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.network.packet;
 
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.target.*;
 
 /**
  * Deserialized packet, unable to rewrite.
@@ -24,4 +25,6 @@ public abstract class ReadonlyPacket extends Packet {
      * @since 1.0.0
      */
     public abstract void fireEvent(ApricotServer server, ApricotProxy proxy);
+
+    public abstract EventTarget target();
 }

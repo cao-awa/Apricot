@@ -6,7 +6,7 @@ import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.element.at.*;
 import com.github.cao.awa.apricot.message.element.cq.element.at.target.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 

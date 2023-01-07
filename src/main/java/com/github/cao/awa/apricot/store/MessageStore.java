@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.store;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.message.*;
 
@@ -21,7 +21,7 @@ public class MessageStore {
         this.recalled = recalled;
     }
 
-    public static MessageStore fromPacket(MessageReceivedPacket packet) {
+    public static MessageStore fromPacket(MessagePacket packet) {
         return new MessageStore(
                 packet.getMessage(),
                 packet.getSenderId(),

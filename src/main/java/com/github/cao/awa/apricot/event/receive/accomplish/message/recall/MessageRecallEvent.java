@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.handler.accomplish.message.recall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.message.recall.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.*;
-import com.github.cao.awa.apricot.network.packet.recevied.message.recall.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class MessageRecallEvent<T extends MessageRecallPacket> extends Event<T> {

@@ -2,8 +2,7 @@ package com.github.cao.awa.apricot.network.packet.factor.add.friend;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
-import com.github.cao.awa.apricot.network.packet.recevied.add.friend.*;
-import com.github.cao.awa.apricot.network.packet.recevied.add.group.*;
+import com.github.cao.awa.apricot.network.packet.receive.add.friend.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 

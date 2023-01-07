@@ -25,8 +25,10 @@ import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.k
 import com.github.cao.awa.apricot.network.packet.factor.member.change.decrease.leave.*;
 import com.github.cao.awa.apricot.network.packet.factor.member.change.increase.approve.*;
 import com.github.cao.awa.apricot.network.packet.factor.member.change.increase.invite.*;
-import com.github.cao.awa.apricot.network.packet.factor.message.group.*;
-import com.github.cao.awa.apricot.network.packet.factor.message.personal.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.group.received.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.group.sent.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.personal.received.*;
+import com.github.cao.awa.apricot.network.packet.factor.message.personal.sent.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.recall.gruop.*;
 import com.github.cao.awa.apricot.network.packet.factor.message.recall.personal.*;
 import com.github.cao.awa.apricot.network.packet.factor.meta.lifecycle.*;
@@ -40,7 +42,7 @@ import com.github.cao.awa.apricot.network.packet.factor.name.card.*;
 import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
-import com.github.cao.awa.apricot.network.packet.recevied.response.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.plugin.accomplish.*;
 import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.resources.loader.*;
@@ -254,6 +256,8 @@ public class ApricotServer {
                 deserializer -> {
                     deserializer.register(new ProxyConnectPacketFactor());
                     deserializer.register(new ProxyDisconnectPacketFactor());
+                    deserializer.register(new GroupNormalMessageSentPacketFactor());
+                    deserializer.register(new GroupAnonymousSentMessagePacketFactor());
                     deserializer.register(new GroupNormalMessagePacketFactor());
                     deserializer.register(new GroupAnonymousMessagePacketFactor());
                     deserializer.register(new GroupMessageRecallPacketFactor());
@@ -273,7 +277,8 @@ public class ApricotServer {
                     deserializer.register(new LiftGroupPersonalMuteReceivedPacketFactor());
                     deserializer.register(new BotDiedFromGroupPacketFactor());
                     deserializer.register(new GroupTitleChangedReceivedPacketFactor());
-                    deserializer.register(new PrivateFriendMessagePacketFactor());
+                    deserializer.register(new PrivateFriendMessageReceivedPacketFactor());
+                    deserializer.register(new PrivateFriendMessageSentPacketFactor());
                     deserializer.register(new PrivateMessageRecallPacketFactor());
                     deserializer.register(new EchoResultPacketFactor());
                     deserializer.register(new InvalidDataReceivedPacketFactor());
@@ -329,7 +334,8 @@ public class ApricotServer {
         return this.messagesHeadOffice;
     }
 
-    public synchronized SerialLongKvDatabase getRelationalDatabase(String path) {
+    public synchronized SerialLongKvDatabase getRelationalDatabase(long botId, long targetId) {
+        String  path = "databases/message/relational/" + botId + "/" + targetId + ".db";
         return this.relationalDatabases.getOrDefault(
                 path,
                 new SerialLongKvDatabase(path)

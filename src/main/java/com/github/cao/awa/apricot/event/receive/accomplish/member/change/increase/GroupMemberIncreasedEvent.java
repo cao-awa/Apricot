@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.event.handler.accomplish.member.change.increas
 import com.github.cao.awa.apricot.event.handler.firewall.*;
 import com.github.cao.awa.apricot.event.handler.firewall.filter.member.change.increase.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.member.change.*;
-import com.github.cao.awa.apricot.network.packet.recevied.member.change.increase.*;
+import com.github.cao.awa.apricot.network.packet.receive.member.change.increase.*;
 import com.github.cao.awa.apricot.network.router.*;
 
 public abstract class GroupMemberIncreasedEvent<T extends GroupMemberIncreasedPacket> extends GroupMemberChangedEvent<T> {
@@ -30,6 +30,7 @@ public abstract class GroupMemberIncreasedEvent<T extends GroupMemberIncreasedPa
         if (handler instanceof GroupMemberIncreasedEventHandler approvedHandler) {
             approvedHandler.onIncrease(this);
         }
+        super.fireAccomplish(handler);
     }
 
     /**
@@ -44,7 +45,7 @@ public abstract class GroupMemberIncreasedEvent<T extends GroupMemberIncreasedPa
     @Override
     public boolean fireFirewall(FirewallEventHandler handler) {
         if (handler instanceof GroupMemberIncreasedEventFilter filter) {
-            return filter.legitimate(this);
+            return filter.legitimate(this) && super.fireFirewall(handler);
         }
         return true;
     }

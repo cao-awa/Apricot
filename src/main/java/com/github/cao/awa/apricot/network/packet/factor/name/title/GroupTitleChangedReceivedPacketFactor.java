@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.network.packet.factor.name.title;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
-import com.github.cao.awa.apricot.network.packet.recevied.name.title.*;
+import com.github.cao.awa.apricot.network.packet.receive.name.title.*;
 import com.github.cao.awa.apricot.server.*;
 import org.jetbrains.annotations.*;
 

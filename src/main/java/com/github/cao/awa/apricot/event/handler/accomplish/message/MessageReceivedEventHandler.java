@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.event.handler.accomplish.message;
 
 import com.github.cao.awa.apricot.event.handler.accomplish.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.personal.*;
 
 public abstract class MessageReceivedEventHandler extends AccomplishEventHandler {
     /**

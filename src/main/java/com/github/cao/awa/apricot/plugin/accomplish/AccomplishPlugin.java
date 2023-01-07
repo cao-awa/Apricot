@@ -40,6 +40,7 @@ public abstract class AccomplishPlugin extends Plugin {
      * @since 1.0.0
      */
     public void fireEvent(Event<?> event) {
+        event.getPacket();
         event.pipeline()
              .forEach(type -> this.getServer()
                                   .submitTask(
@@ -47,10 +48,10 @@ public abstract class AccomplishPlugin extends Plugin {
                                           () -> {
                                               List<AccomplishEventHandler> handlers = this.handlers.get(type);
                                               if (handlers != null) {
-                                                  handlers.forEach(handler -> EntrustEnvironment.trys(
-                                                          () -> event.fireAccomplish(handler),
-                                                          Throwable::printStackTrace
-                                                  ));
+                                                  handlers.stream()
+                                                          .filter(handler -> handler.accept(event.getPacket()
+                                                                                                 .target()))
+                                                          .forEach(handler -> EntrustEnvironment.trys(() -> event.fireAccomplish(handler)));
                                               }
                                           }
                                   ));
