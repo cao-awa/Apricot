@@ -7,16 +7,18 @@ import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.utils.message.*;
 
 public class MessageStore {
-    private final AssembledMessage message;
-    private final long senderId;
-    private final long groupId;
-    private final long messageId;
+    private AssembledMessage message;
+    private long senderId;
+    private long groupId;
+    private long messageId;
+    private boolean recalled;
 
-    public MessageStore(AssembledMessage message, long senderId, long groupId, long messageId) {
+    public MessageStore(AssembledMessage message, long senderId, long groupId, long messageId, boolean recalled) {
         this.message = message;
         this.senderId = senderId;
         this.groupId = groupId;
         this.messageId = messageId;
+        this.recalled = recalled;
     }
 
     public static MessageStore fromPacket(MessageReceivedPacket packet) {
@@ -24,7 +26,8 @@ public class MessageStore {
                 packet.getMessage(),
                 packet.getSenderId(),
                 packet.getType() == MessageType.GROUP ? packet.getResponseId() : - 1,
-                packet.getMessageId()
+                packet.getMessageId(),
+                false
         );
     }
 
@@ -36,7 +39,8 @@ public class MessageStore {
                 ),
                 json.getLong("s"),
                 json.containsKey("g") ? json.getLong("g") : - 1,
-                json.getLong("ri")
+                json.getLong("r"),
+                json.containsKey("c")
         );
         return store;
     }
@@ -45,16 +49,32 @@ public class MessageStore {
         return this.message;
     }
 
+    public void setMessage(AssembledMessage message) {
+        this.message = message;
+    }
+
     public long getSenderId() {
         return this.senderId;
+    }
+
+    public void setSenderId(long senderId) {
+        this.senderId = senderId;
     }
 
     public long getGroupId() {
         return this.groupId;
     }
 
+    public void setGroupId(long groupId) {
+        this.groupId = groupId;
+    }
+
     public long getMessageId() {
         return this.messageId;
+    }
+
+    public void setMessageId(long messageId) {
+        this.messageId = messageId;
     }
 
     public JSONObject toJSONObject() {
@@ -68,7 +88,7 @@ public class MessageStore {
                 this.senderId
         );
         json.fluentPut(
-                "ri",
+                "r",
                 this.messageId
         );
         if (this.groupId != - 1) {
@@ -77,6 +97,20 @@ public class MessageStore {
                     this.groupId
             );
         }
+        if (this.recalled) {
+            json.fluentPut(
+                    "c",
+                    0
+            );
+        }
         return json;
+    }
+
+    public boolean isRecalled() {
+        return recalled;
+    }
+
+    public void setRecalled(boolean recalled) {
+        this.recalled = recalled;
     }
 }

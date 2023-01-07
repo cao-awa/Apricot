@@ -10,7 +10,7 @@ public class EchoResultPacketFactor extends PacketFactor {
     @Override
     public @NotNull EchoResultPacket create(@NotNull ApricotServer server, @NotNull JSONObject request) {
         return new EchoResultPacket(
-                request.getString("id"),
+                request.getJSONObject("echo").getString("id"),
                 request
         );
     }

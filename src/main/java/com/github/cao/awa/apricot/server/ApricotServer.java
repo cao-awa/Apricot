@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.server;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.config.*;
 import com.github.cao.awa.apricot.database.*;
 import com.github.cao.awa.apricot.database.empty.*;
@@ -47,6 +48,7 @@ import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
+import com.github.cao.awa.apricot.store.*;
 import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.utils.collection.*;
 import com.github.cao.awa.apricot.utils.io.*;
@@ -81,7 +83,7 @@ public class ApricotServer {
     private EchoManager echoManager;
     private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
     private ApricotServerNetworkIo networkIo;
-    private ApricotDatabase<String, String> messagesHeadOffice;
+    private ApricotDatabase<Long, MessageStore> messagesHeadOffice;
 
     public ApricotServer() {
     }
@@ -111,12 +113,21 @@ public class ApricotServer {
 
     public void setupDatabase() {
         try {
-            this.messagesHeadOffice = new MessageDatabase(new Iq80DBFactory().open(
-                    new File("databases/message/head_office"),
-                    new Options().createIfMissing(true)
-                                 .writeBufferSize(0xF000000)
-                                 .compressionType(CompressionType.SNAPPY)
-            ));
+            this.messagesHeadOffice = new MessageDatabase(
+                    this,
+                    new Iq80DBFactory().open(
+                            new File("databases/message/head_office/head"),
+                            new Options().createIfMissing(true)
+                                         .writeBufferSize(1048560)
+                                         .compressionType(CompressionType.SNAPPY)
+                    ),
+                    new Iq80DBFactory().open(
+                            new File("databases/message/head_office/convert"),
+                            new Options().createIfMissing(true)
+                                         .writeBufferSize(1048560)
+                                         .compressionType(CompressionType.SNAPPY)
+                    )
+            );
         } catch (Exception e) {
             this.messagesHeadOffice = new EmptyDatabase();
             LOGGER.warn("Failed setup databases");
@@ -314,7 +325,7 @@ public class ApricotServer {
         }
     }
 
-    public ApricotDatabase<String, String> getMessagesHeadOffice() {
+    public ApricotDatabase<Long, MessageStore> getMessagesHeadOffice() {
         return this.messagesHeadOffice;
     }
 
@@ -350,8 +361,18 @@ public class ApricotServer {
 
     @NotNull
     public ReadonlyPacket createPacket(JSONObject json) {
-        return this.packetDeserializers.deserializer(
+        return this.packetDeserializers.deserializerPacket(
                 this,
+                json
+        );
+    }
+
+    @Nullable
+    @Unsupported
+    public ReadonlyPacket createResponse(String type, JSONObject json) {
+        return this.packetDeserializers.deserializerResponse(
+                this,
+                type,
                 json
         );
     }

@@ -37,9 +37,8 @@ public class MessageStorage extends MessageReceivedEventHandler {
 
         server.getMessagesHeadOffice()
               .set(
-                      String.valueOf(packet.getOwnId()),
-                      store.toJSONObject()
-                           .toString()
+                      packet.getOwnId(),
+                      store
               );
 
         server.getRelationalDatabase("databases/message/relational/" + packet.getResponseId() + ".db")

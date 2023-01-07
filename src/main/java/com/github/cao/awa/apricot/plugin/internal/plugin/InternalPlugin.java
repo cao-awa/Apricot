@@ -24,7 +24,7 @@ public class InternalPlugin extends AccomplishPlugin {
 //        registerHandler(new ListenMute());
 //        registerHandler(new ListenLiftMute());
 //        registerHandler(new ListenAddGroup());
-//        registerHandler(new RecallNotice());
+        registerHandler(new RecallMessage());
         registerHandler(new InternalEchoResultHandler());
         registerHandler(new PokeReciprocity());
 //        registerHandler(new Jrrp());

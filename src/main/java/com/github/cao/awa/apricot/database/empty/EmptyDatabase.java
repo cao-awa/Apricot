@@ -4,24 +4,24 @@ import com.github.cao.awa.apricot.database.*;
 
 import java.util.function.*;
 
-public class EmptyDatabase extends ApricotDatabase<String, String> {
+public class EmptyDatabase<K, V> extends ApricotDatabase<K, V> {
     @Override
-    public void forEach(BiConsumer<String, String> action) {
+    public void forEach(BiConsumer<K, V> action) {
 
     }
 
     @Override
-    public void set(String key, String value) {
+    public void set(K key, V value) {
 
     }
 
     @Override
-    public String get(String key) {
-        return "";
+    public V get(K key) {
+        return null;
     }
 
     @Override
-    public String delete(String key) {
-        return "";
+    public V delete(K key) {
+        return null;
     }
 }

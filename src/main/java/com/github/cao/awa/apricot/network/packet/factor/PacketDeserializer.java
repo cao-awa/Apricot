@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.network.packet.factor;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.recevied.invalid.*;
 import com.github.cao.awa.apricot.server.*;
@@ -14,7 +15,7 @@ public class PacketDeserializer {
     private final Map<String, PacketFactor> factors = ApricotCollectionFactor.newHashMap();
 
     @NotNull
-    public ReadonlyPacket deserializer(ApricotServer server, JSONObject request) {
+    public ReadonlyPacket deserializerPacket(ApricotServer server, JSONObject request) {
         try {
             String name;
             PacketFactor factor = null;
@@ -56,8 +57,8 @@ public class PacketDeserializer {
                     default -> name = postType + (subtype == null ? "" : "-" + subtype);
                 }
             } else {
-                request = request.getJSONObject("echo");
-                name = request.getString("type");
+                name = request.getJSONObject("echo")
+                              .getString("type");
             }
             if (factor == null) {
                 factor = this.factors.getOrDefault(
@@ -104,6 +105,16 @@ public class PacketDeserializer {
                 "-"
         ) + (subType == null ? "" : ("-" + subType));
         return this.factors.get(name);
+    }
+
+    @Nullable
+    @Unsupported
+    public ReadonlyPacket deserializerResponse(ApricotServer server, String type, JSONObject request) {
+        return this.factors.get(type)
+                           .create(
+                                   server,
+                                   request
+                           );
     }
 
     @NotNull

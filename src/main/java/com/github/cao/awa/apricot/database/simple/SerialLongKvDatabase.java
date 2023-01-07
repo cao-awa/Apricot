@@ -51,17 +51,15 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
     }
 
     @Override
-    public void set(@Range(from = - 1L, to = - 1L) Long key, Long value) {
+    public void set(Long key, Long value) {
         synchronized (this) {
             try {
-                if (key != - 1) {
+                if (key < 0) {
                     return;
                 }
                 byte[] bytes = Base256.longToBuf(value);
-                this.file.seek(this.id * 8);
+                this.file.seek(key * 8);
                 this.file.write(bytes);
-
-                this.id++;
             } catch (Exception e) {
             }
         }
@@ -79,13 +77,6 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                 return - 1L;
             }
         }
-    }
-
-    public void append(Long value) {
-        set(
-                - 1L,
-                value
-        );
     }
 
     public Long delete(Long key) {
@@ -125,6 +116,13 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
 
     private long getPos(long id) {
         return id * 8;
+    }
+
+    public void append(Long value) {
+        set(
+                this.id++,
+                value
+        );
     }
 
     public void deletes(Long from, Long to) {

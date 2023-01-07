@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin.message;
 
-import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
 import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
 import com.github.cao.awa.apricot.message.element.*;
@@ -9,8 +9,11 @@ import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.store.*;
+import org.apache.logging.log4j.*;
 
 public class MessageReproduce extends MessageReceivedEventHandler {
+    private static final Logger LOGGER = LogManager.getLogger("MessageReproducer");
+
     /**
      * Process event.
      *
@@ -34,11 +37,8 @@ public class MessageReproduce extends MessageReceivedEventHandler {
         if (command.startsWith("reproduce")) {
             String id = command.substring(command.indexOf(" ") + 1);
 
-            MessageStore store = MessageStore.fromJSONObject(
-                    server,
-                    JSONObject.parse(server.getMessagesHeadOffice()
-                                           .get(id))
-            );
+            MessageStore store = server.getMessagesHeadOffice()
+                                       .get(Long.valueOf(id));
 
             proxy.send(new SendMessagePacket(
                     packet.getType(),
@@ -59,6 +59,36 @@ public class MessageReproduce extends MessageReceivedEventHandler {
                         packet.getResponseId()
                 ));
             }
+        }
+
+        if (command.startsWith("recalled")) {
+            MessageDatabase messageDatabase = (MessageDatabase) server.getMessagesHeadOffice();
+            server.getRelationalDatabase("databases/message/relational/" + Long.parseLong(command.substring(command.indexOf(" ") + 1)) + ".db")
+                  .forEach((k, v) -> {
+                      MessageStore store = messageDatabase.get(v);
+                      if (store != null) {
+                          if (store.isRecalled()) {
+                              LOGGER.info(
+                                      "Recalled message '{}'('{}') is '{}'",
+                                      v,
+                                      store.getMessageId(),
+                                      store.toJSONObject()
+                              );
+                          }
+                      }
+                  });
+
+            //            server.getMessagesHeadOffice()
+            //                  .forEach((k, v) -> {
+            //                      if (v.isRecalled()) {
+            //                          LOGGER.info(
+            //                                  "Recalled message '{}'('{}') is '{}'",
+            //                                  k,
+            //                                  v.getMessageId(),
+            //                                  v.getMessage()
+            //                          );
+            //                      }
+            //                  });
         }
     }
 }

@@ -49,6 +49,11 @@ public abstract class WritablePacket extends Packet {
                                                   "type",
                                                   "echo-result"
                                           )
+                                          .fluentPut(
+                                                  "response-type",
+                                                  writer.take()
+                                                        .getString("action")
+                                          )
                   );
         }
         writer.done();

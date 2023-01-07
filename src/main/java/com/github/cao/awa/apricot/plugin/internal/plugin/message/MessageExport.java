@@ -38,11 +38,11 @@ public class MessageExport extends MessageReceivedEventHandler {
                          JSONObject json = new JSONObject();
                          json.put(
                                  "m",
-                                 JSONObject.parse(v)
+                                 v.toJSONObject()
                          );
                          json.put(
                                  "i",
-                                 Long.valueOf(k)
+                                 k
                          );
                          EntrustEnvironment.trys(
                                  () -> {

@@ -10,14 +10,28 @@ import org.jetbrains.annotations.*;
 public class EchoResultPacket extends ReadonlyPacket {
     private final String identifier;
     private final JSONObject response;
+    private final String type;
 
     public EchoResultPacket(String identifier, JSONObject response) {
         this.identifier = identifier;
         this.response = response;
+        this.type = response.getJSONObject("echo")
+                            .getString("response-type") + "-response";
     }
 
     public JSONObject getResponse() {
         return this.response;
+    }
+
+    public JSONObject getData() {
+        return this.response.getJSONObject("data");
+    }
+
+    public ReadonlyPacket getResponsePacket(ApricotServer server) {
+        return server.createResponse(
+                this.type,
+                this.response
+        );
     }
 
     @NotNull
