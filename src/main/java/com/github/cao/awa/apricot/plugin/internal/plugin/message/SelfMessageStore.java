@@ -29,7 +29,6 @@ public class SelfMessageStore extends MessageSentEventHandler {
      */
     @Override
     public void onMessageReceived(MessageSentEvent<?> event) {
-        System.out.println("S");
         MessageSentPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
         ApricotServer server = proxy.server();

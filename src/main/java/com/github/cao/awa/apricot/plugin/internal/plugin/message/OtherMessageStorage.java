@@ -29,7 +29,6 @@ public class OtherMessageStorage extends MessageReceivedEventHandler {
      */
     @Override
     public void onMessageReceived(MessageReceivedEvent<?> event) {
-        System.out.println("O");
         MessageReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
         ApricotServer server = proxy.server();
