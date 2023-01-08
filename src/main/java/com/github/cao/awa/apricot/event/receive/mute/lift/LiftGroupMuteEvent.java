@@ -38,7 +38,7 @@ public abstract class LiftGroupMuteEvent<T extends LiftGroupMuteReceivedPacket> 
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof LiftGroupMuteEventHandler eventHandler) {
             eventHandler.onLift(this);
         }

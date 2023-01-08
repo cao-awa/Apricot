@@ -39,10 +39,10 @@ public class GroupMemberLeavedEvent extends GroupMemberDecreasedEvent<GroupMembe
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupMemberLeavedEventHandler approvedHandler) {
             approvedHandler.onLeaved(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

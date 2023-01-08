@@ -43,7 +43,7 @@ public class GroupNameChangedReceivedEvent extends Event<GroupNameChangedReceive
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupNameChangedReceivedEventHandler changedHandler) {
             changedHandler.onChanged(this);
         }

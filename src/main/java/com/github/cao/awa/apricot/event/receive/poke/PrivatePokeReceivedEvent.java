@@ -40,10 +40,10 @@ public class PrivatePokeReceivedEvent extends PokeReceivedEvent<PrivatePokeRecei
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof PrivatePokeReceivedEventHandler messageReceivedHandler) {
             messageReceivedHandler.onPoke(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

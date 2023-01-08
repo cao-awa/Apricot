@@ -38,7 +38,7 @@ public class AddGroupEvent extends Event<AddGroupReceivedPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof AddGroupEventHandler eventHandler) {
             eventHandler.onAdd(this);
         }

@@ -110,7 +110,6 @@ public abstract class Plugin implements Comparable<Plugin> {
      * @since 1.0.0
      */
     public void fireEvent(Event<?> event) {
-        event.getPacket();
         event.pipeline()
              .forEach(type -> this.getServer()
                                   .submitTask(
@@ -121,7 +120,7 @@ public abstract class Plugin implements Comparable<Plugin> {
                                                   handlers.stream()
                                                           .filter(handler -> handler.accept(event.getPacket()
                                                                                                  .target()))
-                                                          .forEach(handler -> EntrustEnvironment.trys(() -> event.fireAccomplish(handler)));
+                                                          .forEach(handler -> EntrustEnvironment.trys(() -> event.fireEvent(handler)));
                                               }
                                           }
                                   ));

@@ -41,10 +41,10 @@ public class GroupNormalMessageReceivedEvent extends GroupMessageReceivedEvent<G
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupNormalMessageReceivedEventHandler messageReceivedHandler) {
             messageReceivedHandler.onMessageReceived(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

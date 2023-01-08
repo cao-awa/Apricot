@@ -23,7 +23,7 @@ public abstract class MessageSentEvent<T extends MessageSentPacket> extends Mess
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof MessageSentEventHandler receivedHandler) {
             receivedHandler.onMessageReceived(this);
         }

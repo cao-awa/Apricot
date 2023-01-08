@@ -41,10 +41,10 @@ public class PrivateMessageRecallEvent extends MessageRecallEvent<PrivateMessage
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof PrivateMessageRecallEventHandler recallHandler) {
             recallHandler.onRecall(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

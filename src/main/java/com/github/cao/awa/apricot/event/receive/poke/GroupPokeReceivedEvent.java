@@ -40,10 +40,10 @@ public class GroupPokeReceivedEvent extends PokeReceivedEvent<GroupPokeReceivedP
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupPokeReceivedEventHandler messageReceivedHandler) {
             messageReceivedHandler.onPoke(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

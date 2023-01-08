@@ -41,10 +41,10 @@ public class IssueGroupPersonalMuteEvent extends IssueGroupMuteEvent<IssueGroupP
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof IssueGroupPersonalMuteEventHandler eventHandler) {
             eventHandler.onMute(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

@@ -38,5 +38,5 @@ public abstract class Event<T extends ReadonlyPacket> {
      * @author 草二号机
      * @since 1.0.0
      */
-    public abstract void fireAccomplish(EventHandler handler);
+    public abstract void fireEvent(EventHandler handler);
 }

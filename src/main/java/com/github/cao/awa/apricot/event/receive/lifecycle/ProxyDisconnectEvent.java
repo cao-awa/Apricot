@@ -40,7 +40,7 @@ public class ProxyDisconnectEvent extends Event<ProxyDisconnectPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof ProxyDisconnectEventHandler approvedHandler) {
             approvedHandler.onDisconnect(this);
         }

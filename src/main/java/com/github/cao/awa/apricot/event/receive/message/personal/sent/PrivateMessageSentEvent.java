@@ -24,10 +24,10 @@ public abstract class PrivateMessageSentEvent<T extends PrivateMessageSentPacket
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof PrivateMessageSentEventHandler privateMessage) {
             privateMessage.onMessageSent(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

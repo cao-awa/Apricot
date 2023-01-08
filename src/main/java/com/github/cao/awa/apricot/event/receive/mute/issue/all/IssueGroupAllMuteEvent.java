@@ -41,10 +41,10 @@ public class IssueGroupAllMuteEvent extends IssueGroupMuteEvent<IssueGroupAllMut
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof IssueGroupAllMuteEventHandler eventHandler) {
             eventHandler.onMute(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

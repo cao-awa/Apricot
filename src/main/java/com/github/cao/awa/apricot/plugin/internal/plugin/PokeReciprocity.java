@@ -6,7 +6,7 @@ import com.github.cao.awa.apricot.network.packet.receive.poke.*;
 import com.github.cao.awa.apricot.network.packet.send.poke.*;
 import com.github.cao.awa.apricot.network.router.*;
 
-public class PokeReciprocity extends PrivatePokeReceivedEventHandler {
+public class PokeReciprocity extends PokeReceivedEventHandler {
     /**
      * Process event.
      *
@@ -17,8 +17,8 @@ public class PokeReciprocity extends PrivatePokeReceivedEventHandler {
      * @since 1.0.0
      */
     @Override
-    public void onPoke(PrivatePokeReceivedEvent event) {
-        PrivatePokeReceivedPacket packet = event.getPacket();
+    public void onPoke(PokeReceivedEvent<?> event) {
+        PokeReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
         if (packet.getTargetId() == packet.getBotId() && ! (packet.getCauserId() == packet.getBotId())) {
             proxy.echo(new SendPokePacket(

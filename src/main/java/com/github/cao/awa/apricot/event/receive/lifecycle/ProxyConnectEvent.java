@@ -40,7 +40,7 @@ public class ProxyConnectEvent extends Event<ProxyConnectPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof ProxyConnectEventHandler approvedHandler) {
             approvedHandler.onConnect(this);
         }

@@ -38,7 +38,7 @@ public abstract class IssueGroupMuteEvent<T extends IssueGroupMuteReceivedPacket
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof IssueGroupMuteEventHandler eventHandler) {
             eventHandler.onMute(this);
         }

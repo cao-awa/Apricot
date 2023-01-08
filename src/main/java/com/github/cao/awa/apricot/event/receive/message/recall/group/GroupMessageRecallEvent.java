@@ -41,10 +41,10 @@ public class GroupMessageRecallEvent extends MessageRecallEvent<GroupMessageReca
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupMessageRecallEventHandler recallHandler) {
             recallHandler.onRecall(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

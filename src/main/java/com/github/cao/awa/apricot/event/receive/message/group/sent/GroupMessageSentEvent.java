@@ -24,10 +24,10 @@ public abstract class GroupMessageSentEvent<T extends GroupMessageSentPacket> ex
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupMessageSentEventHandler groupMessage) {
             groupMessage.onMessageSent(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

@@ -39,10 +39,10 @@ public class GroupMemberKickedEvent extends GroupMemberDecreasedEvent<GroupMembe
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupMemberKickedEventHandler approvedHandler) {
             approvedHandler.onKicked(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

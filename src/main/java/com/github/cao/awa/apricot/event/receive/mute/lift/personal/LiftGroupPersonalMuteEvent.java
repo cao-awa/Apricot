@@ -41,10 +41,10 @@ public class LiftGroupPersonalMuteEvent extends LiftGroupMuteEvent<LiftGroupPers
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof LiftGroupPersonalMuteEventHandler eventHandler) {
             eventHandler.onLift(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

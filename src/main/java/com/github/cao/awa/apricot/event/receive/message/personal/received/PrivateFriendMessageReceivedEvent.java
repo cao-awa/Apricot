@@ -41,10 +41,10 @@ public class PrivateFriendMessageReceivedEvent extends PrivateMessageReceivedEve
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof PrivateFriendMessageReceivedEventHandler messageReceivedHandler) {
             messageReceivedHandler.onMessageReceived(this);
         }
-        super.fireAccomplish(handler);
+        super.fireEvent(handler);
     }
 }

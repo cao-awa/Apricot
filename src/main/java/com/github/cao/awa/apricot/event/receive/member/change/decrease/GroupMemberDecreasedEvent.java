@@ -24,7 +24,7 @@ public abstract class GroupMemberDecreasedEvent<T extends GroupMemberDecreasedPa
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof GroupMemberDecreasedEventHandler approvedHandler) {
             approvedHandler.onDecrease(this);
         }

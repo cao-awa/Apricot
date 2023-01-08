@@ -39,7 +39,7 @@ public class InvalidDataReceivedEvent extends Event<InvalidDataReceivedPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireAccomplish(EventHandler handler) {
+    public void fireEvent(EventHandler handler) {
         if (handler instanceof InvalidDataReceivedEventHandler eventHandler) {
             eventHandler.onInvalid(this);
         }
