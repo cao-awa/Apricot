@@ -20,10 +20,11 @@
 私聊消息被撤回：PrivateMessageRecallEventHandler
 
 # 被戳一戳
-``` 
-此事件处理器暂时没有区分群和私聊
-```
 被戳：PokeReceivedEventHandler
+
+在群内被戳：GroupPokeReceivedEventHandler
+
+在私聊被戳：PrivatePokeReceivedEventHandler
 
 # 群人数变化
 群人数变化：GroupMemberChangedEventHandler
