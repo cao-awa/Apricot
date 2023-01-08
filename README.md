@@ -14,6 +14,6 @@
 通常来说，杏每秒可以处理数万计的信息和事件<sup>(好像没什么用)</sup>，但启动速度堪忧，即便在无插件时也需要至少1~2秒<sup>[[1]](doc/zh_cn/performance/bootstrap/bootstrap_time.md)</sup>时间完成启动
 
 # 插件
-要为杏编写一个最简单插件只需要一个 ``` @AutoPlugin ``` 注解以及实现 ``` AccomplishPlugin ```
+要为杏编写一个最简单插件只需要一个 ``` @AutoPlugin ``` 注解以及实现 ``` Plugin ```
 
 详见 **[Plugins](doc/zh_cn/develop/plugins/README.md)**

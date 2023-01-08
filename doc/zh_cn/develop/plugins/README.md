@@ -11,12 +11,17 @@
  * @author cao_awa
  */
 @AutoPlugin
-public class InternalPlugin extends AccomplishPlugin {
+public class InternalPlugin extends Plugin {
     private static final UUID ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
     @Override
     public void onInitialize() {
         // ...
+    }
+
+    @Override
+    public String version() {
+        return "0.0.1";
     }
 
     @Override
