@@ -13,30 +13,41 @@ public record ApricotProxy(@NotNull ApricotRouter router, @NotNull ApricotServer
         this.server = server;
     }
 
-    public void send(WritablePacket packet) {
-        this.router.send(packet);
+    public void echo(WritablePacket<? extends ResponsePacket> packet) {
+        this.router.echo(packet);
     }
 
-    public void send(WritablePacket packet, Runnable runnable) {
-        this.router.send(
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Runnable runnable) {
+        this.router.echo(
                 packet,
                 runnable
         );
     }
 
-    public void send(@NotNull WritablePacket packet, Consumer<EchoResultPacket> echo) {
-        this.router.send(
+    public void echo(@NotNull WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> echo) {
+        this.router.echo(
                 packet,
                 echo
         );
     }
 
-    public void send(@NotNull WritablePacket packet, Consumer<EchoResultPacket> echo, Runnable runnable) {
-        this.router.send(
+    public void echo(@NotNull WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> echo, Runnable runnable) {
+        this.router.echo(
                 packet,
                 echo,
                 runnable
         );
+    }
+
+    public <R extends ResponsePacket, T extends WritablePacket<R>> void send(T packet, Consumer<R> result) {
+        this.router.send(
+                packet,
+                result
+        );
+    }
+
+    public <R extends ResponsePacket, T extends WritablePacket<R>> void send(T packet) {
+        this.router.send(packet);
     }
 
     public void disconnect() {

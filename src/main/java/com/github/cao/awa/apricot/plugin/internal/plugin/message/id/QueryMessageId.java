@@ -1,17 +1,15 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin.message.id;
 
 import com.github.cao.awa.apricot.database.message.store.*;
-import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.message.element.cq.element.at.*;
 import com.github.cao.awa.apricot.message.element.cq.element.replay.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
 public class QueryMessageId extends MessageReceivedEventHandler {
     /**
@@ -63,7 +61,7 @@ public class QueryMessageId extends MessageReceivedEventHandler {
                     message.participate(new TextMessageElement("目标消息的id为: " + at.getMessageId() + "(永久id: " + messageDatabase.getConvert(at.getMessageId()) + ")\n"));
                     message.participate(new TextMessageElement("查询语句的id为: " + packet.getMessageId() + "(永久id: " + packet.getOwnId() + ")"));
 
-                    proxy.send(new SendMessagePacket(
+                    proxy.echo(new SendMessagePacket(
                             packet.getType(),
                             message,
                             packet.getResponseId()
@@ -72,7 +70,7 @@ public class QueryMessageId extends MessageReceivedEventHandler {
                     AssembledMessage message = new AssembledMessage();
                     message.participate(new ReplyMessageElement(packet.getMessageId()));
                     message.participate(new TextMessageElement("发生了一些错误导致无法查到此消息的id, 或许是未被记录"));
-                    proxy.send(new SendMessagePacket(
+                    proxy.echo(new SendMessagePacket(
                             packet.getType(),
                             message,
                             packet.getResponseId()

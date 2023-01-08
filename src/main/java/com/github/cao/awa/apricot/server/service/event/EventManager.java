@@ -1,7 +1,6 @@
 package com.github.cao.awa.apricot.server.service.event;
 
-import com.github.cao.awa.apricot.event.receive.accomplish.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.immigration.illegal.*;
+import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
@@ -25,22 +24,11 @@ public class EventManager implements ConcurrentService {
         if (this.active) {
             this.executor.execute(
                     "EventManager",
-                    () -> {
-                        if (this.plugins.getFirewallPlugins()
-                                        .stream()
-                                        .allMatch(firewall -> firewall.fireEvent(event))) {
-                            this.plugins.getAccomplishPlugins()
-                                        .forEach(plugin -> this.executor.execute(
-                                                "EventManager",
-                                                () -> plugin.fireEvent(event)
-                                        ));
-                        } else {
-                            this.server.fireEvent(new IllegalImmigrationEvent(
-                                    event.getProxy(),
-                                    event
-                            ));
-                        }
-                    }
+                    () -> this.plugins.getPlugins()
+                                      .forEach(plugin -> this.executor.execute(
+                                              "EventManager",
+                                              () -> plugin.fireEvent(event)
+                                      ))
             );
         }
     }

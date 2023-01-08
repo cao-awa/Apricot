@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.element.at.*;
@@ -65,7 +65,7 @@ public class Jrrp extends MessageReceivedEventHandler {
 
                 message.participate(new TextMessageElement(" 你的今日人品是: " + rp));
 
-                proxy.send(new SendMessagePacket(
+                proxy.echo(new SendMessagePacket(
                         packet.getType(),
                         message,
                         packet.getResponseId()
@@ -84,7 +84,7 @@ public class Jrrp extends MessageReceivedEventHandler {
 
                 message.participate(new TextMessageElement(" 一个随机数: " + random.nextInt(-1, 100001)));
 
-                proxy.send(new SendMessagePacket(
+                proxy.echo(new SendMessagePacket(
                         packet.getType(),
                         message,
                         packet.getResponseId()

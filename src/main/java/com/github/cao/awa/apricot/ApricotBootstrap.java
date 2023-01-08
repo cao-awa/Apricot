@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot;
 
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.utils.thread.*;
+import com.github.cao.awa.apricot.util.thread.*;
 
 public class ApricotBootstrap {
     public static void main(String[] args) {

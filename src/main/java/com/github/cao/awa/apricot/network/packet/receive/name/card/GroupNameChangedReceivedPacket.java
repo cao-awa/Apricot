@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.network.packet.receive.name.card;
 
 import com.github.cao.awa.apricot.anntations.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.name.card.*;
+import com.github.cao.awa.apricot.event.receive.name.card.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;

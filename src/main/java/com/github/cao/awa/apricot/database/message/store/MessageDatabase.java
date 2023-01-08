@@ -3,8 +3,8 @@ package com.github.cao.awa.apricot.database.message.store;
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.database.*;
 import com.github.cao.awa.apricot.math.base.*;
+import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.store.*;
 import org.iq80.leveldb.*;
 
 import java.nio.charset.*;

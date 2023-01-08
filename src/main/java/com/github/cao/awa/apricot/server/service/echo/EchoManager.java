@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.server.service.echo;
 import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.thread.pool.*;
-import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.util.collection.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;
 

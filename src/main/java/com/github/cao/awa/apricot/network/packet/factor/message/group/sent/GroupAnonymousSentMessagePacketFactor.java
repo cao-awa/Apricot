@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.group.sent.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.anonymous.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.utils.message.*;
+import com.github.cao.awa.apricot.util.message.*;
 import org.jetbrains.annotations.*;
 
 public class GroupAnonymousSentMessagePacketFactor extends PacketFactor {

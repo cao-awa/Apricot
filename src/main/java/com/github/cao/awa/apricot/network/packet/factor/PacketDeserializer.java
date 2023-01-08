@@ -5,8 +5,8 @@ import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.invalid.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.utils.collection.*;
-import com.github.cao.awa.apricot.utils.text.*;
+import com.github.cao.awa.apricot.util.collection.*;
+import com.github.cao.awa.apricot.util.text.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;

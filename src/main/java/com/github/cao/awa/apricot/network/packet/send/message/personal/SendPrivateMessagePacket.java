@@ -2,10 +2,14 @@ package com.github.cao.awa.apricot.network.packet.send.message.personal;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.message.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
-public class SendPrivateMessagePacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendPrivateMessagePacket extends WritablePacket<SendMessageResponsePacket> {
     private long userId;
     private long groupId = - 1;
     private @NotNull AssembledMessage message;
@@ -69,11 +73,6 @@ public class SendPrivateMessagePacket extends WritablePacket {
     }
 
     @Override
-    public boolean shouldEcho() {
-        return true;
-    }
-
-    @Override
     public void write(PacketJSONBufWriter writer) {
         // Final child packet, write and flush it.
         this.message.incinerateMessage(message -> {
@@ -109,5 +108,19 @@ public class SendPrivateMessagePacket extends WritablePacket {
                           this.groupId
                   );
         }
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<SendMessageResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(new SendMessageResponsePacket(result.getData()
+                                                                              .getLong("message_id")))
+        );
     }
 }

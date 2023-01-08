@@ -188,30 +188,41 @@ public class ApricotRouter extends NetworkRouter {
         handleRequest(packet);
     }
 
-    public void send(WritablePacket packet, Runnable callback) {
-        this.dispenser.send(
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Runnable callback) {
+        this.dispenser.echo(
                 packet,
                 callback
         );
     }
 
-    public void send(WritablePacket packet) {
-        this.dispenser.send(packet);
+    public void echo(WritablePacket<? extends ResponsePacket> packet) {
+        this.dispenser.echo(packet);
     }
 
-    public void send(WritablePacket packet, Consumer<EchoResultPacket> echo) {
-        this.dispenser.send(
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> echo) {
+        this.dispenser.echo(
                 packet,
                 echo
         );
     }
 
-    public void send(WritablePacket packet, Consumer<EchoResultPacket> echo, Runnable callback) {
-        this.dispenser.send(
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> echo, Runnable callback) {
+        this.dispenser.echo(
                 packet,
                 echo,
                 callback
         );
+    }
+
+    public <R extends ResponsePacket, T extends WritablePacket<R>> void send(T packet, Consumer<R> result) {
+        this.dispenser.send(
+                packet,
+                result
+        );
+    }
+
+    public <R extends ResponsePacket, T extends WritablePacket<R>> void send(T packet) {
+        this.dispenser.send(packet);
     }
 
     /**

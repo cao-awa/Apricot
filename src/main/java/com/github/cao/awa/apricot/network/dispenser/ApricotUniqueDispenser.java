@@ -45,12 +45,47 @@ public class ApricotUniqueDispenser {
                     .addListener(this::onDisconnect);
     }
 
+    public void onDisconnect(Future<?> future) {
+        LOGGER.info(
+                "Proxy '{}' disconnected",
+                getId()
+        );
+        this.router.handleRequest(new JSONObject().fluentPut(
+                                                          "proxy_id",
+                                                          getId()
+                                                  )
+                                                  .fluentPut(
+                                                          "connect_time",
+                                                          getConnectTime()
+                                                  )
+                                                  .fluentPut(
+                                                          "post_type",
+                                                          "meta_event"
+                                                  )
+                                                  .fluentPut(
+                                                          "meta_event_type",
+                                                          "lifecycle"
+                                                  )
+                                                  .fluentPut(
+                                                          "sub_type",
+                                                          "disconnect"
+                                                  )
+                                                  .fluentPut(
+                                                          "disconnect_reason",
+                                                          this.disconnectReason
+                                                  ));
+    }
+
     public long getId() {
         return this.id;
     }
 
     public void setId(long id) {
         this.id = id;
+    }
+
+    public long getConnectTime() {
+        return this.connectTime;
     }
 
     public void setConnectTime(long time) {
@@ -65,10 +100,6 @@ public class ApricotUniqueDispenser {
         return this.router;
     }
 
-    public long getConnectTime() {
-        return this.connectTime;
-    }
-
     public RequestHandler getHandler() {
         return this.handler;
     }
@@ -81,6 +112,10 @@ public class ApricotUniqueDispenser {
         this.handler.handlePacket(packet);
     }
 
+    public void disconnect() {
+        disconnect("");
+    }
+
     public void disconnect(String reason) {
         this.disconnectReason = reason;
         if (this.channel.isOpen()) {
@@ -89,16 +124,12 @@ public class ApricotUniqueDispenser {
         }
     }
 
-    public void disconnect() {
-        disconnect("");
-    }
-
-    public void send(WritablePacket packet, Runnable callback) {
-        send(packet);
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Runnable callback) {
+        echo(packet);
         callback.run();
     }
 
-    public void send(WritablePacket packet) {
+    public void echo(WritablePacket<? extends ResponsePacket> packet) {
         this.server.echo(
                 packet,
                 DO_NO_HANDLE_ECHO
@@ -106,7 +137,7 @@ public class ApricotUniqueDispenser {
         packet.writeAndFlush(this.writer);
     }
 
-    public void send(WritablePacket packet, Consumer<EchoResultPacket> echo) {
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> echo) {
         this.server.echo(
                 packet,
                 echo
@@ -114,7 +145,7 @@ public class ApricotUniqueDispenser {
         packet.writeAndFlush(this.writer);
     }
 
-    public void send(WritablePacket packet, Consumer<EchoResultPacket> echo, Runnable callback) {
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> echo, Runnable callback) {
         this.server.echo(
                 packet,
                 echo
@@ -123,30 +154,14 @@ public class ApricotUniqueDispenser {
         callback.run();
     }
 
-    public void onDisconnect(Future<?> future) {
-        LOGGER.info(
-                "Proxy '{}' disconnected",
-                getId()
+    public <R extends ResponsePacket, T extends WritablePacket<R>> void send(T packet, Consumer<R> result) {
+        packet.send(
+                this.router.getProxy(),
+                result
         );
-        this.router.handleRequest(new JSONObject().fluentPut(
-                                              "proxy_id",
-                                              getId()
-                                      )
-                                      .fluentPut(
-                                              "connect_time",
-                                              getConnectTime()
-                                      )
-                                      .fluentPut(
-                                              "post_type",
-                                              "meta_event"
-                                      )
-                                      .fluentPut(
-                                              "meta_event_type",
-                                              "lifecycle"
-                                      )
-                                      .fluentPut(
-                                              "sub_type",
-                                              "disconnect"
-                                      ).fluentPut("disconnect_reason", this.disconnectReason));
+    }
+
+    public <R extends ResponsePacket, T extends WritablePacket<R>> void send(T packet) {
+        packet.send(this.router.getProxy());
     }
 }

@@ -1,9 +1,13 @@
 package com.github.cao.awa.apricot.network.packet.send.group.name.card;
 
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 
-public class SetGroupNameCardPacket extends WritablePacket {
+import java.util.function.*;
+
+public class SetGroupNameCardPacket extends WritablePacket<NoResponsePacket> {
     private String cardName;
     private long groupId;
     private long userId;
@@ -38,11 +42,6 @@ public class SetGroupNameCardPacket extends WritablePacket {
         this.cardName = cardName;
     }
 
-    @Override
-    public boolean shouldEcho() {
-        return false;
-    }
-
     /**
      * Write data to buffer.
      *
@@ -71,5 +70,18 @@ public class SetGroupNameCardPacket extends WritablePacket {
                       "card",
                       this.cardName
               );
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return false;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<NoResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(NoResponsePacket.NO_RESPONSE)
+        );
     }
 }

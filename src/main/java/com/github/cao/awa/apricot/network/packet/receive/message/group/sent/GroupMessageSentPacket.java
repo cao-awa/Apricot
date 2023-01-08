@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.network.packet.receive.message.group.sent;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.target.*;
-import com.github.cao.awa.apricot.utils.time.*;
+import com.github.cao.awa.apricot.util.time.*;
 
 public abstract class GroupMessageSentPacket extends MessageSentPacket {
     private final long ownId = TimeUtil.nanoId();

@@ -1,7 +1,11 @@
 package com.github.cao.awa.apricot.plugin;
 
+import com.github.cao.awa.apricot.event.handler.*;
+import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.plugin.requirement.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.util.collection.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.jetbrains.annotations.*;
 
 import java.nio.charset.*;
@@ -15,15 +19,8 @@ import java.util.*;
  * @since 1.0.0
  */
 public abstract class Plugin implements Comparable<Plugin> {
+    private final Map<String, List<EventHandler>> handlers = ApricotCollectionFactor.newHashMap();
     private ApricotServer server;
-
-    public ApricotServer getServer() {
-        return server;
-    }
-
-    public void setServer(ApricotServer server) {
-        this.server = server;
-    }
 
     /**
      * Compares this object with the specified object for order.  Returns a
@@ -84,4 +81,57 @@ public abstract class Plugin implements Comparable<Plugin> {
     }
 
     public abstract String version();
+
+    public void registerHandlers(EventHandler handler, EventHandler... handlers) {
+        registerHandler(handler);
+        for (EventHandler eventHandler : handlers) {
+            registerHandler(eventHandler);
+        }
+    }
+
+    public void registerHandler(EventHandler handler) {
+        if (! this.handlers.containsKey(handler.getType())) {
+            this.handlers.put(
+                    handler.getType(),
+                    new LinkedList<>()
+            );
+        }
+        this.handlers.get(handler.getType())
+                     .add(handler);
+    }
+
+    /**
+     * Let an event be fired.
+     *
+     * @param event
+     *         event
+     * @author cao_awa
+     * @author 草二号机
+     * @since 1.0.0
+     */
+    public void fireEvent(Event<?> event) {
+        event.getPacket();
+        event.pipeline()
+             .forEach(type -> this.getServer()
+                                  .submitTask(
+                                          getName(),
+                                          () -> {
+                                              List<EventHandler> handlers = this.handlers.get(type);
+                                              if (handlers != null) {
+                                                  handlers.stream()
+                                                          .filter(handler -> handler.accept(event.getPacket()
+                                                                                                 .target()))
+                                                          .forEach(handler -> EntrustEnvironment.trys(() -> event.fireAccomplish(handler)));
+                                              }
+                                          }
+                                  ));
+    }
+
+    public ApricotServer getServer() {
+        return server;
+    }
+
+    public void setServer(ApricotServer server) {
+        this.server = server;
+    }
 }

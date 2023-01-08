@@ -3,14 +3,17 @@ package com.github.cao.awa.apricot.network.packet.send.forward;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.group.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.personal.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
+import java.util.function.*;
 
-public class SendMessagesForwardPacket extends WritablePacket {
+public class SendMessagesForwardPacket extends WritablePacket<NoResponsePacket> {
     private MessageType type;
     private long userId;
     private long groupId;
@@ -62,11 +65,6 @@ public class SendMessagesForwardPacket extends WritablePacket {
     }
 
     @Override
-    public boolean shouldEcho() {
-        return true;
-    }
-
-    @Override
     public void write(PacketJSONBufWriter writer) {
         if (this.type == MessageType.PRIVATE) {
             new SendPrivateMessagesForwardPacket(
@@ -79,5 +77,18 @@ public class SendMessagesForwardPacket extends WritablePacket {
                     this.groupId
             ).write(writer);
         }
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<NoResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(NoResponsePacket.NO_RESPONSE)
+        );
     }
 }

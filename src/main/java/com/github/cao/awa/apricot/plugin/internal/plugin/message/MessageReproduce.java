@@ -1,16 +1,16 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin.message;
 
 import com.github.cao.awa.apricot.database.message.store.*;
-import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.store.*;
-import com.github.cao.awa.apricot.utils.text.*;
+import com.github.cao.awa.apricot.util.text.*;
 import org.apache.logging.log4j.*;
 
 import java.util.*;
@@ -58,7 +58,7 @@ public class MessageReproduce extends MessageReceivedEventHandler {
 
                         store = ((MessageDatabase) server.getMessagesHeadOffice()).getFromId(Long.parseLong(id));
                     } else {
-                        proxy.send(new SendMessagePacket(
+                        proxy.echo(new SendMessagePacket(
                                 packet.getType(),
                                 new TextMessageElement("参数不正确, 第二个参数应为 'idp' 或 'idi'").toMessage(),
                                 packet.getResponseId()
@@ -68,8 +68,8 @@ public class MessageReproduce extends MessageReceivedEventHandler {
 
                     AssembledMessage message = new AssembledMessage();
 
-                    if (store.getGroupId() != - 1) {
-                        message.participate(new TextMessageElement("信息 '" + store.getMessageId() + "' 来自群 '" + store.getGroupId() + "', 发送者是 '" + store.getSenderId() + "'\n"));
+                    if (store.getTargetId() != - 1) {
+                        message.participate(new TextMessageElement("信息 '" + store.getMessageId() + "' 来自群 '" + store.getTargetId() + "', 发送者是 '" + store.getSenderId() + "'\n"));
                     } else {
                         message.participate(new TextMessageElement("信息 '" + store.getMessageId() + "' 来自私聊 '" + store.getSenderId() + "'\n"));
                     }
@@ -79,11 +79,13 @@ public class MessageReproduce extends MessageReceivedEventHandler {
                     store.getMessage()
                          .forEach(message::participate);
 
-                    proxy.send(new SendMessagePacket(
-                            packet.getType(),
-                            message,
-                            packet.getResponseId()
-                    ));
+                    proxy.echo(
+                            new SendMessagePacket(
+                                    packet.getType(),
+                                    message,
+                                    packet.getResponseId()
+                            )
+                    );
                 }
             }
         }

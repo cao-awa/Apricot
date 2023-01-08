@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.config;
 
-import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.util.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;

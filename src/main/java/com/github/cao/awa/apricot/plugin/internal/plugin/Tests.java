@@ -1,20 +1,20 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.*;
 import com.github.cao.awa.apricot.network.packet.send.group.name.card.*;
-import com.github.cao.awa.apricot.network.packet.send.group.recall.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
+import com.github.cao.awa.apricot.network.packet.send.recall.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
-import com.github.cao.awa.apricot.utils.collection.*;
-import com.github.cao.awa.apricot.utils.time.*;
+import com.github.cao.awa.apricot.util.collection.*;
+import com.github.cao.awa.apricot.util.time.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 import org.apache.logging.log4j.*;
 
@@ -53,8 +53,6 @@ public class Tests extends MessageReceivedEventHandler {
                          new SendRecallMessagePacket(event.getPacket()
                                                           .getMessageId()),
                          result -> {
-                             System.out.println(result.getIdentifier());
-                             System.out.println(result.getResponse());
                          }
                  );
         }
@@ -149,7 +147,7 @@ public class Tests extends MessageReceivedEventHandler {
                  .getMessage()
                  .toPlainText()
                  .equals(".change_name")) {
-            proxy.send(new SetGroupNameCardPacket(
+            proxy.echo(new SetGroupNameCardPacket(
                     String.valueOf(TimeUtil.millions()),
                     packet.getResponseId(),
                     packet.getSenderId()

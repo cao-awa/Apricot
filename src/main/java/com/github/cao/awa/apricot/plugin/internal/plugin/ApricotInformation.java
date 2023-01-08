@@ -1,13 +1,13 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.accomplish.message.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.*;
+import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.utils.time.*;
+import com.github.cao.awa.apricot.util.time.*;
 
 public class ApricotInformation extends MessageReceivedEventHandler {
     /**
@@ -79,7 +79,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
 
             //            builder.append("Uptime: ").append();
 
-            proxy.send(new SendMessagePacket(
+            proxy.echo(new SendMessagePacket(
                     packet.getType(),
                     new TextMessageElement(builder.toString()).toMessage(),
                     packet.getResponseId()

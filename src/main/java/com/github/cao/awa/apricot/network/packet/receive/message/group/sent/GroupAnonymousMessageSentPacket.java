@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.receive.message.group.sent;
 
-import com.github.cao.awa.apricot.event.receive.accomplish.message.group.sent.*;
+import com.github.cao.awa.apricot.event.receive.message.group.sent.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 import com.github.cao.awa.apricot.network.router.*;

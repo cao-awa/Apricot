@@ -2,18 +2,17 @@ package com.github.cao.awa.apricot.plugin.internal.plugin.recall;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.database.message.store.*;
-import com.github.cao.awa.apricot.event.handler.accomplish.message.recall.*;
-import com.github.cao.awa.apricot.event.handler.accomplish.message.recall.group.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.message.recall.*;
+import com.github.cao.awa.apricot.event.handler.message.recall.*;
+import com.github.cao.awa.apricot.event.receive.message.recall.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.store.*;
 import com.github.cao.awa.apricot.target.*;
-import com.github.cao.awa.apricot.utils.io.*;
+import com.github.cao.awa.apricot.util.io.*;
 
 import java.io.*;
 import java.util.*;
@@ -49,7 +48,7 @@ public class RecallNotice extends MessageRecallEventHandler {
         store.getMessage()
              .forEach(message::participate);
 
-        proxy.send(new SendMessagePacket(
+        proxy.echo(new SendMessagePacket(
                 packet.getType(),
                 message,
                 packet.getResponseId()

@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.message;
 
 import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.util.collection.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;

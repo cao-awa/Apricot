@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.server.service.plugin.loader;
 
-import com.github.cao.awa.apricot.utils.collection.*;
-import com.github.cao.awa.apricot.utils.io.*;
+import com.github.cao.awa.apricot.util.collection.*;
+import com.github.cao.awa.apricot.util.io.*;
 
 import java.io.*;
 import java.lang.annotation.*;

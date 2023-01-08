@@ -2,10 +2,14 @@ package com.github.cao.awa.apricot.network.packet.send.message.group;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.message.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
-public class SendGroupMessagePacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendGroupMessagePacket extends WritablePacket<SendMessageResponsePacket> {
     private long groupId;
     private @NotNull AssembledMessage message;
     private boolean autoEscape = false;
@@ -47,11 +51,6 @@ public class SendGroupMessagePacket extends WritablePacket {
     }
 
     @Override
-    public boolean shouldEcho() {
-        return true;
-    }
-
-    @Override
     public void write(PacketJSONBufWriter writer) {
         // Final child packet, write and flush it.
         this.message.incinerateMessage(message -> {
@@ -79,5 +78,19 @@ public class SendGroupMessagePacket extends WritablePacket {
                       "auto_escape",
                       this.autoEscape
               );
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<SendMessageResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(new SendMessageResponsePacket(result.getData()
+                                                                              .getLong("message_id")))
+        );
     }
 }

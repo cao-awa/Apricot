@@ -2,10 +2,14 @@ package com.github.cao.awa.apricot.network.packet.send.add.group.approve;
 
 import com.github.cao.awa.apricot.approval.group.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
-public class SendGroupApprovalPacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendGroupApprovalPacket extends WritablePacket<NoResponsePacket> {
     private ApprovalType type;
     private String flag;
     private boolean approve;
@@ -87,5 +91,13 @@ public class SendGroupApprovalPacket extends WritablePacket {
     @Override
     public boolean shouldEcho() {
         return false;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<NoResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(NoResponsePacket.NO_RESPONSE)
+        );
     }
 }

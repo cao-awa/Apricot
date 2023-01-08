@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.network.packet.factor.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.personal.received.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.utils.message.*;
+import com.github.cao.awa.apricot.util.message.*;
 import org.jetbrains.annotations.*;
 
 public class PrivateFriendMessageReceivedPacketFactor extends PacketFactor {

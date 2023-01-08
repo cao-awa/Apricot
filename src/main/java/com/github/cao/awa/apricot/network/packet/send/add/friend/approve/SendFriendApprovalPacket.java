@@ -1,10 +1,14 @@
 package com.github.cao.awa.apricot.network.packet.send.add.friend.approve;
 
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
-public class SendFriendApprovalPacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendFriendApprovalPacket extends WritablePacket<NoResponsePacket> {
     private String flag;
     private boolean approve;
     private @NotNull String remark;
@@ -72,5 +76,13 @@ public class SendFriendApprovalPacket extends WritablePacket {
     @Override
     public boolean shouldEcho() {
         return false;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<NoResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(NoResponsePacket.NO_RESPONSE)
+        );
     }
 }

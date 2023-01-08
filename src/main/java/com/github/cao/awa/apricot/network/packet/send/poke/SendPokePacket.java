@@ -3,12 +3,16 @@ package com.github.cao.awa.apricot.network.packet.send.poke;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.cq.element.poke.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.group.*;
 import com.github.cao.awa.apricot.network.packet.send.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
-public class SendPokePacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendPokePacket extends WritablePacket<SendMessageResponsePacket> {
     private MessageType type;
     private long targetId;
     private long botId;
@@ -54,11 +58,6 @@ public class SendPokePacket extends WritablePacket {
     }
 
     @Override
-    public boolean shouldEcho() {
-        return true;
-    }
-
-    @Override
     public void write(PacketJSONBufWriter writer) {
         writer.take()
               .fluentPut(
@@ -85,5 +84,19 @@ public class SendPokePacket extends WritablePacket {
                     false
             ).write(writer);
         }
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<SendMessageResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(new SendMessageResponsePacket(result.getData()
+                                                                              .getLong("message_id")))
+        );
     }
 }

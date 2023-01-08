@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.accomplish.mute.lift.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.mute.lift.*;
+import com.github.cao.awa.apricot.event.handler.mute.lift.*;
+import com.github.cao.awa.apricot.event.receive.mute.lift.*;
 import org.apache.logging.log4j.*;
 
 public class ListenLiftMute extends LiftGroupMuteEventHandler {

@@ -3,11 +3,14 @@ package com.github.cao.awa.apricot.network.packet.send.forward.group;
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 
 import java.util.*;
+import java.util.function.*;
 
-public class SendGroupMessagesForwardPacket extends WritablePacket {
+public class SendGroupMessagesForwardPacket extends WritablePacket<NoResponsePacket> {
     private List<ForwardMessage> messages;
     private long groupId;
 
@@ -30,11 +33,6 @@ public class SendGroupMessagesForwardPacket extends WritablePacket {
 
     public void setMessages(List<ForwardMessage> messages) {
         this.messages = messages;
-    }
-
-    @Override
-    public boolean shouldEcho() {
-        return true;
     }
 
     /**
@@ -61,6 +59,19 @@ public class SendGroupMessagesForwardPacket extends WritablePacket {
                       "messages",
                       messagesToArray()
               );
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<NoResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(NoResponsePacket.NO_RESPONSE)
+        );
     }
 
     public JSONArray messagesToArray() {

@@ -2,14 +2,12 @@ package com.github.cao.awa.apricot.server.service.plugin;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
-import com.github.cao.awa.apricot.plugin.accomplish.*;
-import com.github.cao.awa.apricot.plugin.firewall.*;
 import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.plugin.loader.*;
 import com.github.cao.awa.apricot.thread.pool.*;
-import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.util.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 import org.reflections.*;
@@ -25,8 +23,7 @@ import java.util.concurrent.*;
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
     private final ApricotServer server;
-    private final Map<UUID, AccomplishPlugin> accomplishPlugins = new ConcurrentHashMap<>();
-    private final Map<UUID, FirewallPlugin> firewallPlugins = new ConcurrentHashMap<>();
+    private final Map<UUID, Plugin> accomplishPlugins = new ConcurrentHashMap<>();
     private final ExecutorEntrust executor;
     private boolean active = true;
 
@@ -39,20 +36,12 @@ public class PluginManager implements ConcurrentService {
         return this.server;
     }
 
-    public Collection<AccomplishPlugin> getAccomplishPlugins() {
+    public Collection<Plugin> getPlugins() {
         return this.accomplishPlugins.values();
     }
 
-    public Collection<FirewallPlugin> getFirewallPlugins() {
-        return this.firewallPlugins.values();
-    }
-
-    public AccomplishPlugin getAccomplishPlugin(UUID uuid) {
+    public Plugin getPlugin(UUID uuid) {
         return this.accomplishPlugins.get(uuid);
-    }
-
-    public FirewallPlugin getFirewallPlugin(UUID uuid) {
-        return this.firewallPlugins.get(uuid);
     }
 
     @Override
@@ -105,8 +94,10 @@ public class PluginManager implements ConcurrentService {
                             Plugin plugin = (Plugin) clazz.getDeclaredConstructor()
                                                           .newInstance();
                             if (shouldAsync && plugin.canAsync()) {
-                                this.executor.execute("PluginManager",
-                                                      () -> loadPlugin(plugin));
+                                this.executor.execute(
+                                        "PluginManager",
+                                        () -> loadPlugin(plugin)
+                                );
                             } else {
                                 blockLoading.add(plugin);
                             }
@@ -129,11 +120,7 @@ public class PluginManager implements ConcurrentService {
         if (this.active) {
             plugin.setServer(this.server);
             plugin.onInitialize();
-            if (plugin instanceof FirewallPlugin firewall) {
-                registerFirewall(firewall);
-            } else if (plugin instanceof AccomplishPlugin accomplish) {
-                registerAccomplish(accomplish);
-            }
+            register(plugin);
             LOGGER.info(
                     "Plugins '{}'({}) registered",
                     plugin.getName(),
@@ -142,15 +129,8 @@ public class PluginManager implements ConcurrentService {
         }
     }
 
-    public void registerAccomplish(AccomplishPlugin plugin) {
+    public void register(Plugin plugin) {
         this.accomplishPlugins.put(
-                plugin.getUuid(),
-                plugin
-        );
-    }
-
-    public void registerFirewall(FirewallPlugin plugin) {
-        this.firewallPlugins.put(
                 plugin.getUuid(),
                 plugin
         );

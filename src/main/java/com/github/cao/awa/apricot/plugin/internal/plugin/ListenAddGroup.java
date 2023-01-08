@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.accomplish.add.group.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.add.group.*;
+import com.github.cao.awa.apricot.event.handler.add.group.*;
+import com.github.cao.awa.apricot.event.receive.add.group.*;
 import org.apache.logging.log4j.*;
 
 public class ListenAddGroup extends AddGroupEventHandler {

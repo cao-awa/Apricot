@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.receive.meta.lifecycle;
 
-import com.github.cao.awa.apricot.event.receive.accomplish.lifecycle.*;
+import com.github.cao.awa.apricot.event.receive.lifecycle.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;

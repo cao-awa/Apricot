@@ -2,12 +2,16 @@ package com.github.cao.awa.apricot.network.packet.send.message;
 
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.group.*;
 import com.github.cao.awa.apricot.network.packet.send.message.personal.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 import org.jetbrains.annotations.*;
 
-public class SendMessagePacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendMessagePacket extends WritablePacket<SendMessageResponsePacket> {
     private MessageType type;
     private long responseId;
     private AssembledMessage message;
@@ -59,11 +63,6 @@ public class SendMessagePacket extends WritablePacket {
     }
 
     @Override
-    public boolean shouldEcho() {
-        return true;
-    }
-
-    @Override
     public void write(PacketJSONBufWriter writer) {
         // This not final child packet, write but do not flush it.
         // The final child will flush.
@@ -84,7 +83,7 @@ public class SendMessagePacket extends WritablePacket {
             new SendPrivateMessagePacket(
                     this.message,
                     this.responseId,
-                    -1,
+                    - 1,
                     this.autoEscape
             ).write(writer);
         } else {
@@ -94,5 +93,19 @@ public class SendMessagePacket extends WritablePacket {
                     this.autoEscape
             ).write(writer);
         }
+    }
+
+    @Override
+    public boolean shouldEcho() {
+        return true;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<SendMessageResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(new SendMessageResponsePacket(result.getData()
+                                                                              .getLong("message_id")))
+        );
     }
 }

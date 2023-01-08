@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.network.packet.receive.add.group;
 
 import com.github.cao.awa.apricot.approval.group.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.add.group.*;
+import com.github.cao.awa.apricot.event.receive.add.group.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.send.add.group.approve.*;
 import com.github.cao.awa.apricot.network.router.*;
@@ -55,7 +55,7 @@ public class InviteGroupReceivedPacket extends ReadonlyPacket {
     }
 
     public void rapid(ApricotProxy proxy, boolean approve, @Nullable String rejectReason) {
-        proxy.send(new SendInviteGroupApprovalPacket(
+        proxy.echo(new SendInviteGroupApprovalPacket(
                 this.flag,
                 approve,
                 rejectReason

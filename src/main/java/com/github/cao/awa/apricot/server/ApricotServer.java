@@ -7,13 +7,14 @@ import com.github.cao.awa.apricot.database.*;
 import com.github.cao.awa.apricot.database.empty.*;
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.database.simple.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.*;
+import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.at.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.image.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.poke.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.replay.*;
+import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.factor.*;
@@ -43,21 +44,19 @@ import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.*;
-import com.github.cao.awa.apricot.plugin.accomplish.*;
-import com.github.cao.awa.apricot.plugin.firewall.*;
+import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
-import com.github.cao.awa.apricot.store.*;
 import com.github.cao.awa.apricot.thread.pool.*;
-import com.github.cao.awa.apricot.utils.collection.*;
-import com.github.cao.awa.apricot.utils.io.*;
-import com.github.cao.awa.apricot.utils.time.*;
+import com.github.cao.awa.apricot.util.collection.*;
+import com.github.cao.awa.apricot.util.io.*;
+import com.github.cao.awa.apricot.util.time.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
-import org.apache.logging.log4j.*;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.*;
 import org.iq80.leveldb.*;
 import org.iq80.leveldb.impl.*;
 import org.jetbrains.annotations.*;
@@ -399,12 +398,8 @@ public class ApricotServer {
         );
     }
 
-    public void registerPlugin(AccomplishPlugin plugin) {
-        this.plugins.registerAccomplish(plugin);
-    }
-
-    public void registerFirewall(FirewallPlugin plugin) {
-        this.plugins.registerFirewall(plugin);
+    public void registerPlugin(Plugin plugin) {
+        this.plugins.register(plugin);
     }
 
     /**
@@ -419,7 +414,7 @@ public class ApricotServer {
         this.eventManager.fireEvent(event);
     }
 
-    public void echo(WritablePacket packet, Consumer<EchoResultPacket> action) {
+    public void echo(WritablePacket<? extends ResponsePacket> packet, Consumer<EchoResultPacket> action) {
         echo(
                 packet.getIdentifier(),
                 action
@@ -453,7 +448,7 @@ public class ApricotServer {
         return this.configs.getBoolean("plugin.async.enable");
     }
 
-    public Collection<AccomplishPlugin> getPlugins() {
-        return this.plugins.getAccomplishPlugins();
+    public Collection<Plugin> getPlugins() {
+        return this.plugins.getPlugins();
     }
 }

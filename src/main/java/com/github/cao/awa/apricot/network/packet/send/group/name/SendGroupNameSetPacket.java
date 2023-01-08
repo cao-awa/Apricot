@@ -1,9 +1,13 @@
 package com.github.cao.awa.apricot.network.packet.send.group.name;
 
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
+import com.github.cao.awa.apricot.network.router.*;
 
-public class SendGroupNameSetPacket extends WritablePacket {
+import java.util.function.*;
+
+public class SendGroupNameSetPacket extends WritablePacket<NoResponsePacket> {
     private String groupId;
     private String groupName;
 
@@ -57,5 +61,13 @@ public class SendGroupNameSetPacket extends WritablePacket {
     @Override
     public boolean shouldEcho() {
         return false;
+    }
+
+    @Override
+    public void send(ApricotProxy proxy, Consumer<NoResponsePacket> response) {
+        proxy.echo(
+                this,
+                result -> response.accept(NoResponsePacket.NO_RESPONSE)
+        );
     }
 }

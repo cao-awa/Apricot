@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.plugin.information;
 
-import com.github.cao.awa.apricot.utils.collection.*;
+import com.github.cao.awa.apricot.util.collection.*;
 
 import java.util.*;
 

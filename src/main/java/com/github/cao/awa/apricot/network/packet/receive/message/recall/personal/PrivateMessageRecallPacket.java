@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.receive.message.recall.personal;
 
-import com.github.cao.awa.apricot.event.receive.accomplish.message.recall.personal.*;
+import com.github.cao.awa.apricot.event.receive.message.recall.personal.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.router.*;

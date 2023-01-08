@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin;
 
-import com.github.cao.awa.apricot.event.handler.accomplish.mute.issue.*;
-import com.github.cao.awa.apricot.event.receive.accomplish.mute.issue.*;
+import com.github.cao.awa.apricot.event.handler.mute.issue.*;
+import com.github.cao.awa.apricot.event.receive.mute.issue.*;
 import org.apache.logging.log4j.*;
 
 public class ListenMute extends IssueGroupMuteEventHandler {
