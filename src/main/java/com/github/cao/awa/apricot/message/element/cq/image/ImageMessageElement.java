@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.message.element.cq.element.image;
+package com.github.cao.awa.apricot.message.element.cq.image;
 
 import com.github.cao.awa.apricot.message.element.*;
 

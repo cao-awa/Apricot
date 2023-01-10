@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.message.element.cq.element.replay;
+package com.github.cao.awa.apricot.message.element.cq.replay;
 
 import com.github.cao.awa.apricot.message.element.*;
 

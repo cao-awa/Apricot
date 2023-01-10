@@ -17,6 +17,20 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
         return this;
     }
 
+    public String toPlainText() {
+        StringBuilder builder = new StringBuilder();
+        for (MessageElement element : this.elements) {
+            builder.append(element.toPlainText());
+        }
+        return builder.toString();
+    }
+
+    @NotNull
+    public MessageElement get(int index) {
+        MessageElement element = this.elements.get(index);
+        return element == null ? EMPTY_PLAINS_TEXT : element;
+    }
+
     public AssembledMessage participateAll(List<MessageElement> elements) {
         elements.forEach(this::participate);
         return this;
@@ -24,12 +38,6 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
 
     public <T extends MessageElement, R> R handleMessage(Function<T, R> function, int index) {
         return function.apply((T) get(index));
-    }
-
-    @NotNull
-    public MessageElement get(int index) {
-        MessageElement element = this.elements.get(index);
-        return element == null ? EMPTY_PLAINS_TEXT : element;
     }
 
     public <T extends MessageElement> T get(int index, Class<T> target) {
@@ -40,14 +48,6 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
         return null;
     }
 
-    public String toPlainText() {
-        StringBuilder builder = new StringBuilder();
-        for (MessageElement element : this.elements) {
-            builder.append(element.toPlainText());
-        }
-        return builder.toString();
-    }
-
     public <T extends MessageElement> CarvedMessage<T> carver(Class<T> target) {
         CarvedMessage<T> carvedMessage = new CarvedMessage<>();
         this.elements.forEach(element -> {
@@ -56,6 +56,22 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
             }
         });
         return carvedMessage;
+    }
+
+    public <T extends MessageElement> AssembledMessage skip(Class<T> target) {
+        for (int i = 0; i < this.elements.size(); i++) {
+            if (target.isInstance(this.elements.get(i))) {
+                this.elements.remove(i);
+            } else {
+                break;
+            }
+        }
+        return this;
+    }
+
+    public <T extends MessageElement> AssembledMessage clear(Class<T> target) {
+        this.elements.removeIf(target::isInstance);
+        return this;
     }
 
     public void incinerateMessage(Consumer<AssembledMessage> action) {
@@ -72,7 +88,8 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
 
     public void incinerate(MessageElement element) {
         if (this.elements.size() > 0) {
-            if (element.shouldIncinerate() || this.elements.get(this.elements.size() - 1).shouldIncinerate()) {
+            if (element.shouldIncinerate() || this.elements.get(this.elements.size() - 1)
+                                                           .shouldIncinerate()) {
                 this.incinerate.add(new AssembledMessage().participateAll(this.elements));
                 this.elements.clear();
             }
@@ -81,10 +98,8 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
     }
 
     public void forEach(Consumer<MessageElement> consumer) {
-        this.incinerate.forEach(message -> {
-            message.forEach(consumer);
-        });
+        this.incinerate.forEach(message -> message.forEach(consumer));
 
-        this.elements.forEach(consumer::accept);
+        this.elements.forEach(consumer);
     }
 }

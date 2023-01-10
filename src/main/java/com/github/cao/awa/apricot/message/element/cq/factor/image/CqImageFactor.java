@@ -1,8 +1,8 @@
 package com.github.cao.awa.apricot.message.element.cq.factor.image;
 
 import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.message.element.cq.element.image.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
+import com.github.cao.awa.apricot.message.element.cq.image.*;
 import com.github.cao.awa.apricot.server.*;
 
 import java.util.*;

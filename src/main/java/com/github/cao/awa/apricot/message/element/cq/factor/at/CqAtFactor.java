@@ -1,8 +1,8 @@
 package com.github.cao.awa.apricot.message.element.cq.factor.at;
 
 import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.message.element.cq.element.at.*;
-import com.github.cao.awa.apricot.message.element.cq.element.at.target.*;
+import com.github.cao.awa.apricot.message.element.cq.at.*;
+import com.github.cao.awa.apricot.message.element.cq.at.target.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
 import com.github.cao.awa.apricot.server.*;
 

@@ -38,13 +38,6 @@ public class Tests extends MessageReceivedEventHandler {
         MessageReceivedPacket packet = event.getPacket();
         ApricotServer server = proxy.server();
 
-//        LOGGER.info((packet.getType() == MessageType.GROUP ? "GROUP({}) * {}: {}" : "PRIVATE({}) * {}: {}"),
-//                    packet.getResponseId(),
-//                    packet.getSender()
-//                          .getName(),
-//                    packet.getMessage()
-//                          .toPlainText());
-
         if (event.getPacket()
                  .getMessage()
                  .toPlainText()

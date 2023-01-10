@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.message.element.cq.element.poke;
+package com.github.cao.awa.apricot.message.element.cq.poke;
 
 import com.github.cao.awa.apricot.message.element.*;
 

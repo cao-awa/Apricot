@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.network.packet.send.poke;
 
 import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.message.element.cq.element.poke.*;
+import com.github.cao.awa.apricot.message.element.cq.poke.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.group.*;

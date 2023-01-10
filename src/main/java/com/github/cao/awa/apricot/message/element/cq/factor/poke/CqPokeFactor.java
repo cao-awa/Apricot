@@ -1,8 +1,8 @@
 package com.github.cao.awa.apricot.message.element.cq.factor.poke;
 
 import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.message.element.cq.element.replay.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
+import com.github.cao.awa.apricot.message.element.cq.replay.*;
 import com.github.cao.awa.apricot.server.*;
 
 import java.util.*;

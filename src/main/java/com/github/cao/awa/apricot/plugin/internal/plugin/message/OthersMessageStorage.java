@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.plugin.message;
 
 import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
-import com.github.cao.awa.apricot.message.element.cq.element.image.*;
+import com.github.cao.awa.apricot.message.element.cq.image.*;
 import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.router.*;
@@ -35,13 +35,6 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
         MessageStore store = MessageStore.fromPacket(packet);
 
         server.getMessagesHeadOffice()
-              .set(
-                      packet.getOwnId(),
-                      store
-              );
-
-        // Deprecated
-        server.getMessagesHeadOffice2()
               .set(
                       packet.getOwnId(),
                       store
