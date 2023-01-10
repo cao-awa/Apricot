@@ -20,7 +20,7 @@ public class GroupNormalMessageSentPacketFactor extends PacketFactor {
                 GroupMessageSender.create(request.getJSONObject("sender")),
                 request.getLong("group_id"),
                 request.getLong("time"),
-                request.getLong("message_id")
+                request.getInteger("message_id")
         );
     }
 

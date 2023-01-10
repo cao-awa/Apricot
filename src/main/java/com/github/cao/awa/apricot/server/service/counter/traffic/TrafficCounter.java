@@ -13,9 +13,9 @@ public class TrafficCounter implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("TrafficCounter");
     private final ScheduledExecutorService executor = Executors.newScheduledThreadPool(1);
     private final List<Traffic> traffics = new CopyOnWriteArrayList<>();
+    private final String name;
     private long totalIn = 0;
     private long totalOut = 0;
-    private final String name;
     private long current = 0;
     private int interval = 1000;
 

@@ -10,7 +10,7 @@ import java.util.jar.*;
 
 public class AnnotatedClassFinder extends ClassLoader {
     private final Class<? extends Annotation> targetAnnotation;
-    private final List<File> files = new ArrayList<>();
+    private final List<File> files = ApricotCollectionFactor.newArrayList();
     private final Map<String, Class<?>> classes = ApricotCollectionFactor.newHashMap();
 
     public AnnotatedClassFinder(File file, Class<? extends Annotation> targetAnnotation) {
@@ -26,7 +26,7 @@ public class AnnotatedClassFinder extends ClassLoader {
 
     public void load() {
         try {
-            for (File file : files) {
+            for (File file : this.files) {
                 JarFile jar = new JarFile(file);
                 Iterator<JarEntry> iterator = jar.entries()
                                                  .asIterator();
@@ -82,10 +82,8 @@ public class AnnotatedClassFinder extends ClassLoader {
                             null
                     );
                     try {
-                        //
                         Class.forName(className, true, this);
                     } catch (ClassNotFoundException e) {
-                        e.printStackTrace();
                     }
                 } else {
                     result = target;

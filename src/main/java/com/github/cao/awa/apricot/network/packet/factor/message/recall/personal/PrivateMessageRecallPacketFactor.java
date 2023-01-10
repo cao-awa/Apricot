@@ -13,7 +13,7 @@ public class PrivateMessageRecallPacketFactor extends PacketFactor {
                 request.getLong("self_id"),
                 request.getLong("user_id"),
                 request.getLong("time"),
-                request.getLong("message_id")
+                request.getInteger("message_id")
         );
     }
 

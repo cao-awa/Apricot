@@ -6,7 +6,7 @@ import com.github.cao.awa.apricot.network.packet.*;
 public abstract class MessageRecallPacket extends ReadonlyPacket {
     public abstract MessageType getType();
 
-    public abstract long getMessageId();
+    public abstract int getMessageId();
 
     public abstract long getTimestamp();
 

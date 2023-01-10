@@ -20,7 +20,7 @@ public class GroupAnonymousSentMessagePacketFactor extends PacketFactor {
                 AnonymousMessageSender.create(request.getJSONObject("anonymous"), request.getJSONObject("sender")),
                 request.getLong("group_id"),
                 request.getLong("time"),
-                request.getLong("message_id")
+                request.getInteger("message_id")
         );
     }
 

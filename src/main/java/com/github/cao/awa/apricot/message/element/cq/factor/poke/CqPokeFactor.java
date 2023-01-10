@@ -11,7 +11,7 @@ public class CqPokeFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
         return new ReplyMessageElement(
-                Long.parseLong(args.get("qq"))
+                Integer.parseInt(args.get("qq"))
         );
     }
 

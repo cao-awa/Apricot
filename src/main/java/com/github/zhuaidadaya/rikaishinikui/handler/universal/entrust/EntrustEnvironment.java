@@ -368,17 +368,5 @@ public class EntrustEnvironment {
     public static Thread thread(Temporary action) {
         return new Thread(action::apply);
     }
-
-    public static <T> void tryFor(Collection<T> targets, ExceptingConsumer<T> action) {
-        for (T t : targets) {
-            trys(() -> action.accept(t));
-        }
-    }
-
-    public static <T> void tryFor(T[] targets, ExceptingConsumer<T> action) {
-        for (T t : targets) {
-            trys(() -> action.accept(t));
-        }
-    }
 }
 

@@ -20,7 +20,7 @@ public class PrivateFriendMessageSentPacketFactor extends PacketFactor {
                 PrivateMessageSender.create(request.getJSONObject("sender")),
                 request.getLong("target_id"),
                 request.getLong("time"),
-                request.getLong("message_id")
+                request.getInteger("message_id")
         );
     }
 

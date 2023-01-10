@@ -56,7 +56,7 @@ public class MessageReproduce extends MessageReceivedEventHandler {
                     } else if ("idi".equals(tokens.get(1))) {
                         String id = tokens.get(2);
 
-                        store = ((MessageDatabase) server.getMessagesHeadOffice()).getFromId(Long.parseLong(id));
+                        store = ((MessageDatabase) server.getMessagesHeadOffice()).getFromId(Integer.parseInt(id));
                     } else {
                         proxy.echo(new SendMessagePacket(
                                 packet.getType(),

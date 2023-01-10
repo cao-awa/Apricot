@@ -40,7 +40,17 @@ public class SelfMessageStore extends MessageSentEventHandler {
                       store
               );
 
-        server.getRelationalDatabase(packet.getBotId(), packet.getResponseId())
+        // Deprecated
+        server.getMessagesHeadOffice2()
+              .set(
+                      packet.getOwnId(),
+                      store
+              );
+
+        server.getRelationalDatabase(
+                      packet.getBotId(),
+                      packet.getResponseId()
+              )
               .append(packet.getOwnId());
 
         packet.getMessage()

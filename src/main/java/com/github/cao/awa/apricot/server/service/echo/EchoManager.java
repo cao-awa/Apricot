@@ -21,6 +21,10 @@ public class EchoManager implements ConcurrentService {
         this.executor = new ExecutorEntrust(executor);
     }
 
+    public boolean isActive() {
+        return this.active;
+    }
+
     public synchronized void echo(@Nullable String identifier, @NotNull Consumer<EchoResultPacket> action) {
         if (this.active) {
             if (identifier == null) {

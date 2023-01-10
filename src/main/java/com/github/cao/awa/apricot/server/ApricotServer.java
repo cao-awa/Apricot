@@ -45,6 +45,7 @@ import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.plugin.*;
+import com.github.cao.awa.apricot.plugin.internal.plugin.*;
 import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
@@ -78,13 +79,14 @@ public class ApricotServer {
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
     private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
     private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.newHashMap();
-    private boolean active = true;
+    private boolean active = false;
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
     private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
     private ApricotServerNetworkIo networkIo;
     private ApricotDatabase<Long, MessageStore> messagesHeadOffice;
+    private ApricotDatabase<Long, MessageStore> messagesHeadOffice2;
 
     public ApricotServer() {
     }
@@ -110,9 +112,14 @@ public class ApricotServer {
         setupPlugins();
         setupDatabase();
         setupNetwork();
+        this.active = true;
     }
 
     public void setupDatabase() {
+        if (this.active) {
+            LOGGER.warn("Database already setup, do not setup again");
+            return;
+        }
         try {
             this.messagesHeadOffice = new MessageDatabase(
                     this,
@@ -133,6 +140,31 @@ public class ApricotServer {
             this.messagesHeadOffice = new EmptyDatabase<>();
             LOGGER.warn("Failed setup databases");
         }
+
+        try {
+            this.messagesHeadOffice2 = new MessageDatabase2(
+                    this,
+                    new Iq80DBFactory().open(
+                            new File("databases/message/head_office2/head"),
+                            new Options().createIfMissing(true)
+                                         .writeBufferSize(1048560)
+                                         .compressionType(CompressionType.SNAPPY)
+                    ),
+                    new Iq80DBFactory().open(
+                            new File("databases/message/head_office2/convert"),
+                            new Options().createIfMissing(true)
+                                         .writeBufferSize(1048560)
+                                         .compressionType(CompressionType.SNAPPY)
+                    )
+            );
+        } catch (Exception e) {
+            this.messagesHeadOffice2 = new EmptyDatabase<>();
+            LOGGER.warn("Failed setup databases");
+        }
+    }
+
+    public ApricotDatabase<Long, MessageStore> getMessagesHeadOffice2() {
+        return this.messagesHeadOffice2;
     }
 
     public void setupDirectories() {
@@ -141,11 +173,21 @@ public class ApricotServer {
     }
 
     public void setupPlugins() {
+        if (this.active) {
+            LOGGER.warn("Plugins already setup, do not setup again");
+            return;
+        }
+        LOGGER.info("Loading internal plugins");
+        this.plugins.register(new InternalPlugin());
         this.plugins.loadPlugins();
     }
 
     public void setupServer() {
-        if (this.configs.getBoolean("plugin.threadpool.enable")) {
+        if (this.active) {
+            LOGGER.warn("Server already setup, do not setup again");
+            return;
+        }
+        if (this.configs.getBoolean("SO_PLUGIN_THREADPOOL")) {
             this.plugins = new PluginManager(
                     this,
                     Executors.newCachedThreadPool()
@@ -157,7 +199,7 @@ public class ApricotServer {
             );
         }
 
-        if (this.configs.getBoolean("event.threadpool.enable")) {
+        if (this.configs.getBoolean("SO_EVENT_USE_THREADPOOL")) {
             this.eventManager = new EventManager(
                     this,
                     Executors.newCachedThreadPool(),
@@ -171,13 +213,13 @@ public class ApricotServer {
             );
         }
 
-        if (this.configs.getBoolean("task.threadpool.enable")) {
+        if (this.configs.getBoolean("SO_TASK_USE_THREADPOOL")) {
             this.taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
         } else {
             this.taskExecutor = new ExecutorEntrust(Executors.newSingleThreadExecutor());
         }
 
-        if (this.configs.getBoolean("echo.threadpool.enable")) {
+        if (this.configs.getBoolean("SO_ECHO_USE_THREADPOOL")) {
             this.echoManager = new EchoManager(Executors.newCachedThreadPool());
         } else {
             this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
@@ -185,6 +227,50 @@ public class ApricotServer {
     }
 
     public void setupConfig() {
+        if (this.active) {
+            LOGGER.warn("Config already setup, do not setup again, call 'reloadConfig' to reload");
+            return;
+        }
+        this.configs.setDefault(
+                    "SO_NO_SUPERFLUOUS",
+                    true
+            )
+                    .setDefault(
+                            "SO_EVENT_USE_THREADPOOL",
+                            true
+                    )
+                    .setDefault(
+                            "SO_TASK_USE_THREADPOOL",
+                            true
+                    )
+                    .setDefault(
+                            "SO_ECHO_USE_THREADPOOL",
+                            true
+                    )
+                    .setDefault(
+                            "TRANSPORT_TYPE",
+                            "epoll"
+                    )
+                    .setDefault(
+                            "SO_ASYNC_PLUGIN",
+                            false
+                    )
+                    .setDefault(
+                            "SO_PLUGIN_THREADPOOL",
+                            true
+                    )
+                    .setDefault(
+                            "SERVER_PORT",
+                            1145
+                    )
+                    .setDefault(
+                            "SO_BINARY_MESSAGE",
+                            true
+                    );
+        reloadConfig();
+    }
+
+    public void reloadConfig() {
         this.configs.init(() -> EntrustEnvironment.receptacle(receptacle -> {
             try {
                 File config = new File("configs/bot-server.conf");
@@ -212,42 +298,13 @@ public class ApricotServer {
                 e.printStackTrace();
             }
         }));
-
-        this.configs.setDefault(
-                    "superfluous.space.remove",
-                    true
-            )
-                    .setDefault(
-                            "event.threadpool.enable",
-                            true
-                    )
-                    .setDefault(
-                            "task.threadpool.enable",
-                            true
-                    )
-                    .setDefault(
-                            "echo.threadpool.enable",
-                            true
-                    )
-                    .setDefault(
-                            "transport.type",
-                            "epoll"
-                    )
-                    .setDefault(
-                            "plugin.async.enable",
-                            false
-                    )
-                    .setDefault(
-                            "plugin.threadpool.enable",
-                            true
-                    )
-                    .setDefault(
-                            "server.port",
-                            1145
-                    );
     }
 
     public void setupNetwork() {
+        if (this.active) {
+            LOGGER.warn("Network already setup, do not setup again");
+            return;
+        }
         LOGGER.info("Startup apricot bot server network");
         // Setup packet deserializers
         EntrustEnvironment.operation(
@@ -294,10 +351,10 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        submitTask(
+        execute(
                 "ApricotNetwork",
                 () -> EntrustEnvironment.trys(
-                        () -> this.networkIo.start(configs.getInteger("server.port")),
+                        () -> this.networkIo.start(configs.getInteger("SERVER_PORT")),
                         ex -> {
                             LOGGER.error(
                                     "Apricot network failed to startup",
@@ -309,7 +366,7 @@ public class ApricotServer {
         );
     }
 
-    public void submitTask(String entrust, Runnable runnable) {
+    public void execute(String entrust, Runnable runnable) {
         this.taskExecutor.execute(
                 entrust,
                 runnable
@@ -345,7 +402,7 @@ public class ApricotServer {
         return startupPerformance.get();
     }
 
-    public void submitTask(String entrust, long delay, TimeUnit unit, Runnable runnable) {
+    public void schedule(String entrust, long delay, TimeUnit unit, Runnable runnable) {
         this.scheduleExecutor.schedule(
                 entrust,
                 delay,
@@ -354,7 +411,7 @@ public class ApricotServer {
         );
     }
 
-    public void submitTask(String entrust, long delay, long interval, TimeUnit unit, Runnable runnable) {
+    public void schedule(String entrust, long delay, long interval, TimeUnit unit, Runnable runnable) {
         this.scheduleExecutor.schedule(
                 entrust,
                 delay,
@@ -436,19 +493,23 @@ public class ApricotServer {
     }
 
     public boolean useEpoll() {
-        return this.configs.get("transport.type")
+        return this.configs.get("TRANSPORT_TYPE")
                            .equals("epoll");
     }
 
     public boolean shouldCaverMessage() {
-        return this.configs.getBoolean("superfluous.space.remove");
+        return this.configs.getBoolean("SO_NO_SUPERFLUOUS");
     }
 
     public boolean shouldAsyncLoadPlugins() {
-        return this.configs.getBoolean("plugin.async.enable");
+        return this.configs.getBoolean("SO_ASYNC_PLUGIN");
     }
 
     public Collection<Plugin> getPlugins() {
         return this.plugins.getPlugins();
+    }
+
+    public boolean useBinaryMessage() {
+        return this.configs.getBoolean("SO_BINARY_MESSAGE");
     }
 }

@@ -14,7 +14,7 @@ import org.apache.logging.log4j.*;
 import java.io.*;
 import java.net.*;
 
-public class OtherMessageStorage extends MessageReceivedEventHandler {
+public class OthersMessageStorage extends MessageReceivedEventHandler {
     private static final Logger LOGGER = LogManager.getLogger("MessageStorage");
 
     /**
@@ -40,7 +40,17 @@ public class OtherMessageStorage extends MessageReceivedEventHandler {
                       store
               );
 
-        server.getRelationalDatabase(packet.getBotId(), packet.getResponseId())
+        // Deprecated
+        server.getMessagesHeadOffice2()
+              .set(
+                      packet.getOwnId(),
+                      store
+              );
+
+        server.getRelationalDatabase(
+                      packet.getBotId(),
+                      packet.getResponseId()
+              )
               .append(packet.getOwnId());
 
         packet.getMessage()

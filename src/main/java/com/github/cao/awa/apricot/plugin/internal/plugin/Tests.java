@@ -36,6 +36,7 @@ public class Tests extends MessageReceivedEventHandler {
     public void onMessageReceived(MessageReceivedEvent<?> event) {
         ApricotProxy proxy = event.getProxy();
         MessageReceivedPacket packet = event.getPacket();
+        ApricotServer server = proxy.server();
 
 //        LOGGER.info((packet.getType() == MessageType.GROUP ? "GROUP({}) * {}: {}" : "PRIVATE({}) * {}: {}"),
 //                    packet.getResponseId(),
@@ -61,8 +62,6 @@ public class Tests extends MessageReceivedEventHandler {
                  .getMessage()
                  .toPlainText()
                  .equals(".traffic")) {
-            ApricotServer server = proxy.server();
-
             TrafficCounter traffics = server.getTrafficsCounter();
             TrafficCounter packets = server.getPacketsCounter();
 

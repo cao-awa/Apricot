@@ -15,7 +15,7 @@ public class GroupMessageRecallPacketFactor extends PacketFactor {
                 request.getLong("time"),
                 request.getLong("operator_id"),
                 request.getLong("group_id"),
-                request.getLong("message_id")
+                request.getInteger("message_id")
         );
     }
 

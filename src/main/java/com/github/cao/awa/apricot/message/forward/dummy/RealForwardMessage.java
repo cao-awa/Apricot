@@ -4,14 +4,14 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.message.forward.*;
 
 public class RealForwardMessage extends ForwardMessage {
-    private final long messageId;
+    private final int messageId;
 
-    public RealForwardMessage(long messageId) {
+    public RealForwardMessage(int messageId) {
         this.messageId = messageId;
     }
 
-    public long getMessageId() {
-        return messageId;
+    public int getMessageId() {
+        return this.messageId;
     }
 
     public void write(JSONObject json) {

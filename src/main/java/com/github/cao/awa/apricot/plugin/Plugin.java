@@ -112,7 +112,7 @@ public abstract class Plugin implements Comparable<Plugin> {
     public void fireEvent(Event<?> event) {
         event.pipeline()
              .forEach(type -> this.getServer()
-                                  .submitTask(
+                                  .execute(
                                           getName(),
                                           () -> {
                                               List<EventHandler> handlers = this.handlers.get(type);

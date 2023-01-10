@@ -20,6 +20,14 @@ public class EventManager implements ConcurrentService {
         this.plugins = plugins;
     }
 
+    public boolean isActive() {
+        return this.active;
+    }
+
+    public ApricotServer getServer() {
+        return this.server;
+    }
+
     public void fireEvent(Event<?> event) {
         if (this.active) {
             this.executor.execute(

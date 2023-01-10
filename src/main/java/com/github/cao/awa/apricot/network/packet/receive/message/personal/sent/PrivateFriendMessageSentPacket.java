@@ -12,9 +12,9 @@ public class PrivateFriendMessageSentPacket extends PrivateMessageSentPacket {
     private final MessageSender sender;
     private final long responseId;
     private final long timestamp;
-    private final long messageId;
+    private final int messageId;
 
-    public PrivateFriendMessageSentPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, long messageId) {
+    public PrivateFriendMessageSentPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, int messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
@@ -47,7 +47,7 @@ public class PrivateFriendMessageSentPacket extends PrivateMessageSentPacket {
         return this.timestamp;
     }
 
-    public long getMessageId() {
+    public int getMessageId() {
         return this.messageId;
     }
 

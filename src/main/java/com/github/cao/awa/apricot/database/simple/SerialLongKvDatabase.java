@@ -1,13 +1,15 @@
 package com.github.cao.awa.apricot.database.simple;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.database.*;
-import com.github.cao.awa.apricot.math.base.*;
+import com.github.cao.awa.apricot.mathematic.base.*;
 import com.github.cao.awa.apricot.util.file.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
 import java.io.*;
 import java.util.function.*;
 
+@Synchronized
 public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
     private final byte[] buf = new byte[8];
     private final RandomAccessFile file;

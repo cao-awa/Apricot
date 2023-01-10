@@ -23,7 +23,7 @@ import java.util.concurrent.*;
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
     private final ApricotServer server;
-    private final Map<UUID, Plugin> accomplishPlugins = new ConcurrentHashMap<>();
+    private final Map<UUID, Plugin> plugins = new ConcurrentHashMap<>();
     private final ExecutorEntrust executor;
     private boolean active = true;
 
@@ -37,11 +37,15 @@ public class PluginManager implements ConcurrentService {
     }
 
     public Collection<Plugin> getPlugins() {
-        return this.accomplishPlugins.values();
+        return this.plugins.values();
+    }
+
+    public boolean isActive() {
+        return this.active;
     }
 
     public Plugin getPlugin(UUID uuid) {
-        return this.accomplishPlugins.get(uuid);
+        return this.plugins.get(uuid);
     }
 
     @Override
@@ -54,7 +58,7 @@ public class PluginManager implements ConcurrentService {
 
     public void loadPlugins() {
         if (this.active) {
-            LOGGER.info("Loading apricot bot plugins");
+            LOGGER.info("Loading external plugins");
 
             Set<Class<?>> plugins = Objects.requireNonNull(EntrustEnvironment.trys(() -> {
                 File apricotJar = new File(URLDecoder.decode(
@@ -118,21 +122,21 @@ public class PluginManager implements ConcurrentService {
 
     public void loadPlugin(Plugin plugin) {
         if (this.active) {
-            plugin.setServer(this.server);
-            plugin.onInitialize();
             register(plugin);
-            LOGGER.info(
-                    "Plugins '{}'({}) registered",
-                    plugin.getName(),
-                    plugin.getUuid()
-            );
         }
     }
 
     public void register(Plugin plugin) {
-        this.accomplishPlugins.put(
+        plugin.setServer(this.server);
+        plugin.onInitialize();
+        this.plugins.put(
                 plugin.getUuid(),
                 plugin
+        );
+        LOGGER.info(
+                "Plugins '{}'({}) registered",
+                plugin.getName(),
+                plugin.getUuid()
         );
     }
 }

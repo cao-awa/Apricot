@@ -9,12 +9,13 @@ import org.iq80.leveldb.*;
 import java.nio.charset.*;
 import java.util.function.*;
 
-public class MessageDatabase extends ApricotDatabase<Long, MessageStore> {
+@Deprecated
+public class MessageDatabase2 extends ApricotDatabase<Long, MessageStore> {
     private final ApricotServer server;
     private final DB head;
     private final DB convert;
 
-    public MessageDatabase(ApricotServer server, DB head, DB convert) {
+    public MessageDatabase2(ApricotServer server, DB head, DB convert) {
         this.server = server;
         this.head = head;
         this.convert = convert;
@@ -37,8 +38,6 @@ public class MessageDatabase extends ApricotDatabase<Long, MessageStore> {
     public void set(Long key, MessageStore value) {
         this.head.put(
                 Base256.longToBuf(key),
-                server.useBinaryMessage() ?
-                value.toBin() :
                 value.toJSONObject()
                      .toString()
                      .getBytes(StandardCharsets.UTF_8)
