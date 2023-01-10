@@ -8,6 +8,7 @@ import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.util.message.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 
 import java.io.*;
 import java.nio.charset.*;
@@ -39,12 +40,30 @@ public class MessageStore {
 
     public static MessageStore fromBin(ApricotServer server, byte[] bin) {
         BytesReader reader = new BytesReader(bin);
-        int sign = reader.read();
-        if (sign == 114) {
-            int messageIdLength = reader.read();
-            int messageId = Base256.intFromBuf(reader.read(messageIdLength));
-            long senderId = Base256.longFromBuf(reader.read(8));
-            long targetId = Base256.longFromBuf(reader.read(8));
+        int mark = reader.read();
+        if (mark == '{') {
+            return fromJSONObject(
+                    server,
+                    JSONObject.parse(new String(
+                            bin,
+                            StandardCharsets.UTF_8
+                    ))
+            );
+        } else {
+            boolean isDynamic = mark == 115;
+            int sign = reader.read();
+            int messageId = Base256.intFromBuf(reader.reverseRound(
+                    4,
+                    isDynamic ? sign % 3 == 0 ? reader.read() : 4 : 4
+            ));
+            long senderId = Base256.longFromBuf(reader.reverseRound(
+                    8,
+                    isDynamic ? sign % 4 == 0 ? reader.read() : 8 : 8
+            ));
+            long targetId = Base256.longFromBuf(reader.reverseRound(
+                    8,
+                    isDynamic ? sign % 7 == 0 ? reader.read() : 8 : 8
+            ));
 
             int compound = reader.read();
             boolean isCompressed = compound % 10 == 1;
@@ -70,21 +89,10 @@ public class MessageStore {
                     messageId,
                     recalled
             );
-        } else {
-            if (sign == '{') {
-                return fromJSONObject0(
-                        server,
-                        JSONObject.parse(new String(
-                                bin,
-                                StandardCharsets.UTF_8
-                        ))
-                );
-            }
-            throw new IllegalArgumentException();
         }
     }
 
-    public static MessageStore fromJSONObject0(ApricotServer server, JSONObject json) {
+    public static MessageStore fromJSONObject(ApricotServer server, JSONObject json) {
         return new MessageStore(
                 MessageUtil.process(
                         server,
@@ -112,13 +120,71 @@ public class MessageStore {
                 compressed = true;
             }
 
-            // Binary sign
-            bytes.write(114);
-            // Message id length
-            bytes.write(4);
-            bytes.write(Base256.intToBuf(this.messageId));
-            bytes.write(Base256.longToBuf(this.senderId));
-            bytes.write(Base256.longToBuf(this.targetId));
+            // The base sign.
+            int mark = 114;
+
+            // Use in dynamic encoding.
+            Receptacle<Integer> sign = Receptacle.of(1);
+
+            // Skip the message id.
+            byte[] messageId = Base256.intToBuf(this.messageId);
+            messageId = skip(
+                    messageId,
+                    sign,
+                    4,
+                    3
+            );
+
+            // Skip the sender id.
+            byte[] senderId = Base256.longToBuf(this.senderId);
+            senderId = skip(
+                    senderId,
+                    sign,
+                    8,
+                    4
+            );
+
+            // Skip the target id.
+            byte[] targetId = Base256.longToBuf(this.targetId);
+            targetId = skip(
+                    targetId,
+                    sign,
+                    8,
+                    7
+            );
+
+            // Write binary sign mark.
+            // Mark it to 114 then do not need to write sign.
+            // Use two sign for smaller storing.
+            if (sign.get() == 1) {
+                // The numbers are not used dynamic encoding.
+                bytes.write(mark);
+            } else {
+                // The numbers are used dynamic encoding.
+                bytes.write(mark + 1);
+
+                // Write dynamic encoding metadata.
+                bytes.write(sign.get());
+            }
+
+            if (sign.get() % 3 == 0) {
+                // Write message id length.
+                bytes.write(messageId.length);
+            }
+            bytes.write(messageId);
+
+            if (sign.get() % 4 == 0) {
+                // Write sender id length.
+                bytes.write(senderId.length);
+            }
+            bytes.write(senderId);
+
+            if (sign.get() % 7 == 0) {
+                // Write target id length.
+                bytes.write(targetId.length);
+            }
+            bytes.write(targetId);
+
             int compound = 0;
             if (this.recalled) {
                 compound += 10;
@@ -135,6 +201,22 @@ public class MessageStore {
             return toJSONObject().toString()
                                  .getBytes(StandardCharsets.UTF_8);
         }
+    }
+
+    private static byte[] skip(byte[] source, Receptacle<Integer> sign, int length, int targetNumber) {
+        BytesReader reader = new BytesReader(source);
+        int cursor = reader.skip((byte) 0)
+                           .getCursor();
+        // It only makes sense in the context of cursor not 0.
+        // The zero means unable to skip empty bytes.
+        if (cursor > 1) {
+            int messageIdLength = length - cursor;
+            // Sign it to evenly divisible by target number.
+            sign.set(sign.get() * targetNumber);
+            // Let source skip empty bytes.
+            source = reader.read(messageIdLength);
+        }
+        return source;
     }
 
     public JSONObject toJSONObject() {
