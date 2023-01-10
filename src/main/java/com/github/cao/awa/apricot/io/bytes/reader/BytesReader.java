@@ -1,7 +1,5 @@
 package com.github.cao.awa.apricot.io.bytes.reader;
 
-import java.util.*;
-
 public class BytesReader {
     private final byte[] bytes;
     private int cursor = 0;
@@ -18,10 +16,15 @@ public class BytesReader {
         byte[] bytes = read(length);
         byte[] result = new byte[round];
 
-        for (int i = 0; i < length; i++) {
-            result[round - length + i] = bytes[i];
+        if (length >= 0) {
+            System.arraycopy(
+                    bytes,
+                    0,
+                    result,
+                    round - length,
+                    length
+            );
         }
-        System.out.println(Arrays.toString(result));
         return result;
     }
 
