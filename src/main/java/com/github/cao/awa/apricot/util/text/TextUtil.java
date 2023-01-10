@@ -223,4 +223,14 @@ public class TextUtil {
                 "-"
         );
     }
+
+    public static String group(List<String> args, String delim) {
+        StringBuilder builder = new StringBuilder();
+        for (String name : args) {
+            builder.append(name)
+                   .append(delim);
+        }
+        builder.setLength(builder.length() - 1);
+        return builder.toString();
+    }
 }

@@ -130,7 +130,7 @@ public class ApricotServer {
                     )
             );
         } catch (Exception e) {
-            this.messagesHeadOffice = new EmptyDatabase();
+            this.messagesHeadOffice = new EmptyDatabase<>();
             LOGGER.warn("Failed setup databases");
         }
     }
@@ -334,7 +334,7 @@ public class ApricotServer {
     }
 
     public synchronized SerialLongKvDatabase getRelationalDatabase(long botId, long targetId) {
-        String  path = "databases/message/relational/" + botId + "/" + targetId + ".db";
+        String path = "databases/message/relational/" + botId + "/" + targetId + ".db";
         return this.relationalDatabases.getOrDefault(
                 path,
                 new SerialLongKvDatabase(path)
