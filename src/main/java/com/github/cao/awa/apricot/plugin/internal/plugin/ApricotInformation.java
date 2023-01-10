@@ -37,7 +37,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
             StringBuilder builder = new StringBuilder();
             builder.append("Apricot v")
                    .append(ApricotServer.VERSION)
-                   .append(" By 草awa\n");
+                   .append(" By 草awa、草二号机\n");
             builder.append("https://github.com/cao-awa/Apricot\n");
             builder.append("Plugins: \n");
             proxy.server()
