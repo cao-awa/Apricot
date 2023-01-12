@@ -18,13 +18,15 @@ public class MessageStore {
     private long senderId;
     private long targetId;
     private int messageId;
+    private long timestamp;
     private boolean recalled;
 
-    public MessageStore(AssembledMessage message, long senderId, long targetId, int messageId, boolean recalled) {
+    public MessageStore(AssembledMessage message, long senderId, long targetId, int messageId, long timestamp, boolean recalled) {
         this.message = message;
         this.senderId = senderId;
         this.targetId = targetId;
         this.messageId = messageId;
+        this.timestamp = timestamp;
         this.recalled = recalled;
     }
 
@@ -34,6 +36,7 @@ public class MessageStore {
                 packet.getSenderId(),
                 packet.getResponseId(),
                 packet.getMessageId(),
+                packet.getTimestamp(),
                 false
         );
     }
@@ -51,7 +54,8 @@ public class MessageStore {
             );
         } else {
             boolean isDynamic = mark == 115;
-            int sign = reader.read();
+            int sign = isDynamic ? reader.read() : 1;
+            sign = sign == - 92 ? 420 : sign;
             int messageId = Base256.intFromBuf(reader.reverseRound(
                     4,
                     isDynamic ? sign % 3 == 0 ? reader.read() : 4 : 4
@@ -59,6 +63,10 @@ public class MessageStore {
             long senderId = Base256.longFromBuf(reader.reverseRound(
                     8,
                     isDynamic ? sign % 4 == 0 ? reader.read() : 8 : 8
+            ));
+            long timestamp = Base256.longFromBuf(reader.reverseRound(
+                    8,
+                    isDynamic ? sign % 5 == 0 ? reader.read() : 8 : 8
             ));
             long targetId = Base256.longFromBuf(reader.reverseRound(
                     8,
@@ -87,9 +95,14 @@ public class MessageStore {
                     senderId,
                     targetId,
                     messageId,
+                    timestamp,
                     recalled
             );
         }
+    }
+
+    public long getTimestamp() {
+        return timestamp;
     }
 
     public static MessageStore fromJSONObject(ApricotServer server, JSONObject json) {
@@ -101,8 +114,13 @@ public class MessageStore {
                 json.getLong("s"),
                 json.getLong("a"),
                 json.getInteger("r"),
+                json.getLong("t"),
                 json.containsKey("c")
         );
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
     }
 
     public byte[] toBin() {
@@ -144,6 +162,15 @@ public class MessageStore {
                     4
             );
 
+            // Skip the sender id.
+            byte[] timestamp = Base256.longToBuf(this.timestamp);
+            timestamp = skip(
+                    timestamp,
+                    sign,
+                    8,
+                    5
+            );
+
             // Skip the target id.
             byte[] targetId = Base256.longToBuf(this.targetId);
             targetId = skip(
@@ -178,6 +205,12 @@ public class MessageStore {
                 bytes.write(senderId.length);
             }
             bytes.write(senderId);
+
+            if (sign.get() % 5 == 0) {
+                // Write timestamp length.
+                bytes.write(timestamp.length);
+            }
+            bytes.write(timestamp);
 
             if (sign.get() % 7 == 0) {
                 // Write target id length.
@@ -222,21 +255,25 @@ public class MessageStore {
     public JSONObject toJSONObject() {
         JSONObject json = new JSONObject();
         json.fluentPut(
-                "m",
-                this.message.toPlainText()
-        );
-        json.fluentPut(
-                "s",
-                this.senderId
-        );
-        json.fluentPut(
-                "r",
-                this.messageId
-        );
-        json.fluentPut(
-                "a",
-                this.targetId
-        );
+                    "m",
+                    this.message.toPlainText()
+            )
+            .fluentPut(
+                    "s",
+                    this.senderId
+            )
+            .fluentPut(
+                    "r",
+                    this.messageId
+            )
+            .fluentPut(
+                    "a",
+                    this.targetId
+            )
+            .fluentPut(
+                    "t",
+                    this.timestamp
+            );
         if (this.recalled) {
             json.fluentPut(
                     "c",
