@@ -26,6 +26,6 @@ public class PrivateFriendMessageReceivedPacketFactor extends PacketFactor {
 
     @Override
     public @NotNull String getName() {
-        return "message-sent-private-friend";
+        return "message-private-friend";
     }
 }
