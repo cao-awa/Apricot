@@ -5,7 +5,7 @@ import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 
 public abstract class MessagePacket extends ReadonlyPacket {
-    public abstract MessageSender getSender();
+    public abstract IgnoredIdMessageSender getSender();
 
     public abstract AssembledMessage getMessage();
 

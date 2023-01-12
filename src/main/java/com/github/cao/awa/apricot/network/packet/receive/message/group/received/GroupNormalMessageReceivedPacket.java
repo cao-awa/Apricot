@@ -9,12 +9,12 @@ import com.github.cao.awa.apricot.server.*;
 public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket {
     private final AssembledMessage message;
     private final long botId;
-    private final MessageSender sender;
+    private final IgnoredIdMessageSender sender;
     private final long responseId;
     private final long timestamp;
     private final int messageId;
 
-    public GroupNormalMessageReceivedPacket(AssembledMessage message, long botId, MessageSender sender, long responseId, long timestamp, int messageId) {
+    public GroupNormalMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, int messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
@@ -23,7 +23,7 @@ public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket
         this.messageId = messageId;
     }
 
-    public MessageSender getSender() {
+    public IgnoredIdMessageSender getSender() {
         return this.sender;
     }
 

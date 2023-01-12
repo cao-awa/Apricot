@@ -3,11 +3,10 @@ package com.github.cao.awa.apricot.server;
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.config.*;
-import com.github.cao.awa.apricot.database.*;
-import com.github.cao.awa.apricot.database.empty.*;
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.database.simple.*;
 import com.github.cao.awa.apricot.event.receive.*;
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.at.*;
@@ -43,9 +42,14 @@ import com.github.cao.awa.apricot.network.packet.factor.name.card.*;
 import com.github.cao.awa.apricot.network.packet.factor.name.title.*;
 import com.github.cao.awa.apricot.network.packet.factor.poke.*;
 import com.github.cao.awa.apricot.network.packet.factor.response.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.*;
+import com.github.cao.awa.apricot.network.packet.receive.response.message.get.*;
+import com.github.cao.awa.apricot.network.packet.send.message.get.*;
+import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.internal.plugin.*;
+import com.github.cao.awa.apricot.resource.dispenser.*;
 import com.github.cao.awa.apricot.resources.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
@@ -56,6 +60,7 @@ import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.io.*;
 import com.github.cao.awa.apricot.util.time.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.*;
 import org.iq80.leveldb.*;
@@ -69,6 +74,9 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 public class ApricotServer {
+    public static final String DATABASE_PATH = "database/";
+    public static final String MESSAGE_DATABASE_PATH = DATABASE_PATH + "messages/head_office/";
+    public static final String RESOURCE_DATABASE_PATH = DATABASE_PATH + "resources/";
     public static final String VERSION = "1.0.0";
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
     private final AtomicLong startupPerformance = new AtomicLong();
@@ -79,16 +87,83 @@ public class ApricotServer {
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
     private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
     private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.newHashMap();
+    private final ResourcesDispenser resourcesDispenser = new ResourcesDispenser(
+            RESOURCE_DATABASE_PATH,
+            this
+    );
     private boolean active = false;
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
     private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
     private ApricotServerNetworkIo networkIo;
-    private ApricotDatabase<Long, MessageStore> messagesHeadOffice;
-    private ApricotDatabase<Long, MessageStore> messagesHeadOffice2;
+    private MessageDatabase messagesHeadOffice;
 
     public ApricotServer() {
+    }
+
+    public ResourcesDispenser getResourcesDispenser() {
+        return this.resourcesDispenser;
+    }
+
+    public void download(String name, String url, Consumer<Boolean> callback) {
+        this.resourcesDispenser.download(
+                name,
+                url,
+                callback
+        );
+    }
+
+    public void download(String name, String url) {
+        this.resourcesDispenser.download(
+                name,
+                url
+        );
+    }
+
+    @NotNull
+    public GetMessageResponsePacket getMessage(ApricotProxy proxy, int messageId) {
+        MessageStore store = this.messagesHeadOffice.getFromId(messageId);
+        if (store == null) {
+            Receptacle<GetMessageResponsePacket> response = Receptacle.of();
+
+            proxy.send(
+                    new GetMessagePacket(messageId),
+                    response::set
+            );
+
+            long timeout = 2000;
+
+            long await = TimeUtil.millions();
+
+            while (response.get() == null && TimeUtil.processMillion(await) < timeout) {
+                TimeUtil.coma(15);
+            }
+
+            if (response.get() == null) {
+                return new GetMessageResponsePacket(
+                        new BasicMessageSender(
+                                - 1,
+                                ""
+                        ),
+                        new AssembledMessage(),
+                        - 1
+                );
+            }
+            return response.get();
+        }
+        return new GetMessageResponsePacket(
+                new BasicMessageSender(
+                        store.getSenderId(),
+                        ""
+                ),
+                store.getMessage(),
+                store.getTimestamp()
+        );
+    }
+
+    public File getResource(String name) {
+        return this.resourcesDispenser.get(name);
     }
 
     public ApricotServerNetworkIo getNetworkIo() {
@@ -103,7 +178,7 @@ public class ApricotServer {
         return this.packetsCounter;
     }
 
-    public void startup() {
+    public void startup() throws IOException {
         startupPerformance.set(TimeUtil.millions());
         LOGGER.info("Startup apricot bot server");
         setupDirectories();
@@ -115,7 +190,7 @@ public class ApricotServer {
         this.active = true;
     }
 
-    public void setupDatabase() {
+    public void setupDatabase() throws IOException {
         if (this.active) {
             LOGGER.warn("Database already setup, do not setup again");
             return;
@@ -124,47 +199,22 @@ public class ApricotServer {
             this.messagesHeadOffice = new MessageDatabase(
                     this,
                     new Iq80DBFactory().open(
-                            new File("databases/message/head_office/head"),
+                            new File(MESSAGE_DATABASE_PATH + "/head"),
                             new Options().createIfMissing(true)
                                          .writeBufferSize(1048560)
                                          .compressionType(CompressionType.SNAPPY)
                     ),
                     new Iq80DBFactory().open(
-                            new File("databases/message/head_office/convert"),
+                            new File(MESSAGE_DATABASE_PATH + "/convert"),
                             new Options().createIfMissing(true)
                                          .writeBufferSize(1048560)
                                          .compressionType(CompressionType.SNAPPY)
                     )
             );
         } catch (Exception e) {
-            this.messagesHeadOffice = new EmptyDatabase<>();
             LOGGER.warn("Failed setup databases");
+            throw e;
         }
-
-        try {
-            this.messagesHeadOffice2 = new MessageDatabase2(
-                    this,
-                    new Iq80DBFactory().open(
-                            new File("databases/message/head_office2/head"),
-                            new Options().createIfMissing(true)
-                                         .writeBufferSize(1048560)
-                                         .compressionType(CompressionType.SNAPPY)
-                    ),
-                    new Iq80DBFactory().open(
-                            new File("databases/message/head_office2/convert"),
-                            new Options().createIfMissing(true)
-                                         .writeBufferSize(1048560)
-                                         .compressionType(CompressionType.SNAPPY)
-                    )
-            );
-        } catch (Exception e) {
-            this.messagesHeadOffice2 = new EmptyDatabase<>();
-            LOGGER.warn("Failed setup databases");
-        }
-    }
-
-    public ApricotDatabase<Long, MessageStore> getMessagesHeadOffice2() {
-        return this.messagesHeadOffice2;
     }
 
     public void setupDirectories() {
@@ -386,7 +436,7 @@ public class ApricotServer {
         }
     }
 
-    public ApricotDatabase<Long, MessageStore> getMessagesHeadOffice() {
+    public MessageDatabase getMessagesHeadOffice() {
         return this.messagesHeadOffice;
     }
 

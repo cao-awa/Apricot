@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.network.packet.receive.message.sender.anonymo
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 
-public class AnonymousMessageSender implements MessageSender {
+public class AnonymousMessageSender implements IgnoredIdMessageSender {
     private final Anonymous anonymous;
     private final int age;
     private final String name;

@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.network.packet.receive.message.sender;
 
 import com.alibaba.fastjson2.*;
 
-public class PrivateMessageSender implements MessageSender {
+public class PrivateMessageSender implements IgnoredIdMessageSender {
     private final int age;
     private final String name;
     private final String sex;
