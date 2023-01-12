@@ -14,6 +14,7 @@ import java.io.*;
 import java.nio.charset.*;
 
 public class MessageStore {
+    private MessageType type;
     private AssembledMessage message;
     private long senderId;
     private long targetId;
@@ -21,7 +22,8 @@ public class MessageStore {
     private long timestamp;
     private boolean recalled;
 
-    public MessageStore(AssembledMessage message, long senderId, long targetId, int messageId, long timestamp, boolean recalled) {
+    public MessageStore(MessageType type, AssembledMessage message, long senderId, long targetId, int messageId, long timestamp, boolean recalled) {
+        this.type = type;
         this.message = message;
         this.senderId = senderId;
         this.targetId = targetId;
@@ -32,6 +34,7 @@ public class MessageStore {
 
     public static MessageStore fromPacket(MessagePacket packet) {
         return new MessageStore(
+                packet.getType(),
                 packet.getMessage(),
                 packet.getSenderId(),
                 packet.getResponseId(),
@@ -54,37 +57,69 @@ public class MessageStore {
             );
         } else {
             boolean isDynamic = mark == 115;
-            int sign = isDynamic ? reader.read() : 1;
-            sign = sign == - 92 ? 420 : sign;
+            int sign = (isDynamic ? reader.read() : 1);
+            // Let -92 be all compatible, can be 0 or 420.
+            if (sign == - 92) {
+                sign = 0;
+            }
+            if (sign < 0) {
+                // The 256 is range of byte.
+                sign = 256 + sign;
+            }
+            // Read message id.
             int messageId = Base256.intFromBuf(reader.reverseRound(
                     4,
                     isDynamic ? sign % 3 == 0 ? reader.read() : 4 : 4
             ));
+            // Read sender id.
             long senderId = Base256.longFromBuf(reader.reverseRound(
                     8,
                     isDynamic ? sign % 4 == 0 ? reader.read() : 8 : 8
             ));
+            // Read timestamp.
             long timestamp = Base256.longFromBuf(reader.reverseRound(
                     8,
                     isDynamic ? sign % 5 == 0 ? reader.read() : 8 : 8
             ));
+            // Read target id.
             long targetId = Base256.longFromBuf(reader.reverseRound(
                     8,
                     isDynamic ? sign % 7 == 0 ? reader.read() : 8 : 8
             ));
 
+            // Read compound.
             int compound = reader.read();
-            boolean isCompressed = compound % 10 == 1;
-            boolean recalled = compound > 9;
+            if (compound < 0) {
+                // The 256 is range of byte.
+                compound = 256 + compound;
+            }
 
+            // Handle compound.
+            // Compound can mod 9 mean the message is sent from guild.
+            // Compound can mod 7 mean the message is sent from group.
+            // Else then mean the message is sent from private.
+            MessageType type = compound % 9 == 0 ?
+                               MessageType.GUILD :
+                               compound % 7 == 0 ? MessageType.GROUP : MessageType.PRIVATE;
+            // Compound can mod 3 mean the message is recalled.
+            boolean recalled = compound % 3 == 0;
+            // Compound can mod 5 mean the message is compressed.
+            boolean isCompressed = compound % 5 == 0;
+
+            // Read message length, for next step to read message.
             int length = Base256.tagFromBuf(reader.read(2));
 
+            // Read message.
             byte[] message = reader.read(length);
+
+            // Decompress if the message is compressed.
             if (isCompressed) {
                 message = DeflaterCompressor.INSTANCE.decompress(message);
             }
 
+            // Make the message store.
             return new MessageStore(
+                    type,
                     MessageUtil.process(
                             server,
                             new String(
@@ -101,12 +136,9 @@ public class MessageStore {
         }
     }
 
-    public long getTimestamp() {
-        return timestamp;
-    }
-
     public static MessageStore fromJSONObject(ApricotServer server, JSONObject json) {
         return new MessageStore(
+                MessageType.of(json.getString("p")),
                 MessageUtil.process(
                         server,
                         json.getString("m")
@@ -119,8 +151,20 @@ public class MessageStore {
         );
     }
 
+    public long getTimestamp() {
+        return this.timestamp;
+    }
+
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public MessageType getType() {
+        return this.type;
+    }
+
+    public void setType(MessageType type) {
+        this.type = type;
     }
 
     public byte[] toBin() {
@@ -129,10 +173,13 @@ public class MessageStore {
 
             byte[] message = this.message.toPlainText()
                                          .getBytes(StandardCharsets.UTF_8);
+
+            // Try to compress the message.
             byte[] tryCompress = DeflaterCompressor.INSTANCE.compress(message);
 
             boolean compressed = false;
 
+            // Only save compress result if success reduced the size.
             if (message.length > tryCompress.length + 2) {
                 message = tryCompress;
                 compressed = true;
@@ -149,7 +196,6 @@ public class MessageStore {
             messageId = skip(
                     messageId,
                     sign,
-                    4,
                     3
             );
 
@@ -158,7 +204,6 @@ public class MessageStore {
             senderId = skip(
                     senderId,
                     sign,
-                    8,
                     4
             );
 
@@ -167,7 +212,6 @@ public class MessageStore {
             timestamp = skip(
                     timestamp,
                     sign,
-                    8,
                     5
             );
 
@@ -176,7 +220,6 @@ public class MessageStore {
             targetId = skip(
                     targetId,
                     sign,
-                    8,
                     7
             );
 
@@ -218,15 +261,37 @@ public class MessageStore {
             }
             bytes.write(targetId);
 
-            int compound = 0;
+            int compound = 1;
+            // Handle recall mark.
             if (this.recalled) {
-                compound += 10;
+                // Sign it to evenly divisible by 3.
+                compound *= 3;
             }
+
+            // Handle compress mark.
             if (compressed) {
-                compound += 1;
+                // Sign it to evenly divisible by 5.
+                compound *= 5;
             }
+
+            // Handle message type mark.
+            // Sign it to evenly divisible by target 3 or 5 to mark it is group or guild.
+            // Else then mean it is private type.
+            if (this.type == MessageType.GROUP) {
+                // Sign it to evenly divisible by 7.
+                compound *= 7;
+            } else if (this.type == MessageType.GUILD) {
+                // Sign it to evenly divisible by 9.
+                compound *= 9;
+            }
+
+            // Write compound.
             bytes.write(compound);
+
+            // Write message length mark byte.
             bytes.write(Base256.tagToBuf(message.length));
+
+            // Write message.
             bytes.write(message);
 
             return bytes.toByteArray();
@@ -236,14 +301,15 @@ public class MessageStore {
         }
     }
 
-    private static byte[] skip(byte[] source, Receptacle<Integer> sign, int length, int targetNumber) {
+    private static byte[] skip(byte[] source, Receptacle<Integer> sign, int targetNumber) {
         BytesReader reader = new BytesReader(source);
+        // Skip, and get the cursor.
         int cursor = reader.skip((byte) 0)
                            .getCursor();
         // It only makes sense in the context of cursor not 0.
         // The zero means unable to skip empty bytes.
         if (cursor > 1) {
-            int messageIdLength = length - cursor;
+            int messageIdLength = source.length - cursor;
             // Sign it to evenly divisible by target number.
             sign.set(sign.get() * targetNumber);
             // Let source skip empty bytes.
@@ -273,6 +339,10 @@ public class MessageStore {
             .fluentPut(
                     "t",
                     this.timestamp
+            )
+            .fluentPut(
+                    "p",
+                    this.type
             );
         if (this.recalled) {
             json.fluentPut(
