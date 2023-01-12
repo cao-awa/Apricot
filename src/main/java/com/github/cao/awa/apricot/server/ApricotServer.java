@@ -123,7 +123,8 @@ public class ApricotServer {
 
     @NotNull
     public GetMessageResponsePacket getMessage(ApricotProxy proxy, int messageId) {
-        MessageStore store = this.messagesHeadOffice.getFromId(messageId);
+        long ownId = this.messagesHeadOffice.getConvert(messageId);
+        MessageStore store = this.messagesHeadOffice.get(ownId);
         if (store == null) {
             Receptacle<GetMessageResponsePacket> response = Receptacle.of();
 
@@ -147,10 +148,28 @@ public class ApricotServer {
                                 ""
                         ),
                         new AssembledMessage(),
+                        MessageType.GROUP,
+                        - 1,
+                        - 1,
+                        - 1L,
                         - 1
                 );
             }
-            return response.get();
+            GetMessageResponsePacket packet = response.get();
+            this.messagesHeadOffice.set(
+                    TimeUtil.nano(),
+                    new MessageStore(
+                            packet.getType(),
+                            packet.getMessage(),
+                            packet.getSender()
+                                  .getSenderId(),
+                            packet.getTargetId(),
+                            packet.getMessageId(),
+                            packet.getTimestamp(),
+                            false
+                    )
+            );
+            return packet;
         }
         return new GetMessageResponsePacket(
                 new BasicMessageSender(
@@ -158,6 +177,10 @@ public class ApricotServer {
                         ""
                 ),
                 store.getMessage(),
+                store.getType(),
+                store.getTargetId(),
+                store.getMessageId(),
+                ownId,
                 store.getTimestamp()
         );
     }

@@ -72,7 +72,11 @@ public class MessageDatabase extends ApricotDatabase<Long, MessageStore> {
     }
 
     public long getConvert(int id) {
-        return Base256.longFromBuf(this.convert.get(Base256.intToBuf(id)));
+        try {
+            return Base256.longFromBuf(this.convert.get(Base256.intToBuf(id)));
+        } catch (Exception e) {
+            return - 1;
+        }
     }
 
     public MessageStore getFromId(int id) {
