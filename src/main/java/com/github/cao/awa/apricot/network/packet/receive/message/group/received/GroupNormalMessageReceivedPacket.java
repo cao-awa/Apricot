@@ -51,6 +51,11 @@ public class GroupNormalMessageReceivedPacket extends GroupMessageReceivedPacket
         return this.botId;
     }
 
+    @Override
+    public long getTargetId() {
+        return this.responseId;
+    }
+
     /**
      * Let an event of this packet be fired.
      *

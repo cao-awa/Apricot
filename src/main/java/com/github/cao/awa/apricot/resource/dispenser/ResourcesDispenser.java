@@ -34,7 +34,8 @@ public class ResourcesDispenser {
     }
 
     public void download(String name, String url, Consumer<Boolean> callback) {
-        FileUtil.mkdirs(name);
+        FileUtil.mkdirs(new File(name).getAbsoluteFile()
+                                      .getParentFile());
         File file = get(name);
         try {
             HttpURLConnection connection = (HttpURLConnection) new URL(url).openConnection();

@@ -25,9 +25,14 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                 ),
                 null
         );
+        this.id = size();
+    }
+
+    public long size() {
         try {
-            this.id = this.file.length() / 8;
+            return this.file.length() / 8;
         } catch (Exception e) {
+            return - 1;
         }
     }
 
@@ -58,7 +63,10 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                 if (key < 0) {
                     return;
                 }
-                Base256.longToBuf(value, this.buf);
+                Base256.longToBuf(
+                        value,
+                        this.buf
+                );
                 this.file.seek(key * 8);
                 this.file.write(this.buf);
             } catch (Exception e) {

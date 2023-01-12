@@ -33,7 +33,7 @@ public class RecallNotice extends MessageRecallEventHandler {
         ApricotProxy proxy = event.getProxy();
         ApricotServer server = proxy.server();
 
-        MessageDatabase messageDatabase = (MessageDatabase) server.getMessagesHeadOffice();
+        MessageDatabase messageDatabase = server.getMessagesHeadOffice();
         MessageStore store = messageDatabase.getFromId(packet.getMessageId());
         store.setRecalled(true);
         messageDatabase.setFromId(

@@ -22,4 +22,6 @@ public abstract class MessagePacket extends ReadonlyPacket {
     public abstract MessageType getType();
 
     public abstract long getOwnId();
+
+    public abstract long getTargetId();
 }

@@ -51,6 +51,11 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
         return this.botId;
     }
 
+    @Override
+    public long getTargetId() {
+        return this.responseId;
+    }
+
     /**
      * Let an event of this packet be fired.
      *

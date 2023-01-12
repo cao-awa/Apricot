@@ -74,7 +74,7 @@ import java.util.concurrent.atomic.*;
 import java.util.function.*;
 
 public class ApricotServer {
-    public static final String DATABASE_PATH = "database/";
+    public static final String DATABASE_PATH = "databases/";
     public static final String MESSAGE_DATABASE_PATH = DATABASE_PATH + "messages/head_office/";
     public static final String RESOURCE_DATABASE_PATH = DATABASE_PATH + "resources/";
     public static final String VERSION = "1.0.0";
@@ -464,11 +464,16 @@ public class ApricotServer {
     }
 
     public synchronized SerialLongKvDatabase getRelationalDatabase(long botId, long targetId) {
-        String path = "databases/message/relational/" + botId + "/" + targetId + ".db";
-        return this.relationalDatabases.getOrDefault(
-                path,
-                new SerialLongKvDatabase(path)
-        );
+        String path = DATABASE_PATH + "messages/relational/" + botId + "/" + targetId + ".db";
+        SerialLongKvDatabase rel = this.relationalDatabases.get(path);
+        if (rel == null) {
+            rel = new SerialLongKvDatabase(path);
+            this.relationalDatabases.put(
+                    path,
+                    rel
+            );
+        }
+        return rel;
     }
 
     public long getStartupTime() {
