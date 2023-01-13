@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.server.service.plugin;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
-import com.github.cao.awa.apricot.resources.loader.*;
+import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.plugin.loader.*;
@@ -51,7 +51,7 @@ public class PluginManager implements ConcurrentService {
     @Override
     public void shutdown() {
         this.active = false;
-        if (this.executor.getExecutor() instanceof ThreadPoolExecutor threadPool) {
+        if (this.executor.executor() instanceof ThreadPoolExecutor threadPool) {
             threadPool.shutdown();
         }
     }
