@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.message.sent;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 
-public abstract class MessageSentEventHandler extends EventHandler {
+public abstract class MessageSentEventHandler extends EventHandler<MessageSentEvent<?>> {
     /**
      * Which type event is target of this handler.
      *

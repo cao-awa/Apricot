@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.plugin.internal.plugin.handler;
 
-import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.forward.*;

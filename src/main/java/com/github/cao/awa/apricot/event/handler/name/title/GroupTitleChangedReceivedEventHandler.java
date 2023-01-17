@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.name.title;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.name.title.*;
 
-public abstract class GroupTitleChangedReceivedEventHandler extends EventHandler {
+public abstract class GroupTitleChangedReceivedEventHandler extends EventHandler<GroupTitleChangedReceivedEvent> {
     /**
      * Which type event is target of this handler.
      *

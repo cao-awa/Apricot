@@ -41,9 +41,13 @@ public class PrivateFriendMessageSentEvent extends PrivateMessageSentEvent<Priva
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof PrivateFriendMessageSentEventHandler messageReceivedHandler) {
-            messageReceivedHandler.onMessageSent(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof PrivateFriendMessageSentEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessageSent(this);
+            }
         }
         super.fireEvent(handler);
     }

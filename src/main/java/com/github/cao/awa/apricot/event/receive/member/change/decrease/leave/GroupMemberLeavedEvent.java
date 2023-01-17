@@ -39,9 +39,13 @@ public class GroupMemberLeavedEvent extends GroupMemberDecreasedEvent<GroupMembe
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupMemberLeavedEventHandler approvedHandler) {
-            approvedHandler.onLeaved(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupMemberLeavedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onLeaved(this);
+            }
         }
         super.fireEvent(handler);
     }

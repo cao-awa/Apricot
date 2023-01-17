@@ -40,9 +40,13 @@ public class ProxyDisconnectEvent extends Event<ProxyDisconnectPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof ProxyDisconnectEventHandler approvedHandler) {
-            approvedHandler.onDisconnect(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof ProxyDisconnectEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onDisconnect(this);
+            }
         }
     }
 }

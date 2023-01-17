@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.add.group;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.add.group.*;
 
-public abstract class InviteGroupEventHandler extends EventHandler {
+public abstract class InviteGroupEventHandler extends EventHandler<InviteGroupEvent> {
     /**
      * Which type event is target of this handler.
      *

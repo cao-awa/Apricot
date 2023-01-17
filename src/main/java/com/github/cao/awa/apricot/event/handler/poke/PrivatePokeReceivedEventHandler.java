@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.poke;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.poke.*;
 
-public abstract class PrivatePokeReceivedEventHandler extends EventHandler {
+public abstract class PrivatePokeReceivedEventHandler extends EventHandler<PrivatePokeReceivedEvent> {
     /**
      * Which type event is target of this handler.
      *

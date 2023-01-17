@@ -24,9 +24,13 @@ public abstract class MessageRecallEvent<T extends MessageRecallPacket> extends 
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof MessageRecallEventHandler receivedHandler) {
-            receivedHandler.onRecall(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof MessageRecallEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onRecall(this);
+            }
         }
     }
 }

@@ -40,9 +40,13 @@ public class ProxyConnectEvent extends Event<ProxyConnectPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof ProxyConnectEventHandler approvedHandler) {
-            approvedHandler.onConnect(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof ProxyConnectEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onConnect(this);
+            }
         }
     }
 }

@@ -9,10 +9,19 @@ import java.util.*;
 public abstract class Event<T extends ReadonlyPacket> {
     private final ApricotProxy proxy;
     private final T packet;
+    private boolean exclusive;
 
     public Event(ApricotProxy proxy, T packet) {
         this.proxy = proxy;
         this.packet = packet;
+    }
+
+    public boolean isExclusive() {
+        return this.exclusive;
+    }
+
+    public void setExclusive(boolean exclusive) {
+        this.exclusive = exclusive;
     }
 
     public T getPacket() {
@@ -38,5 +47,5 @@ public abstract class Event<T extends ReadonlyPacket> {
      * @author 草二号机
      * @since 1.0.0
      */
-    public abstract void fireEvent(EventHandler handler);
+    public abstract void fireEvent(EventHandler<?> handler);
 }

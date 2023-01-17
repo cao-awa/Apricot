@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.lifecycle.disconnect;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.lifecycle.*;
 
-public abstract class ProxyConnectEventHandler extends EventHandler {
+public abstract class ProxyConnectEventHandler extends EventHandler<ProxyConnectEvent> {
     /**
      * Which type event is target of this handler.
      *

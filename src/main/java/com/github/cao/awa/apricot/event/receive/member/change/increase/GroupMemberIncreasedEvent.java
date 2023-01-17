@@ -24,9 +24,13 @@ public abstract class GroupMemberIncreasedEvent<T extends GroupMemberIncreasedPa
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupMemberIncreasedEventHandler approvedHandler) {
-            approvedHandler.onIncrease(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupMemberIncreasedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onIncrease(this);
+            }
         }
         super.fireEvent(handler);
     }

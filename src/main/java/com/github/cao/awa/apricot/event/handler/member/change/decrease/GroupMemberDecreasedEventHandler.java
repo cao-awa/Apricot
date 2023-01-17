@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.member.change.decrease;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.member.change.decrease.*;
 
-public abstract class GroupMemberDecreasedEventHandler extends EventHandler {
+public abstract class GroupMemberDecreasedEventHandler extends EventHandler<GroupMemberDecreasedEvent<?>> {
     /**
      * Which type event is target of this handler.
      *

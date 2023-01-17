@@ -24,9 +24,13 @@ public abstract class GroupMemberChangedEvent<T extends GroupMemberChangedPacket
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupMemberChangedEventHandler approvedHandler) {
-            approvedHandler.onApproved(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupMemberChangedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onApproved(this);
+            }
         }
     }
 }

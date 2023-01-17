@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.mute.issue.personal;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.mute.issue.personal.*;
 
-public abstract class IssueGroupPersonalMuteEventHandler extends EventHandler {
+public abstract class IssueGroupPersonalMuteEventHandler extends EventHandler<IssueGroupPersonalMuteEvent> {
     /**
      * Which type event is target of this handler.
      *

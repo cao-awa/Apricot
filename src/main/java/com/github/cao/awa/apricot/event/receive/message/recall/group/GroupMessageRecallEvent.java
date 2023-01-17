@@ -41,9 +41,13 @@ public class GroupMessageRecallEvent extends MessageRecallEvent<GroupMessageReca
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupMessageRecallEventHandler recallHandler) {
-            recallHandler.onRecall(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupMessageRecallEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onRecall(this);
+            }
         }
         super.fireEvent(handler);
     }

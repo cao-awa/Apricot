@@ -24,9 +24,13 @@ public abstract class MessageEvent<T extends MessagePacket> extends Event<T> {
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof MessageEventHandler receivedHandler) {
-            receivedHandler.onMessage(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof MessageEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessage(this);
+            }
         }
     }
 }

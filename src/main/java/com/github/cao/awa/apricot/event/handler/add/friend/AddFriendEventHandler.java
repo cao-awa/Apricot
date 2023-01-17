@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.add.friend;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.add.friend.*;
 
-public abstract class AddFriendEventHandler extends EventHandler {
+public abstract class AddFriendEventHandler extends EventHandler<AddFriendEvent> {
     /**
      * Which type event is target of this handler.
      *

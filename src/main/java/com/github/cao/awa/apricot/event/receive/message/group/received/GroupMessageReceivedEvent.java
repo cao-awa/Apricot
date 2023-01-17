@@ -24,9 +24,13 @@ public abstract class GroupMessageReceivedEvent<T extends GroupMessageReceivedPa
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupMessageReceivedEventHandler groupMessage) {
-            groupMessage.onMessageReceived(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupMessageReceivedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessageReceived(this);
+            }
         }
         super.fireEvent(handler);
     }

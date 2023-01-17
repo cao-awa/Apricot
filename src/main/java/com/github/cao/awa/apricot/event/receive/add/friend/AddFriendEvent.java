@@ -38,9 +38,13 @@ public class AddFriendEvent extends Event<AddFriendReceivedPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
+    public void fireEvent(EventHandler<?> handler) {
         if (handler instanceof AddFriendEventHandler eventHandler) {
-            eventHandler.onAdd(this);
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onAdd(this);
+            }
         }
     }
 }

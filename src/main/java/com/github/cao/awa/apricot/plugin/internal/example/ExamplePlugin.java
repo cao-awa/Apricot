@@ -22,7 +22,9 @@ public class ExamplePlugin extends Plugin {
 
     @Override
     public void onInitialize() {
-
+        //        registerHandler(new NormalHandler1());
+        //        registerHandler(new NormalHandler2());
+        //        registerHandler(new ExclusiveHandler1());
     }
 
     @Override

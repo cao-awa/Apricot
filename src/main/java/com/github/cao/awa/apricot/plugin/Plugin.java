@@ -19,7 +19,7 @@ import java.util.*;
  * @since 1.0.0
  */
 public abstract class Plugin implements Comparable<Plugin> {
-    private final Map<String, List<EventHandler>> handlers = ApricotCollectionFactor.newHashMap();
+    private final Map<String, List<EventHandler<?>>> handlers = ApricotCollectionFactor.newHashMap();
     private ApricotServer server;
 
     /**
@@ -82,18 +82,18 @@ public abstract class Plugin implements Comparable<Plugin> {
 
     public abstract String version();
 
-    public void registerHandlers(EventHandler handler, EventHandler... handlers) {
+    public void registerHandlers(EventHandler<?> handler, EventHandler<?>... handlers) {
         registerHandler(handler);
-        for (EventHandler eventHandler : handlers) {
+        for (EventHandler<?> eventHandler : handlers) {
             registerHandler(eventHandler);
         }
     }
 
-    public void registerHandler(EventHandler handler) {
+    public void registerHandler(EventHandler<?> handler) {
         if (! this.handlers.containsKey(handler.getType())) {
             this.handlers.put(
                     handler.getType(),
-                    new LinkedList<>()
+                    ApricotCollectionFactor.newLinkedList()
             );
         }
         this.handlers.get(handler.getType())
@@ -115,13 +115,14 @@ public abstract class Plugin implements Comparable<Plugin> {
                                   .execute(
                                           getName(),
                                           () -> {
-                                              List<EventHandler> handlers = this.handlers.get(type);
-                                              if (handlers != null) {
-                                                  handlers.stream()
-                                                          .filter(handler -> handler.accept(event.getPacket()
-                                                                                                 .target()))
-                                                          .forEach(handler -> EntrustEnvironment.trys(() -> event.fireEvent(handler)));
+                                              List<EventHandler<?>> handlers = this.handlers.get(type);
+                                              if (handlers == null) {
+                                                  return;
                                               }
+                                              handlers.stream()
+                                                      .filter(handler -> handler.accept(event.getPacket()
+                                                                                             .target()))
+                                                      .forEach(handler -> EntrustEnvironment.trys(() -> event.fireEvent(handler)));
                                           }
                                   ));
     }

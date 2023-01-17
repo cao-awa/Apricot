@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.message.recall.personal;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.message.recall.personal.*;
 
-public abstract class PrivateMessageRecallEventHandler extends EventHandler {
+public abstract class PrivateMessageRecallEventHandler extends EventHandler<PrivateMessageRecallEvent> {
     /**
      * Which type event is target of this handler.
      *

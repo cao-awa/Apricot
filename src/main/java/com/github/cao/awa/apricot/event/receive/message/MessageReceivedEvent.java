@@ -1,7 +1,7 @@
 package com.github.cao.awa.apricot.event.receive.message;
 
 import com.github.cao.awa.apricot.event.handler.*;
-import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 
@@ -23,9 +23,13 @@ public abstract class MessageReceivedEvent<T extends MessageReceivedPacket> exte
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof MessageReceivedEventHandler receivedHandler) {
-            receivedHandler.onMessageReceived(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof MessageReceivedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessageReceived(this);
+            }
         }
     }
 }

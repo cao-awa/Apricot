@@ -24,9 +24,13 @@ public abstract class PrivateMessageSentEvent<T extends PrivateMessageSentPacket
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof PrivateMessageSentEventHandler privateMessage) {
-            privateMessage.onMessageSent(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof PrivateMessageSentEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessageSent(this);
+            }
         }
         super.fireEvent(handler);
     }

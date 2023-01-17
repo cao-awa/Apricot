@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.response;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.response.*;
 
-public abstract class EchoResultEventHandler extends EventHandler {
+public abstract class EchoResultEventHandler extends EventHandler<EchoResultEvent> {
     /**
      * Which type event is target of this handler.
      *

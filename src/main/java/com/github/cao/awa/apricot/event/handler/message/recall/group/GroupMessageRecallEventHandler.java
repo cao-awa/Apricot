@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.message.recall.group;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.message.recall.group.*;
 
-public abstract class GroupMessageRecallEventHandler extends EventHandler {
+public abstract class GroupMessageRecallEventHandler extends EventHandler<GroupMessageRecallEvent> {
     /**
      * Which type event is target of this handler.
      *

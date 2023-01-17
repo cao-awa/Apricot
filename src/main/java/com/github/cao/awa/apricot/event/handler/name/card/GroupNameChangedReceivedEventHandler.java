@@ -11,7 +11,7 @@ import com.github.cao.awa.apricot.event.receive.name.card.*;
  * The not real time warning is only against for 'cq-http'<br>
  */
 @Warning("NOT_REAL_TIME")
-public abstract class GroupNameChangedReceivedEventHandler extends EventHandler {
+public abstract class GroupNameChangedReceivedEventHandler extends EventHandler<GroupNameChangedReceivedEvent> {
     /**
      * Which type event is target of this handler.
      *

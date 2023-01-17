@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.invalid;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.invalid.*;
 
-public abstract class InvalidDataReceivedEventHandler extends EventHandler {
+public abstract class InvalidDataReceivedEventHandler extends EventHandler<InvalidDataReceivedEvent> {
     /**
      * Which type event is target of this handler.
      *

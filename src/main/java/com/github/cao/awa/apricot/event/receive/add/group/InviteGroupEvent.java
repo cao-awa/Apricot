@@ -38,9 +38,13 @@ public class InviteGroupEvent extends Event<InviteGroupReceivedPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
+    public void fireEvent(EventHandler<?> handler) {
         if (handler instanceof InviteGroupEventHandler eventHandler) {
-            eventHandler.onInvite(this);
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onInvite(this);
+            }
         }
     }
 }

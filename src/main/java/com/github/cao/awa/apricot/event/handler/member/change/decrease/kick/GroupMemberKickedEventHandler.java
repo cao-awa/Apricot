@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.member.change.decrease.kick;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.member.change.decrease.kick.*;
 
-public abstract class GroupMemberKickedEventHandler extends EventHandler {
+public abstract class GroupMemberKickedEventHandler extends EventHandler<GroupMemberKickedEvent> {
     /**
      * Which type event is target of this handler.
      *

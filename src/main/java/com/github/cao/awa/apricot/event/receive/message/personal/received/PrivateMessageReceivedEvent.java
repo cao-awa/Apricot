@@ -24,9 +24,13 @@ public abstract class PrivateMessageReceivedEvent<T extends PrivateMessageReceiv
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof PrivateMessageReceivedEventHandler privateMessage) {
-            privateMessage.onMessageReceived(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof PrivateMessageReceivedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessageReceived(this);
+            }
         }
         super.fireEvent(handler);
     }

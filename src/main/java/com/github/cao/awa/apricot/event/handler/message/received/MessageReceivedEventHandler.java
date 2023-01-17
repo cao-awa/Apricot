@@ -1,9 +1,9 @@
-package com.github.cao.awa.apricot.event.handler.message;
+package com.github.cao.awa.apricot.event.handler.message.received;
 
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 
-public abstract class MessageReceivedEventHandler extends EventHandler {
+public abstract class MessageReceivedEventHandler extends EventHandler<MessageReceivedEvent<?>> {
     /**
      * Which type event is target of this handler.
      *

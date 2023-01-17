@@ -24,9 +24,13 @@ public abstract class PokeReceivedEvent<T extends PokeReceivedPacket> extends Ev
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof PokeReceivedEventHandler poke) {
-            poke.onPoke(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof PokeReceivedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onPoke(this);
+            }
         }
     }
 }

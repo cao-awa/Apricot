@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.member.change.decrease.bot;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.member.change.decrease.bot.*;
 
-public abstract class BotDiedFromGroupEventHandler extends EventHandler {
+public abstract class BotDiedFromGroupEventHandler extends EventHandler<BotDiedFromGroupEvent> {
     /**
      * Which type event is target of this handler.
      *

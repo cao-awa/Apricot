@@ -42,9 +42,13 @@ public class BotDiedFromGroupEvent extends GroupMemberDecreasedEvent<BotDiedFrom
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof BotDiedFromGroupEventHandler died) {
-            died.onDied(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof BotDiedFromGroupEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onDied(this);
+            }
         }
         super.fireEvent(handler);
     }

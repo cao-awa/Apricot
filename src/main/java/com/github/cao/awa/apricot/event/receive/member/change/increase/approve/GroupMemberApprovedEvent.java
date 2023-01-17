@@ -39,9 +39,13 @@ public class GroupMemberApprovedEvent extends GroupMemberIncreasedEvent<GroupMem
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupMemberApprovedEventHandler approvedHandler) {
-            approvedHandler.onApproved(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupMemberApprovedEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onApproved(this);
+            }
         }
         super.fireEvent(handler);
     }

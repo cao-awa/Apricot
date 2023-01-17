@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.message.received.group;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.message.group.received.*;
 
-public abstract class GroupMessageReceivedEventHandler extends EventHandler {
+public abstract class GroupMessageReceivedEventHandler extends EventHandler<GroupMessageReceivedEvent<?>> {
     /**
      * Which type event is target of this handler.
      *

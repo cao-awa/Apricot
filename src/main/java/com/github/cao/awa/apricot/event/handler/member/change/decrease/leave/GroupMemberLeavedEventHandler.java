@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.member.change.decrease.leave;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.member.change.decrease.leave.*;
 
-public abstract class GroupMemberLeavedEventHandler extends EventHandler {
+public abstract class GroupMemberLeavedEventHandler extends EventHandler<GroupMemberLeavedEvent> {
     /**
      * Which type event is target of this handler.
      *

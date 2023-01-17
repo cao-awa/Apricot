@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.message.received.personal;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.message.personal.received.*;
 
-public abstract class PrivateFriendMessageReceivedEventHandler extends EventHandler {
+public abstract class PrivateFriendMessageReceivedEventHandler extends EventHandler<PrivateFriendMessageReceivedEvent> {
     /**
      * Which type event is target of this handler.
      *

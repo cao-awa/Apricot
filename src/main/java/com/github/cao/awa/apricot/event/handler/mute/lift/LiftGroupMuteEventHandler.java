@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.event.handler.mute.lift;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.mute.lift.*;
 
-public abstract class LiftGroupMuteEventHandler extends EventHandler {
+public abstract class LiftGroupMuteEventHandler extends EventHandler<LiftGroupMuteEvent<?>> {
     /**
      * Which type event is target of this handler.
      *

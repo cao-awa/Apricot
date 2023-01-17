@@ -41,9 +41,13 @@ public class GroupAnonymousMessageSentEvent extends GroupMessageSentEvent<GroupA
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof GroupAnonymousMessageSentEventHandler messageReceivedHandler) {
-            messageReceivedHandler.onMessageSent(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof GroupAnonymousMessageSentEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onMessageSent(this);
+            }
         }
         super.fireEvent(handler);
     }

@@ -55,6 +55,7 @@ import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
+import com.github.cao.awa.apricot.server.service.task.*;
 import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.io.*;
@@ -85,7 +86,6 @@ public class ApricotServer {
     private final Configure configs = new Configure(() -> "");
     private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
     private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
-    private final ExecutorEntrust scheduleExecutor = new ExecutorEntrust(Executors.newScheduledThreadPool(4));
     private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.newHashMap();
     private final ResourcesDispenser resourcesDispenser = new ResourcesDispenser(
             RESOURCE_DATABASE_PATH,
@@ -95,9 +95,13 @@ public class ApricotServer {
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
-    private ExecutorEntrust taskExecutor;
+    private TaskManager taskManager;
     private ApricotServerNetworkIo networkIo;
     private MessageDatabase messagesHeadOffice;
+
+    public EventManager getEventManager() {
+        return this.eventManager;
+    }
 
     public ApricotServer() {
     }
@@ -286,17 +290,19 @@ public class ApricotServer {
             );
         }
 
-        if (this.configs.getBoolean("SO_TASK_USE_THREADPOOL")) {
-            this.taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
-        } else {
-            this.taskExecutor = new ExecutorEntrust(Executors.newSingleThreadExecutor());
-        }
-
+        ExecutorEntrust executor = this.configs.getBoolean("SO_TASK_USE_THREADPOOL") ?
+                                   new ExecutorEntrust(Executors.newCachedThreadPool()) :
+                                   new ExecutorEntrust(Executors.newSingleThreadExecutor());
         if (this.configs.getBoolean("SO_ECHO_USE_THREADPOOL")) {
             this.echoManager = new EchoManager(Executors.newCachedThreadPool());
         } else {
             this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
         }
+
+        this.taskManager = new TaskManager(
+                executor,
+                new ExecutorEntrust(Executors.newScheduledThreadPool(4))
+        );
     }
 
     public void setupConfig() {
@@ -440,7 +446,7 @@ public class ApricotServer {
     }
 
     public void execute(String entrust, Runnable runnable) {
-        this.taskExecutor.execute(
+        this.taskManager.execute(
                 entrust,
                 runnable
         );
@@ -457,6 +463,12 @@ public class ApricotServer {
             LOGGER.info("Apricot bot server is shutdown");
             System.exit(0);
         }
+    }
+
+    public <T> CompletableFuture<T> future(Supplier<T> runnable) {
+        return this.taskManager.future(
+                runnable
+        );
     }
 
     public MessageDatabase getMessagesHeadOffice() {
@@ -481,7 +493,7 @@ public class ApricotServer {
     }
 
     public void schedule(String entrust, long delay, TimeUnit unit, Runnable runnable) {
-        this.scheduleExecutor.schedule(
+        this.taskManager.schedule(
                 entrust,
                 delay,
                 unit,
@@ -490,7 +502,7 @@ public class ApricotServer {
     }
 
     public void schedule(String entrust, long delay, long interval, TimeUnit unit, Runnable runnable) {
-        this.scheduleExecutor.schedule(
+        this.taskManager.schedule(
                 entrust,
                 delay,
                 interval,

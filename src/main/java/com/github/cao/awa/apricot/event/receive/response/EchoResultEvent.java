@@ -38,9 +38,13 @@ public class EchoResultEvent extends Event<EchoResultPacket> {
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
-        if (handler instanceof EchoResultEventHandler resultHandler) {
-            resultHandler.onResult(this);
+    public void fireEvent(EventHandler<?> handler) {
+        if (handler instanceof EchoResultEventHandler eventHandler) {
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onResult(this);
+            }
         }
     }
 }

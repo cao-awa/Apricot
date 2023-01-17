@@ -41,9 +41,13 @@ public class LiftGroupAllMuteEvent extends LiftGroupMuteEvent<LiftGroupAllMuteRe
      * @since 1.0.0
      */
     @Override
-    public void fireEvent(EventHandler handler) {
+    public void fireEvent(EventHandler<?> handler) {
         if (handler instanceof LiftGroupAllMuteEventHandler eventHandler) {
-            eventHandler.onLift(this);
+            if (this.isExclusive()) {
+                eventHandler.onExclusive(this);
+            } else {
+                eventHandler.onLift(this);
+            }
         }
         super.fireEvent(handler);
     }
