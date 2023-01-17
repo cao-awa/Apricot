@@ -122,11 +122,24 @@ public class PluginManager implements ConcurrentService {
 
     public void loadPlugin(Plugin plugin) {
         if (this.active) {
-            register(plugin);
+            register0(plugin);
         }
     }
 
     public void register(Plugin plugin) {
+        if (plugin.getClass()
+                  .isAnnotationPresent(AutoPlugin.class)) {
+            LOGGER.warn(
+                    "The plugin '{}'({}) already annotation by '@AutoPlugin', do not register it manually",
+                    plugin.getName(),
+                    plugin.getUuid()
+            );
+            return;
+        }
+        register0(plugin);
+    }
+
+    private void register0(Plugin plugin) {
         plugin.setServer(this.server);
         plugin.onInitialize();
         this.plugins.put(

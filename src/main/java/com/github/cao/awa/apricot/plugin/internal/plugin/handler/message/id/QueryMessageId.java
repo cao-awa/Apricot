@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin.message.id;
+package com.github.cao.awa.apricot.plugin.internal.plugin.handler.message.id;
 
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.handler.message.*;

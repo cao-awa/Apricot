@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin;
+package com.github.cao.awa.apricot.plugin.internal.plugin.handler;
 
 import com.github.cao.awa.apricot.event.handler.response.*;
 import com.github.cao.awa.apricot.event.receive.response.*;

@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin.message;
+package com.github.cao.awa.apricot.plugin.internal.plugin.handler.message;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.message.*;

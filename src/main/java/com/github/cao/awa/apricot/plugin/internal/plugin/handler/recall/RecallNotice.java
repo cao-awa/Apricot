@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin.recall;
+package com.github.cao.awa.apricot.plugin.internal.plugin.handler.recall;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.database.message.store.*;
@@ -35,7 +35,6 @@ public class RecallNotice extends MessageRecallEventHandler {
 
         MessageDatabase messageDatabase = server.getMessagesHeadOffice();
         MessageStore store = messageDatabase.getFromId(packet.getMessageId());
-        store.setRecalled(true);
         messageDatabase.setFromId(
                 packet.getMessageId(),
                 store

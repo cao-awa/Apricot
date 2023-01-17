@@ -1,7 +1,5 @@
 package com.github.cao.awa.apricot.util.io;
 
-import com.github.cao.awa.apricot.util.file.*;
-
 import java.io.*;
 
 /**
@@ -25,6 +23,34 @@ public class IOUtil {
      */
     public static void write(OutputStream output, InputStream input) throws IOException {
         output.write(input.readAllBytes());
+        output.close();
+        input.close();
+    }
+
+    /**
+     * Write input to output.
+     *
+     * @param output
+     *         Output
+     * @param input
+     *         Input
+     * @param buffer
+     *         Buffer
+     * @throws IOException
+     *         Happened IO error
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public static void write(OutputStream output, InputStream input, byte[] buffer) throws IOException {
+        int length;
+        while ((length = input.read(buffer)) != - 1) {
+            output.write(
+                    buffer,
+                    0,
+                    length
+            );
+        }
+
         output.close();
         input.close();
     }
@@ -59,7 +85,10 @@ public class IOUtil {
      * @since 1.0.0
      */
     public static void write(OutputStream output, String input) throws IOException {
-        write0(output, input);
+        write0(
+                output,
+                input
+        );
         output.close();
     }
 
@@ -92,7 +121,10 @@ public class IOUtil {
      * @since 1.0.0
      */
     public static void write(Writer writer, String input) throws IOException {
-        write0(writer, input);
+        write0(
+                writer,
+                input
+        );
         writer.close();
     }
 
@@ -185,21 +217,6 @@ public class IOUtil {
         return read(new InputStreamReader(input));
     }
 
-
-    /**
-     * Read input.
-     *
-     * @param input
-     *         Input
-     * @throws IOException
-     *         Happened IO error
-     * @author cao_awa
-     * @since 1.0.0
-     */
-    public static int read0(InputStream input, byte[] bytes) throws IOException {
-        return input.read(bytes);
-    }
-
     /**
      * Read input.
      *
@@ -223,6 +240,20 @@ public class IOUtil {
         }
         input.close();
         return builder.toString();
+    }
+
+    /**
+     * Read input.
+     *
+     * @param input
+     *         Input
+     * @throws IOException
+     *         Happened IO error
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public static int read0(InputStream input, byte[] bytes) throws IOException {
+        return input.read(bytes);
     }
 
     /**
@@ -275,7 +306,8 @@ public class IOUtil {
             );
         }
         input.close();
-        return builder.toString().getBytes();
+        return builder.toString()
+                      .getBytes();
     }
 
     /**
@@ -314,11 +346,18 @@ public class IOUtil {
             );
         }
         input.close();
-        return builder.toString().toCharArray();
+        return builder.toString()
+                      .toCharArray();
     }
 
     public static void copy(String from, String to) throws IOException {
-        FileUtil.mkdirsParent(new File(to));
+        copy(
+                new File(from),
+                new File(to)
+        );
+    }
+
+    public static void copy(File from, File to) throws IOException {
         BufferedInputStream input = new BufferedInputStream(new FileInputStream(from));
         BufferedOutputStream output = new BufferedOutputStream(new FileOutputStream(to));
         byte[] buff = new byte[8192];

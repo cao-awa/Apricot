@@ -14,10 +14,10 @@ import io.netty.handler.codec.http.websocketx.extensions.compression.*;
  * @author 草二号机
  * @since 1.0.0
  */
-public class ApricotChannelInitializer extends ChannelInitializer<SocketChannel> {
+public class ApricotServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private final ApricotServer server;
 
-    public ApricotChannelInitializer(ApricotServer server) {
+    public ApricotServerChannelInitializer(ApricotServer server) {
         this.server = server;
     }
 

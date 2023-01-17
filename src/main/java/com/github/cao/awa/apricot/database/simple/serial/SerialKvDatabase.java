@@ -1,8 +1,7 @@
-package com.github.cao.awa.apricot.database.simple;
+package com.github.cao.awa.apricot.database.simple.serial;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.database.*;
-import com.github.cao.awa.apricot.mathematic.base.*;
 import com.github.cao.awa.apricot.util.file.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
@@ -10,17 +9,20 @@ import java.io.*;
 import java.util.function.*;
 
 @Synchronized
-public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
-    private final byte[] buf = new byte[8];
+public class SerialKvDatabase extends ApricotDatabase<Long, byte[]> {
+    private final int size;
+    private final byte[] buf;
     private final RandomAccessFile file;
-    private long id = 0;
+    private long id;
 
-    public SerialLongKvDatabase(String dbFile) {
-        FileUtil.mkdirsParent(new File(dbFile));
+    public SerialKvDatabase(String file, int size) {
+        this.size = size;
+        this.buf = new byte[size];
+        FileUtil.mkdirsParent(new File(file));
 
         this.file = EntrustEnvironment.get(
                 () -> new RandomAccessFile(
-                        dbFile,
+                        file,
                         "rw"
                 ),
                 null
@@ -30,14 +32,14 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
 
     public long size() {
         try {
-            return this.file.length() / 8;
+            return this.file.length() / this.size;
         } catch (Exception e) {
             return - 1;
         }
     }
 
     @Override
-    public void forEach(BiConsumer<Long, Long> action) {
+    public void forEach(BiConsumer<Long, byte[]> action) {
         synchronized (this) {
             try {
                 this.file.seek(0);
@@ -47,7 +49,7 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                     this.file.read(this.buf);
                     action.accept(
                             key,
-                            Base256.longFromBuf(this.buf)
+                            this.buf
                     );
                     key++;
                 }
@@ -57,51 +59,46 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
     }
 
     @Override
-    public void set(Long key, Long value) {
+    public void set(Long key, byte[] value) {
         synchronized (this) {
             try {
                 if (key < 0) {
                     return;
                 }
-                Base256.longToBuf(
-                        value,
-                        this.buf
-                );
-                this.file.seek(key * 8);
-                this.file.write(this.buf);
+                this.file.seek(key * this.size);
+                this.file.write(value);
             } catch (Exception e) {
             }
         }
     }
 
     @Override
-    public Long get(Long key) {
+    public byte[] get(Long key) {
         synchronized (this) {
             try {
-                byte[] value = new byte[8];
-                this.file.seek(key * 8);
-                this.file.read(value);
-                return Base256.longFromBuf(value);
+                this.file.seek(key * this.size);
+                this.file.read(this.buf);
+                return this.buf;
             } catch (Exception e) {
-                return - 1L;
+                return new byte[this.size];
             }
         }
     }
 
-    public Long delete(Long key) {
+    public byte[] delete(Long key) {
         synchronized (this) {
             try {
                 // Get last value
-                long result = get(key);
+                byte[] result = get(key);
 
                 // Seek to position
                 long writePos = getPos(key);
-                long readPos = getPos(key + 1) * 8;
+                long readPos = getPos(key + 1);
                 int bufSize = 4096;
                 this.file.seek(readPos);
                 byte[] bytes = new byte[bufSize];
                 int length;
-                // Write data to tmp file
+                // Write data
                 while ((length = this.file.read(bytes)) != - 1) {
                     this.file.seek(writePos);
                     this.file.write(
@@ -114,20 +111,20 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                     this.file.seek(readPos);
                 }
 
-                this.file.setLength((-- this.id) * 8);
+                this.file.setLength((-- this.id) * this.size);
 
                 return result;
             } catch (Exception e) {
-                return - 1L;
+                return new byte[this.size];
             }
         }
     }
 
     private long getPos(long id) {
-        return id * 8;
+        return id * this.size;
     }
 
-    public void append(Long value) {
+    public void append(byte[] value) {
         set(
                 this.id++,
                 value
@@ -144,7 +141,7 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                 this.file.seek(readPos);
                 byte[] bytes = new byte[bufSize];
                 int length;
-                // Write data to tmp file
+                // Write data
                 while ((length = this.file.read(bytes)) != - 1) {
                     this.file.seek(writePos);
                     this.file.write(
@@ -157,7 +154,7 @@ public class SerialLongKvDatabase extends ApricotDatabase<Long, Long> {
                     this.file.seek(readPos);
                 }
 
-                this.file.setLength((this.id -= (to - from)) * 8);
+                this.file.setLength((this.id -= (to - from)) * this.size);
             } catch (Exception e) {
             }
         }

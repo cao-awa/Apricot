@@ -1,6 +1,6 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin.message;
+package com.github.cao.awa.apricot.plugin.internal.plugin.handler.message;
 
-import com.github.cao.awa.apricot.event.handler.message.*;
+import com.github.cao.awa.apricot.event.handler.message.sent.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.cq.image.*;
 import com.github.cao.awa.apricot.message.store.*;
@@ -10,7 +10,7 @@ import com.github.cao.awa.apricot.server.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 
-public class OthersMessageStorage extends MessageReceivedEventHandler {
+public class SelfMessageStore extends MessageSentEventHandler {
     private static final Logger LOGGER = LogManager.getLogger("MessageStorage");
 
     /**
@@ -23,8 +23,8 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
      * @since 1.0.0
      */
     @Override
-    public void onMessageReceived(MessageReceivedEvent<?> event) {
-        MessageReceivedPacket packet = event.getPacket();
+    public void onMessageReceived(MessageSentEvent<?> event) {
+        MessageSentPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
         ApricotServer server = proxy.server();
 

@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin;
+package com.github.cao.awa.apricot.plugin.internal.plugin.handler;
 
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.handler.message.recall.*;
@@ -8,7 +8,7 @@ import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 
-public class HandleRecallMessage extends MessageRecallEventHandler {
+public class RecalledMessageHandler extends MessageRecallEventHandler {
     /**
      * Process event.
      *

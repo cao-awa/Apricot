@@ -4,7 +4,7 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.config.*;
 import com.github.cao.awa.apricot.database.message.store.*;
-import com.github.cao.awa.apricot.database.simple.*;
+import com.github.cao.awa.apricot.database.simple.serial.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
@@ -50,7 +50,7 @@ import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.internal.plugin.*;
 import com.github.cao.awa.apricot.resource.dispenser.*;
-import com.github.cao.awa.apricot.resources.loader.*;
+import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
@@ -95,7 +95,7 @@ public class ApricotServer {
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
-    private ExecutorEntrust taskExecutor = new ExecutorEntrust(Executors.newCachedThreadPool());
+    private ExecutorEntrust taskExecutor;
     private ApricotServerNetworkIo networkIo;
     private MessageDatabase messagesHeadOffice;
 
@@ -190,7 +190,7 @@ public class ApricotServer {
     }
 
     public ApricotServerNetworkIo getNetworkIo() {
-        return networkIo;
+        return this.networkIo;
     }
 
     public TrafficCounter getTrafficsCounter() {
@@ -251,7 +251,7 @@ public class ApricotServer {
             return;
         }
         LOGGER.info("Loading internal plugins");
-        this.plugins.register(new InternalPlugin());
+        this.plugins.register(new Lawn());
         this.plugins.loadPlugins();
     }
 

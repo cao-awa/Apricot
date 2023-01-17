@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.resources.loader;
+package com.github.cao.awa.apricot.resource.loader;
 
 import java.io.*;
 

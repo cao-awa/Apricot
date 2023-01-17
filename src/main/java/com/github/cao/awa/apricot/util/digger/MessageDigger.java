@@ -22,6 +22,10 @@ public class MessageDigger {
     public static String digestFile(File file, DigestAlgorithm sha) throws Exception {
         int bufSize = 16384;
 
+        if (! file.isFile()) {
+            return "0";
+        }
+
         RandomAccessFile accessFile = new RandomAccessFile(
                 file,
                 "r"

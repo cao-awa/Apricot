@@ -2,12 +2,12 @@ package com.github.cao.awa.apricot.network.io;
 
 import com.github.cao.awa.apricot.network.io.channel.*;
 import com.github.cao.awa.apricot.server.*;
-import io.netty.bootstrap.ServerBootstrap;
+import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.epoll.*;
-import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.nio.*;
 import io.netty.channel.socket.*;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.channel.socket.nio.*;
 import org.apache.logging.log4j.*;
 
 import java.util.*;
@@ -32,13 +32,13 @@ public class ApricotServerNetworkIo {
             Executors.newCachedThreadPool()
     );
 
-    private final ApricotChannelInitializer channelInitializer;
+    private final ApricotServerChannelInitializer channelInitializer;
     private final ApricotServer server;
     private final List<ChannelFuture> channels = new CopyOnWriteArrayList<>();
 
     public ApricotServerNetworkIo(ApricotServer server) {
         this.server = server;
-        this.channelInitializer = new ApricotChannelInitializer(server);
+        this.channelInitializer = new ApricotServerChannelInitializer(server);
     }
 
     public void start(final int port) throws Exception {
