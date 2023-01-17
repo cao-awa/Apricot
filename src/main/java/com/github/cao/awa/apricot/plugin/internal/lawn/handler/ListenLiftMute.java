@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin.handler;
+package com.github.cao.awa.apricot.plugin.internal.lawn.handler;
 
 import com.github.cao.awa.apricot.event.handler.mute.lift.*;
 import com.github.cao.awa.apricot.event.receive.mute.lift.*;

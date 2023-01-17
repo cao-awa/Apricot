@@ -48,7 +48,8 @@ import com.github.cao.awa.apricot.network.packet.receive.response.message.get.*;
 import com.github.cao.awa.apricot.network.packet.send.message.get.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.plugin.*;
-import com.github.cao.awa.apricot.plugin.internal.plugin.*;
+import com.github.cao.awa.apricot.plugin.internal.lawn.*;
+import com.github.cao.awa.apricot.plugin.internal.simple.*;
 import com.github.cao.awa.apricot.resource.dispenser.*;
 import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
@@ -91,6 +92,7 @@ public class ApricotServer {
             RESOURCE_DATABASE_PATH,
             this
     );
+    public LawnBus eventBus;
     private boolean active = false;
     private PluginManager plugins;
     private EventManager eventManager;
@@ -99,11 +101,11 @@ public class ApricotServer {
     private ApricotServerNetworkIo networkIo;
     private MessageDatabase messagesHeadOffice;
 
-    public EventManager getEventManager() {
-        return this.eventManager;
+    public ApricotServer() {
     }
 
-    public ApricotServer() {
+    public EventManager getEventManager() {
+        return this.eventManager;
     }
 
     public ResourcesDispenser getResourcesDispenser() {
@@ -255,6 +257,8 @@ public class ApricotServer {
             return;
         }
         LOGGER.info("Loading internal plugins");
+        this.eventBus = new LawnBus();
+        this.plugins.register(this.eventBus);
         this.plugins.register(new Lawn());
         this.plugins.loadPlugins();
     }
@@ -466,9 +470,7 @@ public class ApricotServer {
     }
 
     public <T> CompletableFuture<T> future(Supplier<T> runnable) {
-        return this.taskManager.future(
-                runnable
-        );
+        return this.taskManager.future(runnable);
     }
 
     public MessageDatabase getMessagesHeadOffice() {

@@ -13,6 +13,7 @@ public class PrivateFriendMessageReceivedEvent extends PrivateMessageReceivedEve
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
             ApricotCollectionFactor.newHashSet(),
             set -> {
+                set.add("message");
                 set.add("message-received");
                 set.add("message-private");
                 set.add("message-private-friend");

@@ -1,9 +1,9 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin;
+package com.github.cao.awa.apricot.plugin.internal.lawn;
 
 import com.github.cao.awa.apricot.plugin.*;
-import com.github.cao.awa.apricot.plugin.internal.plugin.handler.*;
-import com.github.cao.awa.apricot.plugin.internal.plugin.handler.message.*;
-import com.github.cao.awa.apricot.plugin.internal.plugin.handler.recall.*;
+import com.github.cao.awa.apricot.plugin.internal.lawn.handler.*;
+import com.github.cao.awa.apricot.plugin.internal.lawn.handler.message.*;
+import com.github.cao.awa.apricot.plugin.internal.lawn.handler.recall.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -38,8 +38,10 @@ public class Lawn extends Plugin {
                 new MessageExport()
         );
 
-        // Features handler
-        registerHandler(new Tests());
+        getServer().eventBus.
+
+                // Features handler
+                        registerHandler(new Tests());
         registerHandler(new ApricotInformation());
         //        registerHandler(new ListenMute());
         //        registerHandler(new ListenLiftMute());

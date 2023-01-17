@@ -13,6 +13,7 @@ public class GroupAnonymousMessageSentEvent extends GroupMessageSentEvent<GroupA
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
             ApricotCollectionFactor.newHashSet(),
             set -> {
+                set.add("message");
                 set.add("message-sent");
                 set.add("message-sent-group");
                 set.add("message-sent-group-anonymous");

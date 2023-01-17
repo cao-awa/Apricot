@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.plugin.handler.message;
+package com.github.cao.awa.apricot.plugin.internal.lawn.handler.message;
 
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;

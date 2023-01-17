@@ -31,5 +31,6 @@ public abstract class MessageReceivedEvent<T extends MessageReceivedPacket> exte
                 eventHandler.onMessageReceived(this);
             }
         }
+        super.fireEvent(handler);
     }
 }

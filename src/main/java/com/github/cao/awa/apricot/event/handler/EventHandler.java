@@ -1,9 +1,20 @@
 package com.github.cao.awa.apricot.event.handler;
 
 import com.github.cao.awa.apricot.event.receive.*;
+import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.target.*;
 
 public abstract class EventHandler<T extends Event<?>> {
+    private Plugin plugin;
+
+    public Plugin getPlugin() {
+        return this.plugin;
+    }
+
+    public void setPlugin(Plugin plugin) {
+        this.plugin = plugin;
+    }
+
     /**
      * Which type event is target of this handler.
      *

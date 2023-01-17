@@ -101,12 +101,87 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
 ```java
 @Override
 public void onInitialize(){
-    // 注册回戳事件处理器
-    registerHandler(new PokeReciprocity());
-}
+        // 注册回戳事件处理器
+        registerHandler(new PokeReciprocity());
+        }
 ```
 
 随后使用其他账号对bot进行戳一戳，bot将会反馈一次戳一戳
+
+# 匿名处理器
+
+```
+匿名处理器不支持事件独占(exclusive)
+```
+
+匿名处理器允许不创建类，通过lambda来处理事件
+
+例如：
+
+```java
+/**
+ * An example plugin.
+ *
+ * @since 1.0.0
+ * @author cao_awa
+ */
+@AutoPlugin
+public class InternalPlugin extends Plugin {
+    private static final UUID ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
+
+    @Override
+    public void onInitialize() {
+        // 注册到戳一戳事件
+        getServer().eventBus.poke(event -> {
+            // 获取数据包，以便处理信息
+            PokeReceivedPacket packet = event.getPacket();
+            // 获取代理，用于发送数据包
+            ApricotProxy proxy = event.getProxy();
+            if (
+                // 判断戳一戳的目标是此bot
+                    packet.getTargetId() == packet.getBotId() &&
+                    // 判断不是bot的账号戳的自己
+                    // 缺少这一条件可能导致无限自己戳自己直到次数用尽
+                    ! (packet.getCauserId() == packet.getBotId())
+            ) {
+                // 发送数据包
+                proxy.send(
+                        // PokePacket 即戳一戳的数据包
+                        new SendPokePacket(
+                                // 回复类型，通常从接收的数据包获取
+                                packet.getType(),
+                                // 要戳谁？
+                                // 因为是回戳，所以直接使用戳了bot的id
+                                packet.getCauserId(),
+                                // bot的id，通常直从接收的数据包接获
+                                packet.getBotId(),
+                                // 发给谁
+                                packet.getResponseId()
+                        )
+                );
+            }
+        });
+    }
+
+    @Override
+    public String version() {
+        return "0.0.1";
+    }
+
+    @Override
+    public UUID getUuid() {
+        return ID;
+    }
+
+    @NotNull
+    @Override
+    public String getName() {
+        return "Example Plugin";
+    }
+}
+```
+
+这样可以在不创建额外类的情况下也处理事件
 
 # 事件
 

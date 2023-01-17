@@ -98,6 +98,7 @@ public abstract class Plugin implements Comparable<Plugin> {
         }
         this.handlers.get(handler.getType())
                      .add(handler);
+        handler.setPlugin(this);
     }
 
     /**
@@ -122,7 +123,12 @@ public abstract class Plugin implements Comparable<Plugin> {
                                               handlers.stream()
                                                       .filter(handler -> handler.accept(event.getPacket()
                                                                                              .target()))
-                                                      .forEach(handler -> EntrustEnvironment.trys(() -> event.fireEvent(handler)));
+                                                      .forEach(handler -> EntrustEnvironment.trys(
+                                                              () -> {
+                                                                  event.fireEvent(handler);
+                                                              },
+                                                              Throwable::printStackTrace
+                                                      ));
                                           }
                                   ));
     }
