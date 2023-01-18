@@ -183,6 +183,103 @@ public class InternalPlugin extends Plugin {
 
 这样可以在不创建额外类的情况下也处理事件
 
-# 事件
+# 事件独占
+
+事件独占通常用来处理需要进一步收集信息的需求
+
+\
+例如进行"问答游戏"，如果用户的回答中可能存在触发其他插件响应的关键词
+
+则可以用事件独占将此用户的此事件独占至"问答游戏"的处理器
+
+\
+使用服务器事件管理器提供的 ``` exclusive ``` API来使处理器独占一个事件
+
+如以下示例，当用户发送awa时，处理器会请求独占三次"收到私聊信息"事件，随后无论用户说什么都给用户反馈"www..."
+
+如果指定时间没完成这么多次的处理，则会触发超时，超时的时候向用户发送"Timeout..."
+
+```java
+public class ExclusiveSample extends PrivateMessageReceivedEventHandler {
+    /**
+     * Process event.
+     *
+     * @param event
+     *         event
+     * @author cao_awa
+     * @author 草二号机
+     * @since 1.0.0
+     */
+    @Override
+    public void onMessageReceived(PrivateMessageReceivedEvent<?> event) {
+        ApricotProxy proxy = event.getProxy();
+        ApricotServer server = proxy.server();
+        PrivateMessageReceivedPacket packet = event.getPacket();
+
+        if (packet.getMessage()
+                  .toPlainText()
+                  .equals("awa")) {
+            // 请求独占"收到私聊信息"事件
+            server.getEventManager()
+                  .exclusive(
+                          // 仅占此目标的事件，为了不影响其他人的使用
+                          packet.target(),
+                          // 独占时由哪个处理器来处理这个事件
+                          this,
+                          // 连续进行多少次的事件独占
+                          3,
+                          // 当指定时间（毫秒）后还没达到目标次数则超时
+                          10000,
+                          () -> {
+                              // 在超时时执行一些操作
+                              proxy.send(new SendMessagePacket(
+                                      MessageType.PRIVATE,
+                                      new TextMessageElement("Timeout...").toMessage(),
+                                      packet.getResponseId()
+                              ));
+                          }
+                  );
+        }
+    }
+
+    @Override
+    public void onExclusive(PrivateMessageReceivedEvent<?> event) {
+        // 当此事件被处理器独占时使用此方法处理
+        event.getProxy()
+             // 回用户一个"www"
+             .send(new SendMessagePacket(
+                     MessageType.PRIVATE,
+                     new TextMessageElement("www...").toMessage(),
+                     event.getPacket()
+                          .getResponseId()
+             ));
+    }
+}
+
+```
+
+在事件独占时，只会阻止同属当前插件的处理器，其他插件不受影响
+
+\
+在以后会提供一个方法(compulsory)来决定一个处理器是否一定要参加事件处理
+
+当一定要时则其他处理器的事件独占对此处理器无效，但对其他处理器依旧是有效的
+
+\
+以及提供一个"level"，用于决定独占只针对当前插件或是选择其他插件也一起阻止
+
+亦或是让所有杏已加载的插件都被此独占阻止处理
+
+此"level"与"compulsory"判断不冲突，只是决定适用范围
+
+## 注意
+
+对同一个事件、同一个用户的独占，不能同时被两个处理器请求
+
+这会导致直接这一独占请求被取消，两个处理器都不会成功请求到事件独占
+
+并非是先来后到，或是后者覆盖，而且都别想用（）
+
+# 事件处理器
 
 见：[Handler](/doc/zh_cn/develop/event/handler/README.md)
