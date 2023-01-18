@@ -103,7 +103,7 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
 public void onInitialize(){
         // 注册回戳事件处理器
         registerHandler(new PokeReciprocity());
-        }
+}
 ```
 
 随后使用其他账号对bot进行戳一戳，bot将会反馈一次戳一戳
