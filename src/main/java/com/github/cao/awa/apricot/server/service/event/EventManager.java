@@ -39,7 +39,7 @@ public class EventManager implements ConcurrentService {
 
     public void fireEvent(Event<?> event) {
         if (this.active) {
-            final Map<EventTarget, EventExclusive> exclusives = new HashMap<>(this.exclusives);
+            final Map<EventTarget, EventExclusive> exclusives = ApricotCollectionFactor.newHashMap(this.exclusives);
             this.executor.execute(
                     "EventManager",
                     () -> {
@@ -154,8 +154,6 @@ public class EventManager implements ConcurrentService {
     @Override
     public void shutdown() {
         this.active = false;
-        if (this.executor.executor() instanceof ThreadPoolExecutor threadPool) {
-            threadPool.shutdown();
-        }
+        this.executor.shutdown();
     }
 }

@@ -62,8 +62,6 @@ public class EchoManager implements ConcurrentService {
     @Override
     public void shutdown() {
         this.active = false;
-        if (this.executor.executor() instanceof ThreadPoolExecutor threadPool) {
-            threadPool.shutdown();
-        }
+        this.executor.shutdown();
     }
 }

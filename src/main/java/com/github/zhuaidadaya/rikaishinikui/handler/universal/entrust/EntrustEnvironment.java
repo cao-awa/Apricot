@@ -55,10 +55,10 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void trys(ExceptingTemporary action, Consumer<Throwable> whenException) {
+    public static void trys(ExceptingTemporary action, Consumer<Exception> whenException) {
         try {
             action.apply();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             whenException.accept(e);
         }
     }
@@ -71,7 +71,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static <T> T trys(ExceptingSupplier<T> action, Function<Throwable, T> actionWhenException) {
+    public static <T> T trys(ExceptingSupplier<T> action, Function<Exception, T> actionWhenException) {
         try {
             return action.get();
         } catch (Exception e) {
@@ -172,7 +172,7 @@ public class EntrustEnvironment {
     public static void trys(ExceptingTemporary action, ExceptingTemporary whenException) {
         try {
             action.apply();
-        } catch (Throwable e) {
+        } catch (Exception e) {
             trys(whenException);
         }
     }

@@ -23,7 +23,7 @@ import java.util.concurrent.*;
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
     private final ApricotServer server;
-    private final Map<UUID, Plugin> plugins = new ConcurrentHashMap<>();
+    private final Map<UUID, Plugin> plugins = ApricotCollectionFactor.newConcurrentHashMap();
     private final ExecutorEntrust executor;
     private boolean active = true;
 
@@ -51,9 +51,7 @@ public class PluginManager implements ConcurrentService {
     @Override
     public void shutdown() {
         this.active = false;
-        if (this.executor.executor() instanceof ThreadPoolExecutor threadPool) {
-            threadPool.shutdown();
-        }
+        this.executor.shutdown();
     }
 
     public void loadPlugins() {
@@ -136,7 +134,7 @@ public class PluginManager implements ConcurrentService {
             );
             return;
         }
-        register0(plugin);
+        loadPlugin(plugin);
     }
 
     private void register0(Plugin plugin) {

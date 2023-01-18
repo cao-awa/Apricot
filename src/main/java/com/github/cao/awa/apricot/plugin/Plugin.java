@@ -124,17 +124,15 @@ public abstract class Plugin implements Comparable<Plugin> {
                                                       .filter(handler -> handler.accept(event.getPacket()
                                                                                              .target()))
                                                       .forEach(handler -> EntrustEnvironment.trys(
-                                                              () -> {
-                                                                  event.fireEvent(handler);
-                                                              },
-                                                              Throwable::printStackTrace
+                                                              () -> event.fireEvent(handler),
+                                                              handler::onException
                                                       ));
                                           }
                                   ));
     }
 
     public ApricotServer getServer() {
-        return server;
+        return this.server;
     }
 
     public void setServer(ApricotServer server) {

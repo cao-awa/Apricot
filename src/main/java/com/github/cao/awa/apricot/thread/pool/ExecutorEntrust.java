@@ -112,4 +112,10 @@ public final class ExecutorEntrust implements Executor {
                 command
         );
     }
+
+    public void shutdown() {
+        if (this.executor instanceof ExecutorService service) {
+            service.shutdown();
+        }
+    }
 }

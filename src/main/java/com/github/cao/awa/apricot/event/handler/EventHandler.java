@@ -30,4 +30,8 @@ public abstract class EventHandler<T extends Event<?>> {
     public void onExclusive(T event) {
 
     }
+
+    public void onException(Exception exception) {
+
+    }
 }

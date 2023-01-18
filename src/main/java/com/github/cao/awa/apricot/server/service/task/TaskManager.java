@@ -50,5 +50,7 @@ public class TaskManager implements ConcurrentService {
 
     @Override
     public void shutdown() {
+        this.executor.shutdown();
+        this.scheduler.shutdown();
     }
 }

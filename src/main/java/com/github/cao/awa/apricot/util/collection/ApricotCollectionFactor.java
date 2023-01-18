@@ -9,6 +9,11 @@ public class ApricotCollectionFactor {
         //        return new Object2ObjectOpenHashMap<>();
     }
 
+    public static <K, V> Map<K, V> newHashMap(Map<K, V> map) {
+        return new HashMap<>(map);
+        //        return new Object2ObjectOpenHashMap<>(map);
+    }
+
     public static <K, V> ConcurrentHashMap<K, V> newConcurrentHashMap() {
         return new ConcurrentHashMap<>();
     }
