@@ -258,15 +258,64 @@ public class ExclusiveSample extends PrivateMessageReceivedEventHandler {
 
 ```
 
-在事件独占时，只会阻止同属当前插件的处理器，其他插件不受影响
+在事件被独占时，默认只会阻止同属当前插件的处理器，其他插件不受影响
 
-\
-在以后会提供一个方法(compulsory)来决定一个处理器是否一定要参加事件处理
+在处理事件独占时，需要通过 ``` onExclusive ``` 方法而不是处理器的常规 ``` onXxx ```方法处理
 
-当一定要时则其他处理器的事件独占对此处理器无效，但对其他处理器依旧是有效的
+## 强制处理
+重写 EventHandler 的 ``` compulsory ``` 方法或是实现 ``` Compulsory ``` 都可以让事件处理器强制处理事件
 
-\
-以及提供一个"level"，用于决定独占只针对当前插件或是选择其他插件也一起阻止
+以下两种方式均可，两种方式同时使用也行，但是没有必要这么做
+
+```java
+public class PokeReciprocity extends PokeReceivedEventHandler implements Compulsory {
+    @Override
+    public void onPoke(PokeReceivedEvent event) {
+        
+    }
+}
+```
+
+```java
+public class PokeReciprocity extends PokeReceivedEventHandler {
+    @Override
+    public boolean compulsory() {
+        return true;
+    }
+    
+    @Override
+    public void onPoke(PokeReceivedEvent event) {
+
+    }
+}
+```
+
+如果一个插件内所有处理器都需要强制处理事件，可以对 ``` Plugin ``` 进行上面的操作
+
+即可使此插件内所有处理器全部都会进行事件强制处理，此时处理器的 ``` compulsory ``` 已经被忽略，不需要再做出任何修改 
+
+```java
+@AutoPlugin
+public class InternalPlugin extends Plugin implements Compulsory {
+    // 其他必要方法在此处不多赘述，省略...
+}
+```
+
+```java
+@AutoPlugin
+public class InternalPlugin extends Plugin {
+    // 其他必要方法在此处不多赘述，省略...
+
+    @Override
+    public boolean compulsory() {
+        return true;
+    }
+}
+```
+
+
+## 独占级别
+在以后会以及提供一个"level"，用于决定独占只针对当前插件或是选择其他插件也一起阻止
 
 亦或是让所有杏已加载的插件都被此独占阻止处理
 
@@ -278,7 +327,7 @@ public class ExclusiveSample extends PrivateMessageReceivedEventHandler {
 
 这会导致直接这一独占请求被取消，两个处理器都不会成功请求到事件独占
 
-并非是先来后到，或是后者覆盖，而且都别想用（）
+并非是先来后到，或是后者覆盖，而是都别想用（）
 
 # 事件处理器
 
