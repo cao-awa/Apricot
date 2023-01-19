@@ -369,18 +369,18 @@ public class EntrustEnvironment {
         return new Thread(action::apply);
     }
 
-    /**
-     * Create a virtual thread of target action.
-     *
-     * @param action Action
-     * @return The thread of target action
-     *
-     * @author 草二号机
-     * @since 1.0.0
-     */
-    @NotNull
-    public static Thread vThread(Temporary action) {
-        return Thread.ofVirtual().unstarted(action::apply);
-    }
+//    /**
+//     * Create a virtual thread of target action.
+//     *
+//     * @param action Action
+//     * @return The thread of target action
+//     *
+//     * @author 草二号机
+//     * @since 1.0.0
+//     */
+//    @NotNull
+//    public static Thread vThread(Temporary action) {
+//        return Thread.ofVirtual().unstarted(action::apply);
+//    }
 }
 
