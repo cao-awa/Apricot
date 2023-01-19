@@ -82,7 +82,7 @@ public class MessageUtil {
         }
 
         // Let all prepared element participate in message
-        return new AssembledMessage().participateAll(elements);
+        return new AssembledMessage(elements);
     }
 
     public static String stripAndTrim(ApricotServer server, String source) {

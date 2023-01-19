@@ -181,8 +181,38 @@ public class TextUtil {
         return result;
     }
 
+    public static String underlineDash(String source) {
+        return source.replace(
+                "_",
+                "-"
+        );
+    }
+
+    public static String group(List<String> args, String delim) {
+        StringBuilder builder = new StringBuilder();
+        for (String name : args) {
+            builder.append(name)
+                   .append(delim);
+        }
+        builder.setLength(builder.length() - 1);
+        return builder.toString();
+    }
+
+    /**
+     * Split a string to list.
+     *
+     * @param source
+     *         Target string
+     * @param delim
+     *         The delim
+     * @return Split result
+     *
+     * @author cao_awa
+     * @deprecated This split method is slower than {@link TextUtil#splitToList(String, char)} even than {@link String#split(String, int)}, deprecate this bad design to use faster split.
+     */
     @NotNull
-    public static List<String> splitToList(@NotNull String source, char delim) {
+    @Deprecated(since = "1.0.0")
+    public static List<String> _splitToList_(@NotNull String source, char delim) {
         final String[] strings = new String[source.length() / 2];
         final int length = source.length();
         final StringBuilder builder = new StringBuilder();
@@ -217,20 +247,48 @@ public class TextUtil {
         return List.of(list);
     }
 
-    public static String underlineDash(String source) {
-        return source.replace(
-                "_",
-                "-"
-        );
+    /**
+     * Split a string to list.
+     *
+     * @param source
+     *         Target string
+     * @param delim
+     *         The delim
+     * @return Split result
+     *
+     * @author cao_awa
+     * @author 草二号机
+     */
+    @NotNull
+    public static List<String> splitToList(@NotNull String source, char delim) {
+        final int length = source.length();
+        final List<String> strings = ApricotCollectionFactor.newArrayList(length / 2);
+        int cursor = 0;
+
+        while (cursor < length) {
+            int index = source.indexOf(
+                    delim,
+                    cursor
+            );
+            index = index == - 1 ? length : index;
+            if (index != cursor) {
+                strings.add(source.substring(
+                        cursor,
+                        index
+                ));
+            }
+            cursor = index + 1;
+        }
+
+        return strings;
     }
 
-    public static String group(List<String> args, String delim) {
-        StringBuilder builder = new StringBuilder();
-        for (String name : args) {
-            builder.append(name)
-                   .append(delim);
+    public static int indexOf(char[] chars, char target, int start) {
+        for (int i = start; i < chars.length; i++) {
+            if (chars[i] == target) {
+                return i;
+            }
         }
-        builder.setLength(builder.length() - 1);
-        return builder.toString();
+        return - 1;
     }
 }

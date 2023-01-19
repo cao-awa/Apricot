@@ -21,7 +21,6 @@ import java.util.function.*;
  */
 public class ApricotRouter extends NetworkRouter {
     private static final Logger LOGGER = LogManager.getLogger("ApricotRouter");
-    private final @NotNull ApricotServer server;
     private final @NotNull ApricotProxy proxy;
     private final @NotNull StringBuilder stitching = new StringBuilder();
     private final ApricotUniqueDispenser dispenser;
@@ -30,7 +29,7 @@ public class ApricotRouter extends NetworkRouter {
     private Channel channel;
 
     public ApricotRouter(@NotNull ApricotServer server) {
-        this.server = server;
+        super(server);
         this.proxy = new ApricotProxy(
                 this,
                 server
@@ -74,10 +73,10 @@ public class ApricotRouter extends NetworkRouter {
      */
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        this.server.getTrafficsCounter()
+        this.getServer().getTrafficsCounter()
                    .in(frame.content()
                             .writerIndex());
-        this.server.getPacketsCounter()
+        this.getServer().getPacketsCounter()
                    .in(1);
         handleFragment(frame);
     }
@@ -158,9 +157,9 @@ public class ApricotRouter extends NetworkRouter {
      * @since 1.0.0
      */
     public void handleRequest(JSONObject request) {
-        this.server.execute(
+        this.getServer().execute(
                 "ApricotRouter",
-                () -> handleRequest(this.server.createPacket(request))
+                () -> handleRequest(this.getServer().createPacket(request))
         );
     }
 

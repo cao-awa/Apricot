@@ -8,9 +8,24 @@ import java.util.*;
 import java.util.function.*;
 
 public class AssembledMessage extends Message<MessageElement, AssembledMessage> {
-    private static final MessageElement EMPTY_PLAINS_TEXT = new TextMessageElement(null);
-    private final List<MessageElement> elements = ApricotCollectionFactor.newArrayList();
-    private final List<AssembledMessage> incinerate = ApricotCollectionFactor.newArrayList();
+    private static final MessageElement EMPTY_PLAINS_TEXT = new TextMessageElement("");
+    private final List<MessageElement> elements;
+    private final List<AssembledMessage> incinerate;
+
+    public AssembledMessage(List<MessageElement> elements, List<AssembledMessage> incinerate) {
+        this.elements = elements;
+        this.incinerate = incinerate;
+    }
+
+    public AssembledMessage(List<MessageElement> elements) {
+        this.elements = elements;
+        this.incinerate = ApricotCollectionFactor.newArrayList();
+    }
+
+    public AssembledMessage() {
+        this.elements = ApricotCollectionFactor.newArrayList();
+        this.incinerate = ApricotCollectionFactor.newArrayList();
+    }
 
     public AssembledMessage participate(MessageElement element) {
         incinerate(element);
