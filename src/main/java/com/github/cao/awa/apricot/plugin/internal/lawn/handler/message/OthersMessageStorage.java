@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.plugin.internal.lawn.handler.message;
 
+import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.cq.image.*;
@@ -10,7 +11,7 @@ import com.github.cao.awa.apricot.server.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 
-public class OthersMessageStorage extends MessageReceivedEventHandler {
+public class OthersMessageStorage extends MessageReceivedEventHandler implements Compulsory {
     private static final Logger LOGGER = LogManager.getLogger("MessageStorage");
 
     /**
@@ -57,15 +58,15 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                   }
               });
 
-        LOGGER.info(
-                "|{}/{}| ({}) {}: {}",
-                packet.getMessageId(),
-                packet.getOwnId(),
-                packet.getSenderId(),
-                packet.getSender()
-                      .getName(),
-                packet.getMessage()
-                      .toPlainText()
-        );
+//        LOGGER.info(
+//                "|{}/{}| ({}) {}: {}",
+//                packet.getMessageId(),
+//                packet.getOwnId(),
+//                packet.getSenderId(),
+//                packet.getSender()
+//                      .getName(),
+//                packet.getMessage()
+//                      .toPlainText()
+//        );
     }
 }

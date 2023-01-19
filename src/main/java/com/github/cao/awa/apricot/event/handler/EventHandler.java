@@ -34,4 +34,8 @@ public abstract class EventHandler<T extends Event<?>> {
     public void onException(Exception exception) {
 
     }
+
+    public boolean compulsory() {
+        return this instanceof Compulsory;
+    }
 }

@@ -1,15 +1,13 @@
 package com.github.cao.awa.apricot.plugin.internal.example.exclusive;
 
-import com.github.cao.awa.apricot.event.handler.message.received.personal.*;
-import com.github.cao.awa.apricot.event.receive.message.personal.received.*;
-import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.network.packet.receive.message.personal.received.*;
-import com.github.cao.awa.apricot.network.packet.send.message.*;
+import com.github.cao.awa.apricot.event.handler.message.received.group.*;
+import com.github.cao.awa.apricot.event.receive.message.group.received.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.group.received.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.target.*;
 
-public class ExclusiveHandler1 extends PrivateMessageReceivedEventHandler {
+public class ExclusiveHandler1 extends GroupMessageReceivedEventHandler {
     /**
      * Process event.
      *
@@ -20,22 +18,14 @@ public class ExclusiveHandler1 extends PrivateMessageReceivedEventHandler {
      * @since 1.0.0
      */
     @Override
-    public void onMessageReceived(PrivateMessageReceivedEvent<?> event) {
+    public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
         ApricotProxy proxy = event.getProxy();
         ApricotServer server = proxy.server();
-        PrivateMessageReceivedPacket packet = event.getPacket();
+        GroupMessageReceivedPacket packet = event.getPacket();
 
         if (packet.getMessage()
                   .toPlainText()
                   .equals("zzz")) {
-            // Normally handling. require the message is "zzz" to test exclusive.
-            // Send......
-            proxy.send(new SendMessagePacket(
-                    MessageType.PRIVATE,
-                    new TextMessageElement("zzz...").toMessage(),
-                    packet.getResponseId()
-            ));
-
             // Request exclusive the next messages.
             server.getEventManager()
                   .exclusive(
@@ -49,26 +39,31 @@ public class ExclusiveHandler1 extends PrivateMessageReceivedEventHandler {
                           6000,
                           () -> {
                               // Do something when timeout.
-                              proxy.send(new SendMessagePacket(
-                                      MessageType.PRIVATE,
-                                      new TextMessageElement("Timeout...").toMessage(),
-                                      packet.getResponseId()
-                              ));
+//                              proxy.send(new SendMessagePacket(
+//                                      packet.getType(),
+//                                      new TextMessageElement("Timeout...").toMessage(),
+//                                      packet.getResponseId()
+//                              ));
+                              System.out.println("Timeout...");
                           }
                   );
         }
+
+        System.out.println("E1 a.");
     }
 
     @Override
-    public void onExclusive(PrivateMessageReceivedEvent<?> event) {
-        // Exclusively.
-        // Send......
-        event.getProxy()
-             .send(new SendMessagePacket(
-                     MessageType.PRIVATE,
-                     new TextMessageElement("zzz").toMessage(),
-                     event.getPacket()
-                          .getResponseId()
-             ));
+    public void onException(Exception exception) {
+        exception.printStackTrace();
+    }
+
+    @Override
+    public boolean accept(EventTarget target) {
+        return target.group() == 252755050;
+    }
+
+    @Override
+    public void onExclusive(GroupMessageReceivedEvent<?> event) {
+        System.out.println("E1 e.");
     }
 }

@@ -1,14 +1,11 @@
 package com.github.cao.awa.apricot.plugin.internal.example.exclusive;
 
-import com.github.cao.awa.apricot.event.handler.message.received.personal.*;
-import com.github.cao.awa.apricot.event.receive.message.personal.received.*;
-import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.network.packet.receive.message.personal.received.*;
-import com.github.cao.awa.apricot.network.packet.send.message.*;
-import com.github.cao.awa.apricot.network.router.*;
+import com.github.cao.awa.apricot.event.handler.*;
+import com.github.cao.awa.apricot.event.handler.message.received.group.*;
+import com.github.cao.awa.apricot.event.receive.message.group.received.*;
+import com.github.cao.awa.apricot.target.*;
 
-public class NormalHandler1 extends PrivateMessageReceivedEventHandler {
+public class NormalHandler1 extends GroupMessageReceivedEventHandler implements Compulsory {
     /**
      * Process event.
      *
@@ -19,21 +16,17 @@ public class NormalHandler1 extends PrivateMessageReceivedEventHandler {
      * @since 1.0.0
      */
     @Override
-    public void onMessageReceived(PrivateMessageReceivedEvent<?> event) {
-        ApricotProxy proxy = event.getProxy();
-        PrivateMessageReceivedPacket packet = event.getPacket();
+    public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
+        System.out.println("H1 a.");
+    }
 
-        if (! event.getPacket()
-                   .getMessage()
-                   .toPlainText()
-                   .equals("www")) {
-            return;
-        }
+    @Override
+    public void onExclusive(GroupMessageReceivedEvent<?> event) {
+        System.out.println("H1 e.");
+    }
 
-        proxy.send(new SendMessagePacket(
-                MessageType.PRIVATE,
-                new TextMessageElement("www...").toMessage(),
-                packet.getResponseId()
-        ));
+    @Override
+    public boolean accept(EventTarget target) {
+        return target.group() == 252755050;
     }
 }

@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.plugin.requirement.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.target.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.jetbrains.annotations.*;
@@ -111,23 +112,45 @@ public abstract class Plugin implements Comparable<Plugin> {
      * @since 1.0.0
      */
     public void fireEvent(Event<?> event) {
+        this.fireEvent(
+                event,
+                null,
+                true
+        );
+    }
+
+    /**
+     * Let an event be fired.
+     *
+     * @param event
+     *         event
+     * @author cao_awa
+     * @author 草二号机
+     * @since 1.0.0
+     */
+    private void fireEvent(Event<?> event, EventHandler<?> exclude, boolean compulsory) {
+        EventTarget target = event.getPacket()
+                                  .target();
         event.pipeline()
              .forEach(type -> this.getServer()
                                   .execute(
                                           getName(),
-                                          () -> {
-                                              List<EventHandler<?>> handlers = this.handlers.get(type);
-                                              if (handlers == null) {
-                                                  return;
-                                              }
-                                              handlers.stream()
-                                                      .filter(handler -> handler.accept(event.getPacket()
-                                                                                             .target()))
-                                                      .forEach(handler -> EntrustEnvironment.trys(
-                                                              () -> event.fireEvent(handler),
-                                                              handler::onException
-                                                      ));
-                                          }
+                                          () -> EntrustEnvironment.notNull(
+                                                  this.handlers.get(type),
+                                                  handlers -> EntrustEnvironment.operation(
+                                                          exclude == null || compulsory ?
+                                                          handlers.stream() :
+                                                          handlers.stream()
+                                                                  .filter(handler -> handler != exclude && handler.compulsory()),
+                                                          valid -> EntrustEnvironment.operation(
+                                                                  valid.filter(handler -> handler.accept(target)),
+                                                                  accepted -> accepted.forEach(handler -> EntrustEnvironment.trys(
+                                                                          () -> event.fireEvent(handler),
+                                                                          handler::onException
+                                                                  ))
+                                                          )
+                                                  )
+                                          )
                                   ));
     }
 
@@ -137,5 +160,26 @@ public abstract class Plugin implements Comparable<Plugin> {
 
     public void setServer(ApricotServer server) {
         this.server = server;
+    }
+
+    /**
+     * Let an event be fired.
+     *
+     * @param event
+     *         event
+     * @author cao_awa
+     * @author 草二号机
+     * @since 1.0.0
+     */
+    public void fireEvent(Event<?> event, EventHandler<?> exclude) {
+        this.fireEvent(
+                event,
+                exclude,
+                this.compulsory()
+        );
+    }
+
+    public boolean compulsory() {
+        return this instanceof Compulsory;
     }
 }

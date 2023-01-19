@@ -16,7 +16,8 @@ import java.util.function.*;
  * @since 1.0.0
  */
 public class EntrustEnvironment {
-    public static <T> T getNotNull(T target, @NotNull T defaultValue) {
+    @NotNull
+    public static <T> T getNotNull(@Nullable T target, @NotNull T defaultValue) {
         return target == null ? defaultValue : target;
     }
 

@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.server.service.event;
 
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
-import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.event.exclusive.*;
@@ -42,31 +41,38 @@ public class EventManager implements ConcurrentService {
             final Map<EventTarget, EventExclusive> exclusives = ApricotCollectionFactor.newHashMap(this.exclusives);
             this.executor.execute(
                     "EventManager",
-                    () -> {
-                        for (Plugin plugin : this.plugins.getPlugins()) {
-                            EventTarget target = event.getPacket()
-                                                      .target();
-                            EventExclusive exclusive = exclusives.get(target);
-                            this.executor.execute(
-                                    "EventManager",
-                                    exclusive == null ? () -> plugin.fireEvent(event) : () -> {
-                                        event.setExclusive(true);
-                                        event.fireEvent(exclusive.handler());
-                                    }
-                            );
-                            if (exclusive != null) {
-                                exclusive.counts()
-                                         .set(exclusive.counts()
-                                                       .get() - 1);
-                                if (exclusive.counts()
-                                             .get() == 0) {
-                                    this.exclusives.remove(target);
-                                    exclusives.remove(target);
-                                }
-                                break;
-                            }
-                        }
-                    }
+                    () -> this.plugins.getPlugins()
+                                      .forEach(plugin -> {
+                                          EventTarget target = event.getPacket()
+                                                                    .target();
+                                          EventExclusive exclusive = exclusives.get(target);
+                                          this.executor.execute(
+                                                  "EventManager",
+                                                  () -> {
+                                                      if (exclusive != null && plugin == exclusive.handler()
+                                                                                                  .getPlugin()) {
+                                                          event.setExclusive(true);
+                                                          event.fireEvent(exclusive.handler());
+
+                                                          event.setExclusive(false);
+                                                          plugin.fireEvent(
+                                                                  event,
+                                                                  exclusive.handler()
+                                                          );
+
+                                                          if (exclusive.counts()
+                                                                       .set(exclusive.counts()
+                                                                                     .get() - 1)
+                                                                       .get() == 0) {
+                                                              this.exclusives.remove(target);
+                                                              exclusives.remove(target);
+                                                          }
+                                                      } else {
+                                                          plugin.fireEvent(event);
+                                                      }
+                                                  }
+                                          );
+                                      })
             );
         }
     }
