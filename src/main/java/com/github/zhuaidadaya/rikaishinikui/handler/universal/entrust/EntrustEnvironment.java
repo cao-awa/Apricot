@@ -346,13 +346,13 @@ public class EntrustEnvironment {
     /**
      * Cast an object.
      *
-     * @param target Cast target type
+     * @param target Cast target
      * @param <T> Cast type
-     * @return Cast object
+     * @return Target type or null
      */
-    @NotNull
+    @Nullable
     public static <T> T cast(@NotNull Object target) {
-        return (T) target;
+        return trys(() -> (T) target);
     }
 
     /**
