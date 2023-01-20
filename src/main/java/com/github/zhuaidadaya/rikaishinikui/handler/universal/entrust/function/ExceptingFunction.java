@@ -1,5 +1,8 @@
 package com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.function;
 
+import com.github.cao.awa.apricot.anntations.*;
+
+@Stable
 @FunctionalInterface
 public interface ExceptingFunction<T, R> {
     /**

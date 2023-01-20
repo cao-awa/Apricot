@@ -1,5 +1,7 @@
 package com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.function;
 
+import com.github.cao.awa.apricot.anntations.*;
+
 import java.io.*;
 import java.util.*;
 
@@ -17,6 +19,7 @@ import java.util.*;
  *
  * @since 1.8
  */
+@Stable
 @FunctionalInterface
 public interface ExceptingConsumer<T> extends Serializable {
 

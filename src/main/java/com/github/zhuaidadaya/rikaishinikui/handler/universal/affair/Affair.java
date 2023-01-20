@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.util.collection.*;
 
 import java.util.*;
 
+
 public class Affair {
     private final List<Runnable> actions = ApricotCollectionFactor.newLinkedList();
 

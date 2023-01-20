@@ -36,7 +36,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void trys(ExceptingTemporary action) {
+    public static void trys(ExceptingRunnable action) {
         try {
             action.apply();
         } catch (Exception ignored) {
@@ -56,7 +56,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void trys(ExceptingTemporary action, Consumer<Exception> whenException) {
+    public static void trys(ExceptingRunnable action, Consumer<Exception> whenException) {
         try {
             action.apply();
         } catch (Exception e) {
@@ -170,7 +170,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void trys(ExceptingTemporary action, ExceptingTemporary whenException) {
+    public static void trys(ExceptingRunnable action, ExceptingRunnable whenException) {
         try {
             action.apply();
         } catch (Exception e) {
@@ -212,7 +212,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void equals(Object source, Object target, ExceptingTemporary action) {
+    public static void equals(Object source, Object target, ExceptingRunnable action) {
         if (Objects.equals(
                 source,
                 target
@@ -235,7 +235,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void equals(Object source, Object target, ExceptingTemporary action, ExceptingTemporary orElse) {
+    public static void equals(Object source, Object target, ExceptingRunnable action, ExceptingRunnable orElse) {
         if (Objects.equals(
                 source,
                 target
@@ -262,7 +262,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void equals(Object source, Object target1, ExceptingTemporary action1, Object target2, ExceptingTemporary action2) {
+    public static void equals(Object source, Object target1, ExceptingRunnable action1, Object target2, ExceptingRunnable action2) {
         if (Objects.equals(
                 source,
                 target1
@@ -294,7 +294,7 @@ public class EntrustEnvironment {
      * @author cao_awa
      * @since 1.0.0
      */
-    public static void equals(Object source, Object target1, ExceptingTemporary action1, Object target2, ExceptingTemporary action2, ExceptingTemporary orElse) {
+    public static void equals(Object source, Object target1, ExceptingRunnable action1, Object target2, ExceptingRunnable action2, ExceptingRunnable orElse) {
         if (Objects.equals(
                 source,
                 target1
@@ -366,8 +366,8 @@ public class EntrustEnvironment {
      * @since 1.0.0
      */
     @NotNull
-    public static Thread thread(Temporary action) {
-        return new Thread(action::apply);
+    public static Thread thread(Runnable action) {
+        return new Thread(action::run);
     }
 
 //    /**

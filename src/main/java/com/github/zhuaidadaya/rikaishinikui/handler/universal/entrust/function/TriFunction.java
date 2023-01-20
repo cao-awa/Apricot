@@ -1,8 +1,11 @@
 package com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.function;
 
+import com.github.cao.awa.apricot.anntations.*;
+
 import java.util.*;
 import java.util.function.*;
 
+@Stable
 public interface TriFunction<A, B, C, R> {
     /**
      * Applies this function to the given arguments.

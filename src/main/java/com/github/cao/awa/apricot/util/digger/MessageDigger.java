@@ -1,9 +1,12 @@
 package com.github.cao.awa.apricot.util.digger;
 
+import com.github.cao.awa.apricot.anntations.*;
+
 import java.io.*;
 import java.nio.charset.*;
 import java.security.*;
 
+@Stable
 public class MessageDigger {
     public static String digest(String message, DigestAlgorithm sha) throws NoSuchAlgorithmException {
         MessageDigest messageDigest = MessageDigest.getInstance(sha.instanceName());

@@ -1,7 +1,10 @@
 package com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle;
 
+import com.github.cao.awa.apricot.anntations.*;
+
 import java.util.function.*;
 
+@Stable
 public final class Receptacle<T> {
     private T target;
 
