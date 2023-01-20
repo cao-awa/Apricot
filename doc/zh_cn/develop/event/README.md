@@ -32,7 +32,7 @@ public class NameOfHandler extends XxxEventHandler {
 }
 ```
 
-以下是提前准备好的插件的onInitialize方法(见[Plugins](/doc/zh_cn/develop/plugins/README.md))
+以下是提前准备好的插件的onInitialize方法(见[Plugins](/doc/zh_cn/develop/plugin/README.md))
 
 ```java
 @Override

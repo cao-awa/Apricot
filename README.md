@@ -6,13 +6,26 @@
 
 对于QQ，暂时仅支持 [OneBot](https://github.com/botuniverse/onebot) 协议，对 [Mirai](https://github.com/mamoe/mirai) 协议的支持还并未开始
 
-\
-杏的目的是为了高效(?)、易于开发、易于部署
+# 声明
+
+<details>
+<summary>声明</summary>
+
+## 承诺
+完全开源、无偿开发、长期支持、不删仓库、零隐私收集，零植入程序
+## 分发和使用
+修改后分发需声明原仓库，完全开源，禁止收费，可以自行署名，可以自由分发
+
+提供内容符合当地法律法规、符合意愿、禁止收费，可以自由使用
+## 所有权
+杏属于公共项目，并不属于任何人，且任何贡献者均享有杏的著作权
 
 \
-杏使用Java开发，可以部署在任何支持Java的平台上
+任何人也都可以试着修改或增删代码到杏的仓库，请见：[工作流程](doc/zh_cn/develop/working_stream/README.md)
 
-杏的各方面占用并不高，在仅使用自带插件的前提下仅需120MB内存、50MB存储空间
+\
+目前 ``` 草 ``` 和 ``` 草二号机 ``` 为项目负责人及主要贡献者
+</details>
 
 # 要求
 
@@ -44,9 +57,12 @@
 
 要为杏编写一个最简单插件只需要一个 ``` @AutoPlugin ``` 注解以及实现 ``` Plugin ```
 
-详见 **[Plugins](doc/zh_cn/develop/plugins/README.md)**
+详见 **[Plugins](doc/zh_cn/develop/plugin/README.md)**
 
 # 技术信息
+
+<details>
+<summary>技术信息</summary>
 
 ## 协议
 
@@ -88,3 +104,5 @@
 理论上来说任何使用WebSocket协议、JSON传输格式的连接，杏都可以为其提供信息处理
 
 但是需要为这些数据包单独设计反序列化Factor并将其注册
+
+</details>
