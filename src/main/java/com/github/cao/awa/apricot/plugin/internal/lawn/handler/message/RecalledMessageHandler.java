@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.lawn.handler;
+package com.github.cao.awa.apricot.plugin.internal.lawn.handler.message;
 
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.handler.message.recall.*;
@@ -7,6 +7,7 @@ import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.task.intensive.*;
 
 public class RecalledMessageHandler extends MessageRecallEventHandler {
     /**
@@ -28,5 +29,15 @@ public class RecalledMessageHandler extends MessageRecallEventHandler {
         MessageStore store = messageDatabase.getFromId(packet.getMessageId());
         store.setRecalled(true);
         messageDatabase.setFromId(packet.getMessageId(), store);
+    }
+
+    /**
+     * The messages store service is intensive IO.
+     *
+     * @return Intensive
+     */
+    @Override
+    public IntensiveType intensive() {
+        return IntensiveType.IO;
     }
 }

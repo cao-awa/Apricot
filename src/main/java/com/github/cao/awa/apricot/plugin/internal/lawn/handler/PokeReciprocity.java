@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.event.receive.poke.*;
 import com.github.cao.awa.apricot.network.packet.receive.poke.*;
 import com.github.cao.awa.apricot.network.packet.send.poke.*;
 import com.github.cao.awa.apricot.network.router.*;
+import com.github.cao.awa.apricot.task.intensive.*;
 
 public class PokeReciprocity extends PokeReceivedEventHandler {
     /**
@@ -28,5 +29,15 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
                     packet.getResponseId()
             ));
         }
+    }
+
+    /**
+     * The poke reciprocity is intensive IO.
+     *
+     * @return Intensive
+     */
+    @Override
+    public IntensiveType intensive() {
+        return IntensiveType.IO;
     }
 }

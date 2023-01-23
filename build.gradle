@@ -38,6 +38,10 @@ dependencies {
     shadow 'org.reflections:reflections:0.10.2'
 }
 
+tasks.withType(JavaCompile).all {
+    options.compilerArgs += ['--enable-preview']
+}
+
 jar {
     from("LICENSE") {
 

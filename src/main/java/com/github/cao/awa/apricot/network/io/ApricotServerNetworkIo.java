@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.network.io;
 
 import com.github.cao.awa.apricot.network.io.channel.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.thread.pool.*;
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.epoll.*;
@@ -25,11 +26,11 @@ public class ApricotServerNetworkIo {
     private static final Logger LOGGER = LogManager.getLogger("ApricotNetworkIo");
     private static final Supplier<NioEventLoopGroup> DEFAULT_CHANNEL = () -> new NioEventLoopGroup(
             0,
-            Executors.newCachedThreadPool()
+            ExecutorFactor.intensiveIo()
     );
     private static final Supplier<EpollEventLoopGroup> EPOLL_CHANNEL = () -> new EpollEventLoopGroup(
             0,
-            Executors.newCachedThreadPool()
+            ExecutorFactor.intensiveIo()
     );
 
     private final ApricotServerChannelInitializer channelInitializer;

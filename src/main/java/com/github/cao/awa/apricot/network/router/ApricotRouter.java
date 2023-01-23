@@ -157,7 +157,7 @@ public class ApricotRouter extends NetworkRouter {
      * @since 1.0.0
      */
     public void handleRequest(JSONObject request) {
-        this.getServer().execute(
+        this.getServer().intensiveIo().execute(
                 "ApricotRouter",
                 () -> handleRequest(this.getServer().createPacket(request))
         );

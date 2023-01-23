@@ -97,7 +97,8 @@ public class ApricotServer {
     private PluginManager plugins;
     private EventManager eventManager;
     private EchoManager echoManager;
-    private TaskManager taskManager;
+    private TaskManager cpuTaskManager;
+    private TaskManager ioTaskManager;
     private ApricotServerNetworkIo networkIo;
     private MessageDatabase messagesHeadOffice;
 
@@ -268,45 +269,29 @@ public class ApricotServer {
             LOGGER.warn("Server already setup, do not setup again");
             return;
         }
-        if (this.configs.getBoolean("SO_PLUGIN_THREADPOOL")) {
-            this.plugins = new PluginManager(
-                    this,
-                    Executors.newCachedThreadPool()
-            );
-        } else {
-            this.plugins = new PluginManager(
-                    this,
-                    Executors.newSingleThreadExecutor()
-            );
-        }
-
-        if (this.configs.getBoolean("SO_EVENT_USE_THREADPOOL")) {
-            this.eventManager = new EventManager(
-                    this,
-                    Executors.newCachedThreadPool(),
-                    this.plugins
-            );
-        } else {
-            this.eventManager = new EventManager(
-                    this,
-                    Executors.newSingleThreadExecutor(),
-                    this.plugins
-            );
-        }
-
-        ExecutorEntrust executor = this.configs.getBoolean("SO_TASK_USE_THREADPOOL") ?
-                                   new ExecutorEntrust(Executors.newCachedThreadPool()) :
-                                   new ExecutorEntrust(Executors.newSingleThreadExecutor());
-        if (this.configs.getBoolean("SO_ECHO_USE_THREADPOOL")) {
-            this.echoManager = new EchoManager(Executors.newCachedThreadPool());
-        } else {
-            this.echoManager = new EchoManager(Executors.newSingleThreadExecutor());
-        }
-
-        this.taskManager = new TaskManager(
-                executor,
-                new ExecutorEntrust(Executors.newScheduledThreadPool(4))
+        this.plugins = new PluginManager(
+                this,
+                ExecutorFactor.intensiveCpu()
         );
+
+        this.eventManager = new EventManager(
+                this,
+                ExecutorFactor.intensiveIo(),
+                this.plugins
+        );
+
+        this.echoManager = new EchoManager(ExecutorFactor.intensiveIo());
+
+        this.cpuTaskManager = new TaskManager(
+                new ExecutorEntrust(ExecutorFactor.intensiveCpu()),
+                new ExecutorEntrust(ExecutorFactor.scheduled(4))
+        );
+
+        this.ioTaskManager = new TaskManager(
+                new ExecutorEntrust(ExecutorFactor.intensiveIo()),
+                new ExecutorEntrust(ExecutorFactor.scheduled(4))
+        );
+
     }
 
     public void setupConfig() {
@@ -319,28 +304,12 @@ public class ApricotServer {
                     true
             )
                     .setDefault(
-                            "SO_EVENT_USE_THREADPOOL",
-                            true
-                    )
-                    .setDefault(
-                            "SO_TASK_USE_THREADPOOL",
-                            true
-                    )
-                    .setDefault(
-                            "SO_ECHO_USE_THREADPOOL",
-                            true
-                    )
-                    .setDefault(
                             "TRANSPORT_TYPE",
                             "epoll"
                     )
                     .setDefault(
                             "SO_ASYNC_PLUGIN",
                             false
-                    )
-                    .setDefault(
-                            "SO_PLUGIN_THREADPOOL",
-                            true
                     )
                     .setDefault(
                             "SERVER_PORT",
@@ -434,26 +403,24 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        execute(
-                "ApricotNetwork",
-                () -> EntrustEnvironment.trys(
-                        () -> this.networkIo.start(configs.getInteger("SERVER_PORT")),
-                        ex -> {
-                            LOGGER.error(
-                                    "Apricot network failed to startup",
-                                    ex
-                            );
-                            shutdown();
-                        }
-                )
-        );
+        this.intensiveIo()
+            .execute(
+                    "ApricotNetwork",
+                    () -> EntrustEnvironment.trys(
+                            () -> this.networkIo.start(configs.getInteger("SERVER_PORT")),
+                            ex -> {
+                                LOGGER.error(
+                                        "Apricot network failed to startup",
+                                        ex
+                                );
+                                shutdown();
+                            }
+                    )
+            );
     }
 
-    public void execute(String entrust, Runnable runnable) {
-        this.taskManager.execute(
-                entrust,
-                runnable
-        );
+    public TaskManager intensiveIo() {
+        return this.ioTaskManager;
     }
 
     public synchronized void shutdown() {
@@ -469,8 +436,19 @@ public class ApricotServer {
         }
     }
 
+    public TaskManager intensiveCpu() {
+        return this.cpuTaskManager;
+    }
+
+    public void execute(String entrust, Runnable runnable) {
+        this.cpuTaskManager.execute(
+                entrust,
+                runnable
+        );
+    }
+
     public <T> CompletableFuture<T> future(Supplier<T> runnable) {
-        return this.taskManager.future(runnable);
+        return this.cpuTaskManager.future(runnable);
     }
 
     public MessageDatabase getMessagesHeadOffice() {
@@ -495,7 +473,7 @@ public class ApricotServer {
     }
 
     public void schedule(String entrust, long delay, TimeUnit unit, Runnable runnable) {
-        this.taskManager.schedule(
+        this.cpuTaskManager.schedule(
                 entrust,
                 delay,
                 unit,
@@ -504,7 +482,7 @@ public class ApricotServer {
     }
 
     public void schedule(String entrust, long delay, long interval, TimeUnit unit, Runnable runnable) {
-        this.taskManager.schedule(
+        this.cpuTaskManager.schedule(
                 entrust,
                 delay,
                 interval,

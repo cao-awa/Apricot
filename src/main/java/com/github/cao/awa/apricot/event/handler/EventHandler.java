@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.event.handler;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.target.*;
+import com.github.cao.awa.apricot.task.intensive.*;
 
 public abstract class EventHandler<T extends Event<?>> {
     private Plugin plugin;
@@ -37,5 +38,9 @@ public abstract class EventHandler<T extends Event<?>> {
 
     public boolean compulsory() {
         return this instanceof Compulsory;
+    }
+
+    public IntensiveType intensive() {
+        return IntensiveType.CPU;
     }
 }

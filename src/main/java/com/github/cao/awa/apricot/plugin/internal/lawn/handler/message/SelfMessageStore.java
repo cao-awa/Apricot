@@ -7,6 +7,7 @@ import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.task.intensive.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 
@@ -56,5 +57,15 @@ public class SelfMessageStore extends MessageSentEventHandler {
                       );
                   }
               });
+    }
+
+    /**
+     * The messages store service is intensive IO.
+     *
+     * @return Intensive
+     */
+    @Override
+    public IntensiveType intensive() {
+        return IntensiveType.IO;
     }
 }

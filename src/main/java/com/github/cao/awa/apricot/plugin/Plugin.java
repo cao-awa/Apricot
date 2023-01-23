@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.plugin.requirement.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.target.*;
+import com.github.cao.awa.apricot.task.intensive.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.jetbrains.annotations.*;
@@ -133,6 +134,7 @@ public abstract class Plugin implements Comparable<Plugin> {
                                   .target();
         event.pipeline()
              .forEach(type -> this.getServer()
+                                  .intensiveIo()
                                   .execute(
                                           getName(),
                                           () -> EntrustEnvironment.notNull(
@@ -145,7 +147,17 @@ public abstract class Plugin implements Comparable<Plugin> {
                                                           valid -> EntrustEnvironment.operation(
                                                                   valid.filter(handler -> handler.accept(target)),
                                                                   accepted -> accepted.forEach(handler -> EntrustEnvironment.trys(
-                                                                          () -> event.fireEvent(handler),
+                                                                          () -> EntrustEnvironment.operation(
+                                                                                  handler.intensive() == IntensiveType.CPU ?
+                                                                                  this.getServer()
+                                                                                      .intensiveCpu() :
+                                                                                  this.getServer()
+                                                                                      .intensiveIo(),
+                                                                                  manager -> manager.execute(
+                                                                                          getName(),
+                                                                                          () -> event.fireEvent(handler)
+                                                                                  )
+                                                                          ),
                                                                           handler::onException
                                                                   ))
                                                           )
