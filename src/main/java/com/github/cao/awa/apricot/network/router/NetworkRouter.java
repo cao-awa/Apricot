@@ -8,7 +8,7 @@ import org.jetbrains.annotations.*;
 public abstract class NetworkRouter extends SimpleChannelInboundHandler<WebSocketFrame> {
     private final @NotNull ApricotServer server;
 
-    public ApricotServer getServer() {
+    public @NotNull ApricotServer getServer() {
         return this.server;
     }
 

@@ -27,6 +27,7 @@ public class ApricotRouter extends NetworkRouter {
     //    private final Set<ReadonlyPacket> broadcasts = ApricotCollectionFactor.newHashSet();
     private ChannelHandlerContext context;
     private Channel channel;
+    private static final int LIMIT_OF_QQ_CONTENT = 2430 * 2 + 4096;
 
     public ApricotRouter(@NotNull ApricotServer server) {
         super(server);
@@ -114,7 +115,7 @@ public class ApricotRouter extends NetworkRouter {
                     this.stitching.append(textFrame.text());
                     LOGGER.debug("Handling multi fragment packet");
                 } else {
-                    LOGGER.warn("Occurs unexpected fragment appended");
+                    LOGGER.warn("Occurs unexpected fragment appends");
                 }
             }
         } else if (frame instanceof ContinuationWebSocketFrame continuationFrame) {
@@ -129,9 +130,13 @@ public class ApricotRouter extends NetworkRouter {
                 handleFrame(new TextWebSocketFrame(this.stitching.toString()));
                 // Let stitching clear.
                 this.stitching.setLength(0);
+            } else if (this.stitching.length() > LIMIT_OF_QQ_CONTENT) {
+                // Reset largest packet
+                disconnect("Packet too large");
             }
         } else {
             LOGGER.warn("Occurs unexpected fragment appender received");
+            this.stitching.setLength(0);
         }
     }
 
