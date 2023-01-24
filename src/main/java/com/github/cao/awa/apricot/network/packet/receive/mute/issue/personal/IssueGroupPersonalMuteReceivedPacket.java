@@ -1,10 +1,10 @@
 package com.github.cao.awa.apricot.network.packet.receive.mute.issue.personal;
 
 import com.github.cao.awa.apricot.event.receive.mute.issue.personal.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.receive.mute.issue.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 public class IssueGroupPersonalMuteReceivedPacket extends IssueGroupMuteReceivedPacket {
     private final long botId;

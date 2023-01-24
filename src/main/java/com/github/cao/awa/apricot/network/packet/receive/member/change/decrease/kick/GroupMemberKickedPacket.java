@@ -1,10 +1,10 @@
 package com.github.cao.awa.apricot.network.packet.receive.member.change.decrease.kick;
 
 import com.github.cao.awa.apricot.event.receive.member.change.decrease.kick.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.receive.member.change.decrease.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 public class GroupMemberKickedPacket extends GroupMemberDecreasedPacket {
     private final long operatorId;

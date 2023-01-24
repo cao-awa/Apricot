@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.config;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
@@ -11,10 +12,11 @@ import java.util.function.*;
 
 /**
  * Configuration readonly, changes will temporally apply.
- * Will not rewrite to file.
+ * Unable rewrite to file.
  *
  * @author cao_awa
  */
+@Stable
 public class Configure {
     private static final @NotNull Logger LOGGER = LogManager.getLogger("Configure");
     private final @NotNull Map<String, Map<String, String>> warning = ApricotCollectionFactor.newHashMap();

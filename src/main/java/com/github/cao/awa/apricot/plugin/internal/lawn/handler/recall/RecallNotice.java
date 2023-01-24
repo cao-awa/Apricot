@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.handler.message.recall.*;
 import com.github.cao.awa.apricot.event.receive.message.recall.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.store.*;
@@ -11,7 +12,6 @@ import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 import com.github.cao.awa.apricot.util.io.*;
 
 import java.io.*;

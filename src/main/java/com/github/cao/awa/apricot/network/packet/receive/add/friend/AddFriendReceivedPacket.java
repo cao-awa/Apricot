@@ -1,11 +1,11 @@
 package com.github.cao.awa.apricot.network.packet.receive.add.friend;
 
 import com.github.cao.awa.apricot.event.receive.add.friend.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.send.add.friend.approve.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 import org.jetbrains.annotations.*;
 
 public class AddFriendReceivedPacket extends ReadonlyPacket {

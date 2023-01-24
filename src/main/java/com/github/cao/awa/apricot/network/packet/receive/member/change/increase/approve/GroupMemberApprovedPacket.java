@@ -1,10 +1,10 @@
 package com.github.cao.awa.apricot.network.packet.receive.member.change.increase.approve;
 
 import com.github.cao.awa.apricot.event.receive.member.change.increase.approve.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.receive.member.change.increase.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 public class GroupMemberApprovedPacket extends GroupMemberIncreasedPacket {
     private final long operatorId;

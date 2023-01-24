@@ -2,10 +2,10 @@ package com.github.cao.awa.apricot.network.packet.receive.invalid;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.receive.invalid.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 public class InvalidDataReceivedPacket extends ReadonlyPacket {
     private final JSONObject request;

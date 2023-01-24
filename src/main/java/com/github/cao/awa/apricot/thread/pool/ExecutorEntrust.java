@@ -1,11 +1,13 @@
 package com.github.cao.awa.apricot.thread.pool;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.util.thread.*;
 import com.github.cao.awa.apricot.util.time.*;
 import org.jetbrains.annotations.*;
 
 import java.util.concurrent.*;
 
+@Stable
 public final class ExecutorEntrust implements Executor {
     private static final @NotNull ThreadLocal<String> last = ThreadLocal.withInitial(() -> "");
     private final @NotNull Executor executor;

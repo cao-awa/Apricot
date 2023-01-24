@@ -2,11 +2,11 @@ package com.github.cao.awa.apricot.network.packet.receive.add.group;
 
 import com.github.cao.awa.apricot.approval.group.*;
 import com.github.cao.awa.apricot.event.receive.add.group.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.send.add.group.approve.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 import org.jetbrains.annotations.*;
 
 public class AddGroupReceivedPacket extends ReadonlyPacket {

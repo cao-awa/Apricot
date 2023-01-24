@@ -227,7 +227,7 @@ public class ApricotServer {
     }
 
     private void printBanner() throws IOException {
-        Banner banner = new Banner(IOUtil.read(ResourcesLoader.getResource("apricot.banner")));
+        Banner banner = new Banner(IOUtil.read(ResourcesLoader.get("apricot.banner")));
         banner.forEach(line -> {
             LOGGER.info(line);
         });
@@ -345,7 +345,7 @@ public class ApricotServer {
                     EntrustEnvironment.trys(() -> config.getParentFile()
                                                         .mkdirs());
 
-                    receptacle.set(IOUtil.read(ResourcesLoader.getResource("default-config.conf")));
+                    receptacle.set(IOUtil.read(ResourcesLoader.get("default-config.conf")));
 
                     EntrustEnvironment.operation(
                             new BufferedWriter(new FileWriter(config)),

@@ -1,5 +1,7 @@
 package com.github.cao.awa.apricot.mathematic.base;
 
+import com.github.cao.awa.apricot.anntations.*;
+
 /**
  * An util using to convert number and bytes.
  *
@@ -7,6 +9,7 @@ package com.github.cao.awa.apricot.mathematic.base;
  * @author cao_awa
  * @since 1.0.0
  */
+@Stable
 public class Base256 {
     /**
      * Convert a long to 8 bytes.

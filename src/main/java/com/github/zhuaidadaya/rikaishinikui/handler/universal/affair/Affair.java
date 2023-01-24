@@ -1,10 +1,11 @@
 package com.github.zhuaidadaya.rikaishinikui.handler.universal.affair;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.util.collection.*;
 
 import java.util.*;
 
-
+@Stable
 public class Affair {
     private final List<Runnable> actions = ApricotCollectionFactor.newLinkedList();
 

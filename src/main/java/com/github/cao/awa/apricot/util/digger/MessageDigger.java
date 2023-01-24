@@ -8,23 +8,17 @@ import java.security.*;
 
 @Stable
 public class MessageDigger {
+    private static final int BUF_SIZE = 16384;
+
     public static String digest(String message, DigestAlgorithm sha) throws NoSuchAlgorithmException {
-        MessageDigest messageDigest = MessageDigest.getInstance(sha.instanceName());
-        messageDigest.update(message.getBytes(StandardCharsets.UTF_8));
+        MessageDigest digest = MessageDigest.getInstance(sha.instanceName());
+        digest.update(message.getBytes(StandardCharsets.UTF_8));
         StringBuilder result = new StringBuilder();
-        for (byte b : messageDigest.digest()) {
-            String hexString = Integer.toHexString(b & 0xFF);
-            if (2 > hexString.length()) {
-                result.append(0);
-            }
-            result.append(hexString);
-        }
+        digest(digest, result);
         return result.toString();
     }
 
     public static String digestFile(File file, DigestAlgorithm sha) throws Exception {
-        int bufSize = 16384;
-
         if (! file.isFile()) {
             return "0";
         }
@@ -34,45 +28,48 @@ public class MessageDigger {
                 "r"
         );
 
-        MessageDigest messageDigest = MessageDigest.getInstance(sha.instanceName());
+        MessageDigest digest = MessageDigest.getInstance(sha.instanceName());
 
-        byte[] buffer = new byte[bufSize];
+        byte[] buffer = new byte[BUF_SIZE];
 
         long read = 0;
 
         long offset = accessFile.length();
-        int unitsize;
+        int length;
         while (read < offset) {
-            unitsize = (int) (((offset - read) < bufSize) ? (offset - read) : bufSize);
+            length = (int) (offset - read < BUF_SIZE ? offset - read : BUF_SIZE);
             accessFile.read(
                     buffer,
                     0,
-                    unitsize
+                    length
             );
 
-            messageDigest.update(
+            digest.update(
                     buffer,
                     0,
-                    unitsize
+                    length
             );
 
-            read += unitsize;
+            read += length;
         }
 
         accessFile.close();
 
         StringBuilder result = new StringBuilder();
 
-        String hexString;
-        for (byte b : messageDigest.digest()) {
-            hexString = Integer.toHexString(b & 255);
-            if (hexString.length() < 2) {
-                result.append(0);
-            }
-            result.append(hexString);
-        }
+        digest(digest, result);
 
         return result.toString();
+    }
+
+    private static void digest(MessageDigest digest, StringBuilder result) {
+        for (byte b : digest.digest()) {
+            String hex = Integer.toHexString(b & 0xFF);
+            if (hex.length() < 2) {
+                result.append(0);
+            }
+            result.append(hex);
+        }
     }
 
     public enum Sha1 implements Sha {

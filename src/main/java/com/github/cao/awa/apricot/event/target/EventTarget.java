@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.target;
+package com.github.cao.awa.apricot.event.target;
 
 import com.github.cao.awa.apricot.anntations.*;
 

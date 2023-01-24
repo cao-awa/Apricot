@@ -1,8 +1,8 @@
 package com.github.cao.awa.apricot.network.packet;
 
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 /**
  * Deserialized packet, unable to rewrite.

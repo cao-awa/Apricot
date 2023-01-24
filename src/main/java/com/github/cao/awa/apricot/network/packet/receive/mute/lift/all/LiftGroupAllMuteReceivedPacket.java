@@ -1,10 +1,10 @@
 package com.github.cao.awa.apricot.network.packet.receive.mute.lift.all;
 
 import com.github.cao.awa.apricot.event.receive.mute.lift.all.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.receive.mute.lift.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 public class LiftGroupAllMuteReceivedPacket extends LiftGroupMuteReceivedPacket {
     private final long botId;

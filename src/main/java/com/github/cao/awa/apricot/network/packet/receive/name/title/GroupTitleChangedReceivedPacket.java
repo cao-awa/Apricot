@@ -2,10 +2,10 @@ package com.github.cao.awa.apricot.network.packet.receive.name.title;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.event.receive.name.title.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.target.*;
 
 /**
  * The name card change maybe not real time.<br>
