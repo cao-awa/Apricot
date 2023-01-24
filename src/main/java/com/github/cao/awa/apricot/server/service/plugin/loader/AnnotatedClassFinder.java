@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.server.service.plugin.loader;
 
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.io.*;
+import org.jetbrains.annotations.*;
 
 import java.io.*;
 import java.lang.annotation.*;
@@ -10,23 +11,23 @@ import java.util.jar.*;
 
 public class AnnotatedClassFinder extends ClassLoader {
     private final Class<? extends Annotation> targetAnnotation;
-    private final List<File> files = ApricotCollectionFactor.newArrayList();
+    private final List<File> jars = ApricotCollectionFactor.newArrayList();
     private final Map<String, Class<?>> classes = ApricotCollectionFactor.newHashMap();
 
-    public AnnotatedClassFinder(File file, Class<? extends Annotation> targetAnnotation) {
+    public AnnotatedClassFinder(@NotNull File file, Class<? extends Annotation> targetAnnotation) {
         super(AnnotatedClassFinder.class.getClassLoader());
         this.targetAnnotation = targetAnnotation;
         if (file.isFile()) {
-            this.files.add(file);
+            this.jars.add(file);
         } else {
-            this.files.addAll(Arrays.asList(Objects.requireNonNull(file.listFiles())));
+            this.jars.addAll(Arrays.asList(Objects.requireNonNull(file.listFiles())));
         }
         this.load();
     }
 
     public void load() {
         try {
-            for (File file : this.files) {
+            for (File file : this.jars) {
                 JarFile jar = new JarFile(file);
                 Iterator<JarEntry> iterator = jar.entries()
                                                  .asIterator();
@@ -37,11 +38,11 @@ public class AnnotatedClassFinder extends ClassLoader {
                                 jar,
                                 next
                         );
-                    } catch (Throwable e) {
+                    } catch (Throwable ignored) {
                     }
                 }
             }
-        } catch (Exception e) {
+        } catch (Exception ignored) {
         }
     }
 
@@ -83,7 +84,7 @@ public class AnnotatedClassFinder extends ClassLoader {
                     );
                     try {
                         Class.forName(className, true, this);
-                    } catch (ClassNotFoundException e) {
+                    } catch (ClassNotFoundException ignored) {
                     }
                 } else {
                     result = target;
@@ -102,13 +103,13 @@ public class AnnotatedClassFinder extends ClassLoader {
     public Class<?> findClass(String className) {
         try {
             return findSystemClass(className);
-        } catch (Exception e) {
+        } catch (Exception ignored) {
 
         }
 
         try {
             return Class.forName(className);
-        } catch (ClassNotFoundException e) {
+        } catch (ClassNotFoundException ignored) {
 
         }
         return this.getClasses().get(className);

@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.server;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.anntations.*;
+import com.github.cao.awa.apricot.banner.*;
 import com.github.cao.awa.apricot.config.*;
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.database.simple.serial.*;
@@ -79,7 +80,8 @@ public class ApricotServer {
     public static final String DATABASE_PATH = "databases/";
     public static final String MESSAGE_DATABASE_PATH = DATABASE_PATH + "messages/head_office/";
     public static final String RESOURCE_DATABASE_PATH = DATABASE_PATH + "resources/";
-    public static final String VERSION = "1.0.0";
+    public static final String VERSION_SUFFIX = "-preview";
+    public static final String VERSION = "1.0.0" + VERSION_SUFFIX;
     private static final Logger LOGGER = LogManager.getLogger("BotServer");
     private final AtomicLong startupPerformance = new AtomicLong();
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
@@ -210,14 +212,25 @@ public class ApricotServer {
 
     public void startup() throws IOException {
         startupPerformance.set(TimeUtil.millions());
-        LOGGER.info("Startup apricot bot server");
+        LOGGER.info("Startup apricot {}", VERSION);
         setupDirectories();
+        printBanner();
+        if (VERSION.endsWith("-preview")) {
+            LOGGER.warn("The apricot in {} is a preview version, not stabled, please do careful to bugs", VERSION);
+        }
         setupConfig();
         setupServer();
         setupPlugins();
         setupDatabase();
         setupNetwork();
         this.active = true;
+    }
+
+    private void printBanner() throws IOException {
+        Banner banner = new Banner(IOUtil.read(ResourcesLoader.getResource("apricot.banner")));
+        banner.forEach(line -> {
+            LOGGER.info(line);
+        });
     }
 
     public void setupDatabase() throws IOException {
@@ -271,7 +284,7 @@ public class ApricotServer {
         }
         this.plugins = new PluginManager(
                 this,
-                ExecutorFactor.intensiveCpu()
+                ExecutorFactor.intensiveIo()
         );
 
         this.eventManager = new EventManager(
@@ -357,7 +370,7 @@ public class ApricotServer {
             LOGGER.warn("Network already setup, do not setup again");
             return;
         }
-        LOGGER.info("Startup apricot bot server network");
+        LOGGER.info("Startup apricot network");
         // Setup packet deserializers
         EntrustEnvironment.operation(
                 this.packetDeserializers,
@@ -426,12 +439,12 @@ public class ApricotServer {
     public synchronized void shutdown() {
         if (this.active) {
             this.active = false;
-            LOGGER.info("Apricot bot server shutting down");
+            LOGGER.info("Apricot shutting down");
             this.networkIo.shutdown();
             this.eventManager.shutdown();
             this.echoManager.shutdown();
             this.plugins.shutdown();
-            LOGGER.info("Apricot bot server is shutdown");
+            LOGGER.info("Apricot has been shutdown");
             System.exit(0);
         }
     }
