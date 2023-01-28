@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.database.*;
 import com.github.cao.awa.apricot.mathematic.base.*;
 import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.iq80.leveldb.*;
 
 import java.nio.charset.*;
@@ -51,10 +52,10 @@ public class MessageDatabase extends ApricotDatabase<Long, MessageStore> {
 
     @Override
     public MessageStore get(Long key) {
-        return MessageStore.fromBin(
+        return EntrustEnvironment.trys(() -> MessageStore.fromBin(
                 this.server,
                 this.head.get(Base256.longToBuf(key))
-        );
+        ));
     }
 
     @Override

@@ -272,8 +272,8 @@ public class ApricotServer {
         }
         LOGGER.info("Loading internal plugins");
         this.eventBus = new LawnBus();
-        this.plugins.register(this.eventBus);
         this.plugins.register(new Lawn());
+        this.plugins.register(this.eventBus);
         this.plugins.loadPlugins();
     }
 

@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.example;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
+import com.github.cao.awa.apricot.plugin.internal.example.disinformation.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -23,6 +24,7 @@ public class ExamplePlugin extends Plugin {
     @Override
     public void onInitialize() {
         //        registerHandler(new DrawTest());
+        registerHandler(new Disinformation());
     }
 
     @Override

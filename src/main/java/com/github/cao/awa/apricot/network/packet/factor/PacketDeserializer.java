@@ -78,7 +78,6 @@ public class PacketDeserializer {
                     request
             );
         } catch (Exception e) {
-            e.printStackTrace();
             return new InvalidDataReceivedPacket(
                     request,
                     true
