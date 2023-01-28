@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot;
+package com.github.cao.awa.apricot.server.bootstrap;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.server.*;

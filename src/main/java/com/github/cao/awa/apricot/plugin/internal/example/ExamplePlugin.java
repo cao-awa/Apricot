@@ -22,6 +22,7 @@ public class ExamplePlugin extends Plugin {
 
     @Override
     public void onInitialize() {
+        //        registerHandler(new DrawTest());
     }
 
     @Override
