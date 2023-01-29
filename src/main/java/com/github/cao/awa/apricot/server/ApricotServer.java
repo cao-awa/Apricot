@@ -11,6 +11,7 @@ import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.at.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.face.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.image.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.poke.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.replay.*;
@@ -212,11 +213,17 @@ public class ApricotServer {
 
     public void startup() throws IOException {
         startupPerformance.set(TimeUtil.millions());
-        LOGGER.info("Startup apricot {}", VERSION);
+        LOGGER.info(
+                "Startup apricot {}",
+                VERSION
+        );
         setupDirectories();
         printBanner();
         if (VERSION.endsWith("-preview")) {
-            LOGGER.warn("The apricot in {} is a preview version, not stabled, please do careful to bugs", VERSION);
+            LOGGER.warn(
+                    "The apricot in {} is a preview version, not stabled, please do careful to bugs",
+                    VERSION
+            );
         }
         setupConfig();
         setupServer();
@@ -408,10 +415,16 @@ public class ApricotServer {
         );
 
         // Setup CQ deserializers
-        this.cqDeserializers.register(new CqImageFactor());
-        this.cqDeserializers.register(new CqReplyFactor());
-        this.cqDeserializers.register(new CqAtFactor());
-        this.cqDeserializers.register(new CqPokeFactor());
+        EntrustEnvironment.operation(
+                this.cqDeserializers,
+                deserializer -> {
+                    deserializer.register(new CqReplyFactor());
+                    deserializer.register(new CqAtFactor());
+                    deserializer.register(new CqPokeFactor());
+                    deserializer.register(new CqFaceFactor());
+                    deserializer.register(new CqImageFactor());
+                }
+        );
 
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);

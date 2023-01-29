@@ -25,6 +25,7 @@ public class ExamplePlugin extends Plugin {
     public void onInitialize() {
         //        registerHandler(new DrawTest());
         registerHandler(new Disinformation());
+        registerHandler(new CqCodeReproduce());
     }
 
     @Override

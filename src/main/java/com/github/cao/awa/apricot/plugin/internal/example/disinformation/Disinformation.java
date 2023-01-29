@@ -3,13 +3,13 @@ package com.github.cao.awa.apricot.plugin.internal.example.disinformation;
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.*;
-import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.util.collection.*;
+import com.github.cao.awa.apricot.util.message.*;
 import com.github.cao.awa.apricot.util.text.*;
 
 import java.util.*;
@@ -45,6 +45,8 @@ public class Disinformation extends MessageReceivedEventHandler {
             List<ForwardMessage> msgs = ApricotCollectionFactor.newArrayList();
 
             for (String arg : args) {
+                arg = MessageUtil.unescape(arg);
+
                 try {
                     int numberIndex = arg.indexOf(" ");
                     if (numberIndex == - 1) {
@@ -76,7 +78,10 @@ public class Disinformation extends MessageReceivedEventHandler {
                     DummyForwardMessage dummyMessage = new DummyForwardMessage(
                             Long.parseLong(number),
                             name,
-                            new AssembledMessage().participate(new TextMessageElement(msg))
+                            MessageUtil.process(
+                                    proxy.server(),
+                                    msg
+                            )
                     );
                     msgs.add(dummyMessage);
                 } catch (Exception e) {

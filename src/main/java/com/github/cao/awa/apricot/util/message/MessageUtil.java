@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.text.*;
+import org.jetbrains.annotations.*;
 
 import java.util.*;
 
@@ -25,16 +26,11 @@ public class MessageUtil {
         )) != - 1) {
             // Process plain text.
             if (pos > cursor) {
-                String result = stripAndTrim(
-                        server,
-                        content.substring(
-                                cursor,
-                                pos
-                        )
+                String result = content.substring(
+                        cursor,
+                        pos
                 );
-                if (result.length() > 0) {
-                    elements.add(new TextMessageElement(result));
-                }
+                elements.add(new TextMessageElement(result));
             }
             // Find cq code end.
             int endPos = content.indexOf(
@@ -90,5 +86,52 @@ public class MessageUtil {
                source.strip()
                      .trim() :
                source;
+    }
+
+    public static String unescape(@Nullable String source) {
+        if (source == null) {
+            return null;
+        }
+        return source.replace(
+                             "&amp;",
+                             "&"
+                     )
+                     .replace(
+                             "&#91;",
+                             "["
+                     )
+                     .replace(
+                             "&#93;",
+                             "]"
+                     )
+                     .replace(
+                             "&#44;",
+                             ","
+                     );
+    }
+
+    public static String escape(@Nullable String source) {
+        if (source == null) {
+            return null;
+        }
+        return source.replace(
+                             "&",
+                             "&amp;"
+                     )
+                     .replace(
+                             "[",
+                             "&#91;"
+
+                     )
+                     .replace(
+                             "]",
+                             "&#93;"
+
+                     )
+                     .replace(
+                             ",",
+                             "&#44;"
+
+                     );
     }
 }
