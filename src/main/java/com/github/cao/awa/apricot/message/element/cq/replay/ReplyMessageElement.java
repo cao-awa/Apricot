@@ -3,13 +3,13 @@ package com.github.cao.awa.apricot.message.element.cq.replay;
 import com.github.cao.awa.apricot.message.element.*;
 
 public class ReplyMessageElement extends MessageElement {
-    private final int messageId;
+    private final long messageId;
 
-    public ReplyMessageElement(int messageId) {
+    public ReplyMessageElement(long messageId) {
         this.messageId = messageId;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

@@ -4,11 +4,9 @@ import com.github.cao.awa.apricot.message.element.*;
 
 public class PokeMessageElement extends MessageElement {
     private final long target;
-    private final long causer;
 
-    public PokeMessageElement(long target, long causer) {
+    public PokeMessageElement(long target) {
         this.target = target;
-        this.causer = causer;
     }
 
     @Override
@@ -18,11 +16,15 @@ public class PokeMessageElement extends MessageElement {
 
     @Override
     public String getShortName() {
-        return "PokeMessageElement{target=" + this.target + ",by=" + this.causer + "}";
+        return "PokeMessageElement{target=" + this.target + "}";
     }
 
     @Override
     public boolean shouldIncinerate() {
         return true;
+    }
+
+    public long getTarget() {
+        return this.target;
     }
 }

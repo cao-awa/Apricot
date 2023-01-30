@@ -11,7 +11,7 @@ public class CqReplyFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
         return new ReplyMessageElement(
-                Integer.parseInt(args.get("id"))
+                Long.parseLong(args.get("id"))
         );
     }
 

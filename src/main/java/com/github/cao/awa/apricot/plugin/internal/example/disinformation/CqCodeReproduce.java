@@ -7,6 +7,7 @@ import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.*;
+import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.message.*;
@@ -31,12 +32,22 @@ public class CqCodeReproduce extends MessageEventHandler {
 
         String plain = message.toPlainText();
 
-        if (plain.startsWith(".cq")) {
-            List<ForwardMessage> msgs = ApricotCollectionFactor.newArrayList();
+        String msg = MessageUtil.unescape(plain.substring(plain.indexOf(" ") + 1)
+                                               .strip()
+                                               .trim());
+        if (plain.startsWith(".cqs")) {
+            SendMessagePacket send = new SendMessagePacket(
+                    packet.getType(),
+                    MessageUtil.process(
+                            proxy.server(),
+                            msg
+                    ),
+                    packet.getResponseId()
+            );
 
-            String msg = MessageUtil.unescape(plain.substring(plain.indexOf(" ") + 1)
-                                                   .strip()
-                                                   .trim());
+            proxy.send(send);
+        } else if (plain.startsWith(".cq")) {
+            List<ForwardMessage> msgs = ApricotCollectionFactor.newArrayList();
 
             try {
                 DummyForwardMessage dummyMessage = new DummyForwardMessage(
