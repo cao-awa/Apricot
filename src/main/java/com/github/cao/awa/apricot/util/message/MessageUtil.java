@@ -14,11 +14,6 @@ public class MessageUtil {
         int cursor = 0;
         int pos;
 
-        content = unlw(unescape(stripAndTrim(
-                server,
-                content
-        )));
-
         List<MessageElement> elements = ApricotCollectionFactor.newArrayList();
         while ((pos = content.indexOf(
                 "[CQ:",
@@ -30,7 +25,7 @@ public class MessageUtil {
                         cursor,
                         pos
                 );
-                elements.add(new TextMessageElement(result));
+                elements.add(new TextMessageElement(unescape(result)));
             }
             // Find cq code end.
             int endPos = content.indexOf(
@@ -64,7 +59,7 @@ public class MessageUtil {
 
         // It means have CQ codes is unsupported
         if (elements.size() == 0) {
-            elements.add(new TextMessageElement(content));
+            elements.add(new TextMessageElement(unescape((content))));
         } else {
             // It means have more information can be precessed to text element
             if (cursor < content.length()) {
@@ -73,12 +68,18 @@ public class MessageUtil {
                         server,
                         source
                 );
-                elements.add(result.length() > 0 ? new TextMessageElement(result) : new TextMessageElement(source));
+                elements.add(result.length() > 0 ?
+                             new TextMessageElement(unescape((result))) :
+                             new TextMessageElement(unescape(source)));
             }
         }
 
         // Let all prepared element participate in message
         return new AssembledMessage(elements);
+    }
+
+    private enum Status {
+        CQ, PLAINS
     }
 
     public static String stripAndTrim(ApricotServer server, String source) {
