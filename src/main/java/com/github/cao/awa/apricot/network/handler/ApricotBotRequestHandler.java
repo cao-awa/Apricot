@@ -1,8 +1,10 @@
 package com.github.cao.awa.apricot.network.handler;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.packet.*;
 
+@Stable
 public class ApricotBotRequestHandler extends RequestHandler {
     public ApricotBotRequestHandler(ApricotUniqueDispenser dispenser) {
         super(dispenser);

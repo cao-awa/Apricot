@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.network.dispenser;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.*;
@@ -13,6 +14,7 @@ import org.apache.logging.log4j.*;
 import java.util.concurrent.*;
 import java.util.function.*;
 
+@Stable
 public class ApricotUniqueDispenser {
     private static final Logger LOGGER = LogManager.getLogger("ApricotDispenser");
     private static final Consumer<EchoResultPacket> DO_NO_HANDLE_ECHO = result -> {

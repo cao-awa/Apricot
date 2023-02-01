@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.io.channel;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
@@ -14,6 +15,7 @@ import io.netty.handler.codec.http.websocketx.extensions.compression.*;
  * @author 草二号机
  * @since 1.0.0
  */
+@Stable
 public class ApricotServerChannelInitializer extends ChannelInitializer<SocketChannel> {
     private final ApricotServer server;
 

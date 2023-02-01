@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.message;
 
 import com.github.cao.awa.apricot.anntations.*;
 
+@Stable
 public enum MessageType {
     PRIVATE("private"), GROUP("group"), @Unsupported GUILD("guild");
 

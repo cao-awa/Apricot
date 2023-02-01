@@ -1,11 +1,14 @@
 package com.github.cao.awa.apricot.information.compressor;
 
+import com.github.cao.awa.apricot.anntations.*;
+
 /**
  * Information compress.
  *
  * @author cao_awa
  * @since 1.0.0
  */
+@Stable
 public interface InformationCompressor {
     byte[] EMPTY_BYTES = new byte[0];
 

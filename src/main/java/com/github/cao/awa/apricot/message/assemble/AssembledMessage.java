@@ -1,14 +1,17 @@
 package com.github.cao.awa.apricot.message.assemble;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.carve.*;
 import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
 import java.util.function.*;
 
+@Stable
 public class AssembledMessage extends Message<MessageElement, AssembledMessage> {
     private static final MessageElement EMPTY_PLAINS_TEXT = new TextMessageElement("");
     private final List<MessageElement> elements;

@@ -1,10 +1,12 @@
 package com.github.cao.awa.apricot.network.handler;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.meta.lifecycle.*;
 import org.apache.logging.log4j.*;
 
+@Stable
 public class ApricotHandshakeHandler extends RequestHandler {
     private static final Logger LOGGER = LogManager.getLogger("ApricotHandshake");
 

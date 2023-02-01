@@ -1,11 +1,13 @@
 package com.github.cao.awa.apricot.information.compressor.deflater;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.information.compressor.*;
 import com.github.cao.awa.apricot.util.io.*;
 
 import java.io.*;
 import java.util.zip.*;
 
+@Stable
 public class DeflaterCompressor implements InformationCompressor {
     public static final DeflaterCompressor INSTANCE = new DeflaterCompressor();
 

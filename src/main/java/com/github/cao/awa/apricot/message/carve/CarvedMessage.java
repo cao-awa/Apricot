@@ -1,11 +1,13 @@
 package com.github.cao.awa.apricot.message.carve;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.util.collection.*;
 
 import java.util.*;
 
+@Stable
 public class CarvedMessage<T extends MessageElement> extends Message<T, CarvedMessage<T>> {
     private final List<T> elements = ApricotCollectionFactor.newArrayList();
 

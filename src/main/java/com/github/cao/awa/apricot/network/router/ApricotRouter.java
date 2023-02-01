@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.network.router;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
@@ -19,6 +20,7 @@ import java.util.function.*;
  * @author 草二号机
  * @since 1.0.0
  */
+@Stable
 public class ApricotRouter extends NetworkRouter {
     private static final Logger LOGGER = LogManager.getLogger("ApricotRouter");
     private final @NotNull ApricotProxy proxy;
@@ -96,7 +98,6 @@ public class ApricotRouter extends NetworkRouter {
             if (frame.isFinalFragment()) {
                 // Final fragment should be direct handle.
                 handleFrame(textFrame);
-                LOGGER.debug("Handled single fragment packet");
 
                 // Aftermath for wrongly append fragment.
                 // In normally, this is redundancy plan, do not wish it be happens.
@@ -104,37 +105,37 @@ public class ApricotRouter extends NetworkRouter {
                     // Handle the wrong frame forcefully.
                     LOGGER.debug("Aftermath for wrongly append fragment");
                     handleFrame(new TextWebSocketFrame(this.stitching.toString()));
-                    // Let stitching clear.
+                    // Let stitching be clear.
                     this.stitching.setLength(0);
                 }
             } else {
                 // Not final fragment should be stitching to one.
-                // Usually the fragment stitching length must 0, else then is a wrong.
+                // Usually the fragment stitching length must 0, else then mean it is a wrong.
                 if (this.stitching.length() == 0) {
                     // Append this fragment.
                     this.stitching.append(textFrame.text());
-                    LOGGER.debug("Handling multi fragment packet");
                 } else {
+                    // Do not handle it if wrongly.
                     LOGGER.warn("Occurs unexpected fragment appends");
                 }
             }
         } else if (frame instanceof ContinuationWebSocketFrame continuationFrame) {
             // Handle the continuation fragments.
             this.stitching.append(continuationFrame.text());
-            LOGGER.debug("Fragment appended");
 
             // Let it build to a completed fragment when continuation frame is final.
             if (continuationFrame.isFinalFragment()) {
                 // Handle the completed frame.
-                LOGGER.debug("Fragment appends done");
                 handleFrame(new TextWebSocketFrame(this.stitching.toString()));
-                // Let stitching clear.
+                // Let stitching be clear.
                 this.stitching.setLength(0);
             } else if (this.stitching.length() > LIMIT_OF_QQ_CONTENT) {
                 // Reset largest packet
+                this.stitching.setLength(0);
                 disconnect("Packet too large");
             }
         } else {
+            // The frame is unsupported, do not process this.
             LOGGER.warn("Occurs unexpected fragment appender received");
             this.stitching.setLength(0);
         }

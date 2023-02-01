@@ -20,6 +20,7 @@ import java.nio.charset.*;
 import java.util.*;
 import java.util.concurrent.*;
 
+@Stable
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
     private final ApricotServer server;

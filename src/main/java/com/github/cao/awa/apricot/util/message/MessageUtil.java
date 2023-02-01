@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.util.message;
 
 import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.text.*;

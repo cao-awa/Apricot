@@ -3,7 +3,7 @@ package com.github.cao.awa.apricot.plugin.internal.example.encrypt;
 import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.assemble.*;
-import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;

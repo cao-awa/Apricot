@@ -1,8 +1,10 @@
 package com.github.cao.awa.apricot.information.compressor.lz4;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.information.compressor.*;
 import net.jpountz.lz4.*;
 
+@Stable
 public class Lz4Compressor implements InformationCompressor {
     public static final Lz4Compressor INSTANCE = new Lz4Compressor();
 

@@ -6,7 +6,7 @@ import com.github.cao.awa.apricot.event.handler.message.recall.*;
 import com.github.cao.awa.apricot.event.receive.message.recall.*;
 import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.message.assemble.*;
-import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.recall.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;

@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.message.store;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.information.compressor.deflater.*;
 import com.github.cao.awa.apricot.io.bytes.reader.*;
 import com.github.cao.awa.apricot.mathematic.base.*;
@@ -14,6 +15,7 @@ import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 import java.io.*;
 import java.nio.charset.*;
 
+@Stable
 public class MessageStore {
     private MessageType type;
     private AssembledMessage message;

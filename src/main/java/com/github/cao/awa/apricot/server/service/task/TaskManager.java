@@ -1,11 +1,13 @@
 package com.github.cao.awa.apricot.server.service.task;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.thread.pool.*;
 
 import java.util.concurrent.*;
 import java.util.function.*;
 
+@Stable
 public class TaskManager implements ConcurrentService {
     private final ExecutorEntrust executor;
     private final ExecutorEntrust scheduler;

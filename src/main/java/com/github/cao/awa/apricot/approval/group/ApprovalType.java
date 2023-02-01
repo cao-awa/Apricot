@@ -1,5 +1,8 @@
 package com.github.cao.awa.apricot.approval.group;
 
+import com.github.cao.awa.apricot.anntations.*;
+
+@Stable
 public enum ApprovalType {
     ADD("add"), INVITE("invite");
 

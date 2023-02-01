@@ -1,8 +1,11 @@
-package com.github.cao.awa.apricot.message.element;
+package com.github.cao.awa.apricot.message.element.plain.text;
 
+import com.github.cao.awa.apricot.anntations.*;
+import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.util.message.*;
 import org.jetbrains.annotations.*;
 
+@Stable
 public final class TextMessageElement extends MessageElement {
     private final @NotNull String text;
 

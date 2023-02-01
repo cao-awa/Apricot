@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.io;
 
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.io.channel.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.thread.pool.*;
@@ -22,6 +23,7 @@ import java.util.function.*;
  * @author cao_awa
  * @since 1.0.0
  */
+@Stable
 public class ApricotServerNetworkIo {
     private static final Logger LOGGER = LogManager.getLogger("ApricotNetworkIo");
     private static final Supplier<NioEventLoopGroup> DEFAULT_CHANNEL = () -> new NioEventLoopGroup(

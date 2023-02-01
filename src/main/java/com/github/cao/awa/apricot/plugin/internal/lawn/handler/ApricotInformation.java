@@ -2,7 +2,7 @@ package com.github.cao.awa.apricot.plugin.internal.lawn.handler;
 
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
-import com.github.cao.awa.apricot.message.element.*;
+import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
