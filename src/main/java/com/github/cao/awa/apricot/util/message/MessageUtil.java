@@ -78,10 +78,6 @@ public class MessageUtil {
         return new AssembledMessage(elements);
     }
 
-    private enum Status {
-        CQ, PLAINS
-    }
-
     public static String stripAndTrim(ApricotServer server, String source) {
         return server.shouldCaverMessage() ?
                source.strip()
@@ -89,10 +85,7 @@ public class MessageUtil {
                source;
     }
 
-    public static String unescape(@Nullable String source) {
-        if (source == null) {
-            return null;
-        }
+    public static String unescape(@NotNull String source) {
         return source.replace(
                              "&amp;",
                              "&"
@@ -111,20 +104,14 @@ public class MessageUtil {
                      );
     }
 
-    public static String unlw(@Nullable String source) {
-        if (source == null) {
-            return null;
-        }
+    public static String unlw(@NotNull String source) {
         return source.replace(
                 "\\n",
                 "\n"
         );
     }
 
-    public static String escape(@Nullable String source) {
-        if (source == null) {
-            return null;
-        }
+    public static String escape(@NotNull String source) {
         return source.replace(
                              "&",
                              "&amp;"
@@ -146,10 +133,7 @@ public class MessageUtil {
                      );
     }
 
-    public static String lw(@Nullable String source) {
-        if (source == null) {
-            return null;
-        }
+    public static String lw(@NotNull String source) {
         return source.replace(
                 "\n",
                 "\\n"

@@ -37,6 +37,6 @@ public class XmlMessageElement extends MessageElement {
     }
 
     public String getData() {
-        return MessageUtil.escape(this.data);
+        return this.data;
     }
 }

@@ -4,13 +4,14 @@ import com.github.cao.awa.apricot.util.message.*;
 import org.jetbrains.annotations.*;
 
 public final class TextMessageElement extends MessageElement {
-    private final @Nullable String text;
+    private final @NotNull String text;
 
-    public TextMessageElement(@Nullable String text) {
+    public TextMessageElement(@NotNull String text) {
         this.text = text;
     }
 
-    public @Nullable String getText() {
+    @NotNull
+    public String getText() {
         return this.text;
     }
 

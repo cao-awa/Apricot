@@ -33,7 +33,6 @@ public class ExamplePlugin extends Plugin {
                 new Encrypt(),
                 new Decrypt()
         );
-        //        registerHandler(new XmlMaker());
     }
 
     @Override
