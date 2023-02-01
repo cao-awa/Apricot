@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin.internal.lawn.handler.recall.reproduce
 import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.replay.*;
 import com.github.cao.awa.apricot.message.store.*;

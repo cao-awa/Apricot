@@ -32,6 +32,7 @@ dependencies {
 //    shadow 'org.iq80.leveldb:leveldb:0.12'
     shadow 'io.github.pcmind:leveldb:1.2'
     shadow 'org.lz4:lz4-java:1.8.0'
+    shadow 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
 
     shadow 'org.jetbrains:annotations:23.1.0'
 

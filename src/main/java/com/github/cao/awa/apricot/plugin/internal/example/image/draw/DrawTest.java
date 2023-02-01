@@ -2,7 +2,8 @@ package com.github.cao.awa.apricot.plugin.internal.example.image.draw;
 
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
-import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
+import com.github.cao.awa.apricot.message.carve.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.image.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;

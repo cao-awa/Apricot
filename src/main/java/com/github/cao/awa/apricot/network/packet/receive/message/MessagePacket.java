@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.network.packet.receive.message;
 
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 

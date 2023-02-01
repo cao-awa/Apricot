@@ -1,8 +1,8 @@
 package com.github.cao.awa.apricot.plugin.internal.example.disinformation;
 
-import com.github.cao.awa.apricot.event.handler.message.received.*;
+import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
-import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
@@ -14,7 +14,7 @@ import com.github.cao.awa.apricot.util.text.*;
 
 import java.util.*;
 
-public class Disinformation extends MessageReceivedEventHandler {
+public class Disinformation extends MessageEventHandler {
     /**
      * Process event.
      *
@@ -25,8 +25,8 @@ public class Disinformation extends MessageReceivedEventHandler {
      * @since 1.0.0
      */
     @Override
-    public void onMessageReceived(MessageReceivedEvent<?> event) {
-        MessageReceivedPacket packet = event.getPacket();
+    public void onMessage(MessageEvent<?> event) {
+        MessagePacket packet = event.getPacket();
         AssembledMessage message = packet.getMessage();
         ApricotProxy proxy = event.getProxy();
 

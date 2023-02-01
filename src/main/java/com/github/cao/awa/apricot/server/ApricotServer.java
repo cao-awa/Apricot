@@ -8,13 +8,17 @@ import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.database.simple.serial.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.at.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.face.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.forward.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.image.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.json.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.poke.*;
 import com.github.cao.awa.apricot.message.element.cq.factor.replay.*;
+import com.github.cao.awa.apricot.message.element.cq.factor.xml.*;
 import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.io.*;
 import com.github.cao.awa.apricot.network.packet.*;
@@ -423,6 +427,9 @@ public class ApricotServer {
                     deserializer.register(new CqPokeFactor());
                     deserializer.register(new CqFaceFactor());
                     deserializer.register(new CqImageFactor());
+                    deserializer.register(new CqForwardFactor());
+                    deserializer.register(new CqXmlFactor());
+                    deserializer.register(new CqJsonFactor());
                 }
         );
 

@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.message.forward.dummy;
+package com.github.cao.awa.apricot.message.forward.real;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.message.forward.*;

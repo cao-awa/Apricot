@@ -9,6 +9,10 @@ public class FaceMessageElement extends MessageElement {
         this.id = id;
     }
 
+    public int getId() {
+        return this.id;
+    }
+
     @Override
     public String toPlainText() {
         return "[CQ:face,id=" + this.id + "]";

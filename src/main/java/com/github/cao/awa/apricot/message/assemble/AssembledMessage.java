@@ -1,5 +1,7 @@
-package com.github.cao.awa.apricot.message;
+package com.github.cao.awa.apricot.message.assemble;
 
+import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.carve.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import org.jetbrains.annotations.*;
@@ -37,6 +39,9 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
         for (MessageElement element : this.elements) {
             builder.append(element.toPlainText());
         }
+        for (AssembledMessage message : this.incinerate) {
+            builder.append(message.toPlainText());
+        }
         return builder.toString();
     }
 
@@ -44,6 +49,16 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
     public MessageElement get(int index) {
         MessageElement element = this.elements.get(index);
         return element == null ? EMPTY_PLAINS_TEXT : element;
+    }
+
+    @Override
+    public int size() {
+        int size = 0;
+        size += this.elements.size();
+        for (AssembledMessage message : this.incinerate) {
+            size += message.size();
+        }
+        return size;
     }
 
     public AssembledMessage participateAll(List<MessageElement> elements) {

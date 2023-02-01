@@ -6,4 +6,6 @@ public abstract class Message<T, M> {
     public abstract String toPlainText();
 
     public abstract T get(int index);
+
+    public abstract int size();
 }

@@ -1,6 +1,6 @@
 package com.github.cao.awa.apricot.util.message;
 
-import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.util.collection.*;
@@ -14,10 +14,10 @@ public class MessageUtil {
         int cursor = 0;
         int pos;
 
-        content = stripAndTrim(
+        content = unlw(unescape(stripAndTrim(
                 server,
                 content
-        );
+        )));
 
         List<MessageElement> elements = ApricotCollectionFactor.newArrayList();
         while ((pos = content.indexOf(
@@ -110,6 +110,16 @@ public class MessageUtil {
                      );
     }
 
+    public static String unlw(@Nullable String source) {
+        if (source == null) {
+            return null;
+        }
+        return source.replace(
+                "\\n",
+                "\n"
+        );
+    }
+
     public static String escape(@Nullable String source) {
         if (source == null) {
             return null;
@@ -133,5 +143,15 @@ public class MessageUtil {
                              "&#44;"
 
                      );
+    }
+
+    public static String lw(@Nullable String source) {
+        if (source == null) {
+            return null;
+        }
+        return source.replace(
+                "\n",
+                "\\n"
+        );
     }
 }

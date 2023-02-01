@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.information.compressor.deflater.*;
 import com.github.cao.awa.apricot.io.bytes.reader.*;
 import com.github.cao.awa.apricot.mathematic.base.*;
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.util.message.*;

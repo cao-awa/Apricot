@@ -2,6 +2,7 @@ package com.github.cao.awa.apricot.network.packet.receive.response.message.get;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.message.*;
+import com.github.cao.awa.apricot.message.assemble.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.sender.*;
 import com.github.cao.awa.apricot.server.*;

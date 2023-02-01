@@ -29,6 +29,7 @@ public class SendMessagesForwardPacket extends WritablePacket<NoResponsePacket> 
     public SendMessagesForwardPacket(@NotNull MessageType type, @NotNull List<ForwardMessage> messages, long userId) {
         this.type = type;
         this.userId = userId;
+        this.groupId = userId;
         this.messages = messages;
     }
 

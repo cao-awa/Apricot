@@ -1,5 +1,6 @@
-package com.github.cao.awa.apricot.message;
+package com.github.cao.awa.apricot.message.carve;
 
+import com.github.cao.awa.apricot.message.*;
 import com.github.cao.awa.apricot.message.element.*;
 import com.github.cao.awa.apricot.util.collection.*;
 
@@ -10,6 +11,11 @@ public class CarvedMessage<T extends MessageElement> extends Message<T, CarvedMe
 
     public T get(int index) {
         return this.elements.get(index);
+    }
+
+    @Override
+    public int size() {
+        return this.elements.size();
     }
 
     @Override
