@@ -3,7 +3,6 @@ package com.github.cao.awa.apricot.server.service.event;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.event.target.*;
-import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.event.exclusive.*;
@@ -15,7 +14,6 @@ import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 
 import java.util.*;
 import java.util.concurrent.*;
-import java.util.function.*;
 
 public class EventManager implements ConcurrentService {
     private final ApricotServer server;
@@ -41,62 +39,55 @@ public class EventManager implements ConcurrentService {
     public void fireEvent(Event<?> event) {
         if (this.active) {
             final Map<EventTarget, EventExclusive> currentExclusives = ApricotCollectionFactor.newHashMap(this.exclusives);
+            EventTarget target = event.getPacket()
+                                      .target();
+            EventExclusive exclusive = currentExclusives.get(target);
             this.executor.execute(
                     "EventManager",
-                    () -> this.plugins.getPlugins()
-                                      .forEach(plugin -> {
-                                          EventTarget target = event.getPacket()
-                                                                    .target();
-                                          EventExclusive exclusive = currentExclusives.get(target);
-                                          this.executor.execute(
-                                                  "EventManager",
-                                                  () -> {
-                                                      // Handling event exclusive.
-                                                      if (exclusive != null) {
-                                                          EventHandler<?> handler = exclusive.handler();
-                                                          // Level exclusives.
-                                                          Predicate<Plugin> predicate = switch (exclusive.target()
-                                                                                                         .getLevel()) {
-                                                              case SELF -> p -> p == plugin;
-                                                              case ALL -> p -> true;
-                                                              case SPECIALS -> p -> exclusive.target()
-                                                                                             .getTargets()
-                                                                                             .contains(p);
-                                                          };
+                    () -> {
+                        // Handle exclusive.
+                        final boolean blocked = exclusive != null;
+                        if (blocked) {
+                            EventHandler<?> handler = exclusive.handler();
 
-                                                          // Test the predicate.
-                                                          if (predicate.test(handler.getPlugin())) {
-                                                              // Fire event for exclusive handler.
-                                                              event.setExclusive(true);
-                                                              event.fireEvent(handler);
+                            // Fire event for exclusive handler.
+                            event.setExclusive(true);
+                            event.fireEvent(handler);
 
-                                                              // Fire event for compulsory handlers.
-                                                              event.setExclusive(false);
-                                                              plugin.fireEvent(
-                                                                      event,
-                                                                      handler
-                                                              );
+                            // Count down the exclusive.
+                            if (exclusive.counts()
+                                         .set(exclusive.counts()
+                                                       .get() - 1)
+                                         .get() == 0) {
+                                // Remove it when count to zero.
+                                this.exclusives.remove(target);
+                                currentExclusives.remove(target);
+                            }
+                        }
 
-                                                              // Count down the exclusive.
-                                                              if (exclusive.counts()
-                                                                           .set(exclusive.counts()
-                                                                                         .get() - 1)
-                                                                           .get() == 0) {
-                                                                  // Remove it when count to zero.
-                                                                  this.exclusives.remove(target);
-                                                                  currentExclusives.remove(target);
-                                                              }
+                        // Handle event.
+                        this.plugins.getPlugins()
+                                    .forEach(plugin -> this.executor.execute(
+                                            "EventManager",
+                                            () -> {
+                                                // Handling event exclusive.
+                                                if (blocked && exclusive.blocked(plugin)) {
+                                                    // Fire event for compulsory handlers.
+                                                    event.setExclusive(false);
+                                                    plugin.fireEvent(
+                                                            event,
+                                                            exclusive.handler()
+                                                    );
 
-                                                              // Do not let event be fired again with normally.
-                                                              return;
-                                                          }
-                                                      }
+                                                    // Do not let event be fired again with normally.
+                                                    return;
+                                                }
 
-                                                      // Fire event normally.
-                                                      plugin.fireEvent(event);
-                                                  }
-                                          );
-                                      })
+                                                // Fire event normally.
+                                                plugin.fireEvent(event);
+                                            }
+                                    ));
+                    }
             );
         }
     }

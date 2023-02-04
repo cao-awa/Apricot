@@ -10,24 +10,24 @@ public class EventExclusiveTarget {
     public static final EventExclusiveTarget ALL = new EventExclusiveTarget(EventExclusiveLevel.ALL);
 
     private final EventExclusiveLevel level;
-    private final List<Plugin> target = ApricotCollectionFactor.newArrayList();
+    private final List<Plugin> targets = ApricotCollectionFactor.newArrayList();
 
     public List<Plugin> getTargets() {
-        return this.target;
+        return this.targets;
     }
 
     public EventExclusiveTarget(EventExclusiveLevel level) {
         this.level = level;
     }
 
-    public EventExclusiveTarget(EventExclusiveLevel level, Plugin target) {
+    public EventExclusiveTarget(EventExclusiveLevel level, Plugin targets) {
         this.level = level;
-        this.target.add(target);
+        this.targets.add(targets);
     }
 
     public EventExclusiveTarget(EventExclusiveLevel level, List<Plugin> targets) {
         this.level = level;
-        this.target.addAll(targets);
+        this.targets.addAll(targets);
     }
 
     public EventExclusiveLevel getLevel() {
