@@ -105,8 +105,7 @@ public class SendMessagePacket extends WritablePacket<SendMessageResponsePacket>
     public void send(ApricotProxy proxy, Consumer<SendMessageResponsePacket> response) {
         proxy.echo(
                 this,
-                result -> response.accept(new SendMessageResponsePacket(result.getData()
-                                                                              .getLong("message_id")))
+                result -> response.accept(SendMessageResponsePacket.create(result.getData()))
         );
     }
 }

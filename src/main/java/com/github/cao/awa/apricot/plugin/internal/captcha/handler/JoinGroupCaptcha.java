@@ -94,7 +94,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                                                                 AtTargetType.PERSON,
                                                                 packet.getUserId()
                                                         )))
-                                                        .participate(new TextMessageElement("验证已超时")),
+                                                        .participate(new TextMessageElement("验证已超时！")),
                                   packet.getGroupId()
                           ));
                           proxy.send(new SendGroupKickPacket(
@@ -113,14 +113,20 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                                                       AtTargetType.PERSON,
                                                       packet.getUserId()
                                               )))
-                                              .participate(new TextMessageElement("为了验证您是否为自动加群，请在五分钟内回答此问题：" + tester.getNumber1() + tester.getOperator() + tester.getNumber2() + "=?")),
+                                              .participate(new TextMessageElement("请您在五分钟内回答此问题，直接发出得数：\n" + tester.getNumber1() + tester.getOperator() + tester.getNumber2() + "=?")),
                         packet.getGroupId()
                 ),
                 result -> {
-                    CAPTCHA_CHECKER.passable(
-                            result.getMessageId(),
-                            packet.target()
-                    );
+                    // Message are not sent.
+                    if (result.getMessageId() == 0) {
+                        CAPTCHA_CHECKER.reset(packet.target());
+                    } else {
+                        // Make passable for admin to cancel captcha
+                        CAPTCHA_CHECKER.passable(
+                                result.getMessageId(),
+                                packet.target()
+                        );
+                    }
                 }
         );
     }
@@ -139,22 +145,6 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
     }
 
     private static final class CalculateTester {
-        private static final CalculateTester ADD = new CalculateTester(
-                "+",
-                Integer::sum,
-                () -> RANDOM.nextInt(50)
-        );
-        private static final CalculateTester SUBTRACT = new CalculateTester(
-                "-",
-                (x, y) -> x - y,
-                () -> RANDOM.nextInt(50)
-        );
-        private static final CalculateTester MULTIPLY = new CalculateTester(
-                "x",
-                (x, y) -> x * y,
-                () -> RANDOM.nextInt(10)
-        );
-
         private final String operator;
         private final int result;
         private final int number1;
@@ -172,9 +162,21 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
 
         public static CalculateTester select() {
             return switch (RANDOM.nextInt(4)) {
-                case 1 -> SUBTRACT;
-                case 2 -> MULTIPLY;
-                default -> ADD;
+                case 1 -> new CalculateTester(
+                        "-",
+                        (x, y) -> x - y,
+                        () -> RANDOM.nextInt(50)
+                );
+                case 2 -> new CalculateTester(
+                        "x",
+                        (x, y) -> x * y,
+                        () -> RANDOM.nextInt(10)
+                );
+                default -> new CalculateTester(
+                        "+",
+                        Integer::sum,
+                        () -> RANDOM.nextInt(50)
+                );
             };
         }
 

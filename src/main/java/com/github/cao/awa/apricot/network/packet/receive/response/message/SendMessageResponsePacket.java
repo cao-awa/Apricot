@@ -11,7 +11,11 @@ public class SendMessageResponsePacket extends ResponsePacket {
     }
 
     public static SendMessageResponsePacket create(JSONObject json) {
-        return new SendMessageResponsePacket(json.getInteger("message_id"));
+        try {
+            return new SendMessageResponsePacket(json.getLong("message_id"));
+        } catch (Exception e) {
+            return new SendMessageResponsePacket(0);
+        }
     }
 
     public long getMessageId() {
