@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.plugin.internal.captcha.handler;
 
+import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.member.change.increase.*;
 import com.github.cao.awa.apricot.event.receive.member.change.increase.*;
 import com.github.cao.awa.apricot.event.target.*;
@@ -15,7 +16,10 @@ import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.event.exclusive.*;
+import com.github.cao.awa.apricot.util.io.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
+import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
@@ -123,8 +127,15 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
 
     @Override
     public boolean accept(EventTarget target) {
-        // Default not enabled.
-        return target.group() == 326503646;
+        return EntrustEnvironment.get(
+                () -> {
+                    List<Long> list = JSONObject.parse(IOUtil.read(new FileInputStream("configs/plugins/internal/captcha/whitelist.json")))
+                                                .getJSONArray("lists")
+                                                .toList(Long.TYPE);
+                    return target.group() != - 1 && list.contains(target.group());
+                },
+                false
+        );
     }
 
     private static final class CalculateTester {
