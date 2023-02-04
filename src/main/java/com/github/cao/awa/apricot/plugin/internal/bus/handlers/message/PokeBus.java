@@ -1,8 +1,8 @@
-package com.github.cao.awa.apricot.plugin.internal.simple.handlers.message;
+package com.github.cao.awa.apricot.plugin.internal.bus.handlers.message;
 
 import com.github.cao.awa.apricot.event.handler.poke.*;
 import com.github.cao.awa.apricot.event.receive.poke.*;
-import com.github.cao.awa.apricot.plugin.internal.simple.handlers.*;
+import com.github.cao.awa.apricot.plugin.internal.bus.handlers.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.util.collection.*;
 

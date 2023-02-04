@@ -115,21 +115,15 @@ public class EventManager implements ConcurrentService {
         );
     }
 
-    public void exclusive(EventTarget target, EventHandler<?> handler, int counts) {
-        if (this.exclusives.containsKey(target)) {
-            this.exclusives.remove(target);
-            throw new IllegalStateException("The exclusive for this target already registered, breaking this");
-        }
-        this.exclusives.put(
-                target,
-                new EventExclusive(
-                        handler,
-                        Receptacle.of(counts)
-                )
-        );
-    }
-
     public void exclusive(EventTarget target, EventHandler<?> handler, int counts, long timeout) {
+        if (counts == - 1 && timeout == - 1) {
+            throw new IllegalArgumentException("Must be timeout when exclusive request is unlimited");
+        }
+
+        if (timeout == 0) {
+            return;
+        }
+
         if (this.exclusives.containsKey(target)) {
             this.exclusives.remove(target);
             throw new IllegalStateException("The exclusive for this target already registered, breaking this");
@@ -149,6 +143,15 @@ public class EventManager implements ConcurrentService {
     }
 
     public void exclusive(EventTarget target, EventHandler<?> handler, int counts, long timeout, Runnable callback) {
+        if (counts == - 1 && timeout == - 1) {
+            throw new IllegalArgumentException("Must be timeout when exclusive request is unlimited");
+        }
+
+        if (timeout == 0) {
+            callback.run();
+            return;
+        }
+
         if (this.exclusives.containsKey(target)) {
             this.exclusives.remove(target);
             throw new IllegalStateException("The exclusive for this target already registered, breaking this");
@@ -181,6 +184,54 @@ public class EventManager implements ConcurrentService {
                     }
                 }
         );
+    }
+
+    public void exclusive(EventTarget target, EventHandler<?> handler, int counts, long timeout, Runnable callback, EventExclusiveTarget exclusiveTarget) {
+        if (counts == - 1 && timeout == - 1) {
+            throw new IllegalArgumentException("Must be timeout when exclusive request is unlimited");
+        }
+
+        if (timeout == 0) {
+            callback.run();
+            return;
+        }
+
+        if (this.exclusives.containsKey(target)) {
+            this.exclusives.remove(target);
+            throw new IllegalStateException("The exclusive for this target already registered, breaking this");
+        }
+        long recorded = TimeUtil.millions();
+        this.exclusives.put(
+                target,
+                new EventExclusive(
+                        handler,
+                        Receptacle.of(counts),
+                        recorded,
+                        timeout,
+                        callback,
+                        exclusiveTarget
+                )
+        );
+        this.executor.schedule(
+                "EventManager",
+                timeout,
+                TimeUnit.MILLISECONDS,
+                () -> {
+                    EventExclusive exclusive = this.exclusives.get(target);
+                    if (exclusive == null) {
+                        return;
+                    }
+                    if (exclusive.recorded() == recorded) {
+                        this.exclusives.remove(target);
+                        exclusive.timeoutCallback()
+                                 .run();
+                    }
+                }
+        );
+    }
+
+    public void release(EventTarget target) {
+        this.exclusives.remove(target);
     }
 
     @Override

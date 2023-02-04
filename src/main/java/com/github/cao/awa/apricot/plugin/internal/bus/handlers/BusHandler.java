@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.simple.handlers;
+package com.github.cao.awa.apricot.plugin.internal.bus.handlers;
 
 import com.github.cao.awa.apricot.event.receive.*;
 

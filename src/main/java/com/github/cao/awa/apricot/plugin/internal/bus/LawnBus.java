@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.simple;
+package com.github.cao.awa.apricot.plugin.internal.bus;
 
 import com.github.cao.awa.apricot.event.receive.message.group.received.*;
 import com.github.cao.awa.apricot.event.receive.message.group.sent.*;
@@ -9,7 +9,7 @@ import com.github.cao.awa.apricot.event.receive.message.recall.group.*;
 import com.github.cao.awa.apricot.event.receive.message.recall.personal.*;
 import com.github.cao.awa.apricot.event.receive.poke.*;
 import com.github.cao.awa.apricot.plugin.*;
-import com.github.cao.awa.apricot.plugin.internal.simple.handlers.message.*;
+import com.github.cao.awa.apricot.plugin.internal.bus.handlers.message.*;
 import org.jetbrains.annotations.*;
 
 import java.util.function.*;

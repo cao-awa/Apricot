@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.network.packet.receive.member.change.increase.invite;
 
+import com.github.cao.awa.apricot.approval.group.*;
 import com.github.cao.awa.apricot.event.receive.member.change.increase.invite.*;
 import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.network.packet.receive.member.change.increase.*;
@@ -66,5 +67,10 @@ public class GroupMemberInvitedPacket extends GroupMemberIncreasedPacket {
                 this.userId,
                 this.botId
         );
+    }
+
+    @Override
+    public ApprovalType getType() {
+        return ApprovalType.INVITE;
     }
 }

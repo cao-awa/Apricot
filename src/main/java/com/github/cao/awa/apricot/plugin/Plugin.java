@@ -147,17 +147,23 @@ public abstract class Plugin implements Comparable<Plugin> {
                                                           valid -> EntrustEnvironment.operation(
                                                                   valid.filter(handler -> handler.accept(target)),
                                                                   accepted -> accepted.forEach(handler -> EntrustEnvironment.trys(
-                                                                          () -> EntrustEnvironment.operation(
-                                                                                  handler.intensive() == IntensiveType.CPU ?
-                                                                                  this.getServer()
-                                                                                      .intensiveCpu() :
-                                                                                  this.getServer()
-                                                                                      .intensiveIo(),
-                                                                                  manager -> manager.execute(
-                                                                                          getName(),
-                                                                                          () -> event.fireEvent(handler)
-                                                                                  )
-                                                                          ),
+                                                                          () -> {
+                                                                              if (parallel()) {
+                                                                                  EntrustEnvironment.operation(
+                                                                                          handler.intensive() == IntensiveType.CPU ?
+                                                                                          this.getServer()
+                                                                                              .intensiveCpu() :
+                                                                                          this.getServer()
+                                                                                              .intensiveIo(),
+                                                                                          manager -> manager.execute(
+                                                                                                  getName(),
+                                                                                                  () -> event.fireEvent(handler)
+                                                                                          )
+                                                                                  );
+                                                                              } else {
+                                                                                  event.fireEvent(handler);
+                                                                              }
+                                                                          },
                                                                           handler::onException
                                                                   ))
                                                           )
@@ -189,6 +195,10 @@ public abstract class Plugin implements Comparable<Plugin> {
                 exclude,
                 this.compulsory()
         );
+    }
+
+    public boolean parallel() {
+        return true;
     }
 
     public boolean compulsory() {

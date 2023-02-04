@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.lawn.handler.message;
+package com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message;
 
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.event.handler.message.recall.*;

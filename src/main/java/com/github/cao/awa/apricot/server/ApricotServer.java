@@ -56,8 +56,8 @@ import com.github.cao.awa.apricot.network.packet.receive.response.message.get.*;
 import com.github.cao.awa.apricot.network.packet.send.message.get.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.plugin.*;
-import com.github.cao.awa.apricot.plugin.internal.lawn.*;
-import com.github.cao.awa.apricot.plugin.internal.simple.*;
+import com.github.cao.awa.apricot.plugin.internal.bus.*;
+import com.github.cao.awa.apricot.plugin.internal.core.lawn.*;
 import com.github.cao.awa.apricot.resource.dispenser.*;
 import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.server.service.counter.traffic.*;
@@ -285,7 +285,7 @@ public class ApricotServer {
         }
         LOGGER.info("Loading internal plugins");
         this.eventBus = new LawnBus();
-        this.plugins.register(new Lawn());
+        this.plugins.register(new LawnCore());
         this.plugins.register(this.eventBus);
         this.plugins.loadPlugins();
     }

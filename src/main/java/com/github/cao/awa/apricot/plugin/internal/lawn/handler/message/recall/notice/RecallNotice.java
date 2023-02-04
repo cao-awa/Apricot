@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.lawn.handler.recall;
+package com.github.cao.awa.apricot.plugin.internal.lawn.handler.message.recall.notice;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.database.message.store.*;

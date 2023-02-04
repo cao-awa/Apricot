@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.lawn.handler;
+package com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.echo;
 
 import com.github.cao.awa.apricot.event.handler.response.*;
 import com.github.cao.awa.apricot.event.receive.response.*;
