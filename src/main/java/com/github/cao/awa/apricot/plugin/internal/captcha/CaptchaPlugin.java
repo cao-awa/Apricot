@@ -7,7 +7,8 @@ import org.jetbrains.annotations.*;
 
 @AutoPlugin
 public class CaptchaPlugin extends Plugin {
-    public static final CalCaptcha CAPTCHA_CHECKER = new CalCaptcha();
+    public static final CaptchaChecker CAPTCHA_CHECKER = new CaptchaChecker();
+    public static final CaptchaPass CAPTCHA_PASS = new CaptchaPass();
 
     @Override
     public @NotNull String getName() {
@@ -19,6 +20,7 @@ public class CaptchaPlugin extends Plugin {
         registerHandler(new JoinGroupCaptcha());
         registerHandler(new LeaveGroupCaptcha());
         registerHandler(CAPTCHA_CHECKER);
+        registerHandler(CAPTCHA_PASS);
     }
 
     @Override
