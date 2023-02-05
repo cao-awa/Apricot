@@ -19,6 +19,6 @@ public class CqImageFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:image";
+        return "image";
     }
 }

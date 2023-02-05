@@ -17,6 +17,6 @@ public class CqReplyFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:reply";
+        return "reply";
     }
 }

@@ -19,6 +19,6 @@ public class CqJsonFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:json";
+        return "json";
     }
 }

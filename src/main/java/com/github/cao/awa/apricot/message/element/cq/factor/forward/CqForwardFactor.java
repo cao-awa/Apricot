@@ -17,6 +17,6 @@ public class CqForwardFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:forward";
+        return "forward";
     }
 }

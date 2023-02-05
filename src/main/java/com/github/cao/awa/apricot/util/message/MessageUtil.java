@@ -15,6 +15,11 @@ public class MessageUtil {
         int cursor = 0;
         int pos;
 
+        content = carve(
+                server,
+                content
+        );
+
         List<MessageElement> elements = ApricotCollectionFactor.newArrayList();
         while ((pos = content.indexOf(
                 "[CQ:",
@@ -22,9 +27,12 @@ public class MessageUtil {
         )) != - 1) {
             // Process plain text.
             if (pos > cursor) {
-                String result = content.substring(
-                        cursor,
-                        pos
+                String result = carve(
+                        server,
+                        content.substring(
+                                cursor,
+                                pos
+                        )
                 );
                 elements.add(new TextMessageElement(unescape(result)));
             }
@@ -38,7 +46,7 @@ public class MessageUtil {
             }
             // Processing cq.
             String cq = content.substring(
-                    pos + 1,
+                    pos + 4,
                     endPos
             );
 
@@ -60,17 +68,20 @@ public class MessageUtil {
 
         // It means have CQ codes is unsupported
         if (elements.size() == 0) {
-            elements.add(new TextMessageElement(unescape((content))));
+            elements.add(new TextMessageElement(unescape(carve(
+                    server,
+                    content
+            ))));
         } else {
             // It means have more information can be precessed to text element
             if (cursor < content.length()) {
                 String source = content.substring(cursor);
-                String result = stripAndTrim(
+                String result = carve(
                         server,
                         source
                 );
                 elements.add(result.length() > 0 ?
-                             new TextMessageElement(unescape((result))) :
+                             new TextMessageElement(unescape(result)) :
                              new TextMessageElement(unescape(source)));
             }
         }
@@ -79,7 +90,7 @@ public class MessageUtil {
         return new AssembledMessage(elements);
     }
 
-    public static String stripAndTrim(ApricotServer server, String source) {
+    public static String carve(ApricotServer server, String source) {
         return server.shouldCaverMessage() ?
                source.strip()
                      .trim() :

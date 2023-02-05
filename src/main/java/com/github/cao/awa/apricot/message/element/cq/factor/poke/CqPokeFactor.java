@@ -17,6 +17,6 @@ public class CqPokeFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:poke";
+        return "poke";
     }
 }

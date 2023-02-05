@@ -19,6 +19,6 @@ public class CqRecordFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:record";
+        return "record";
     }
 }

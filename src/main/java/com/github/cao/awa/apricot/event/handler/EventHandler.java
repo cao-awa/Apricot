@@ -43,4 +43,8 @@ public abstract class EventHandler<T extends Event<?>> {
     public IntensiveType intensive() {
         return IntensiveType.CPU;
     }
+
+    public void reload() {
+
+    }
 }

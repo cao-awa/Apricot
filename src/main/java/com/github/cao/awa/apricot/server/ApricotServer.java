@@ -412,7 +412,9 @@ public class ApricotServer {
                     deserializer.register(new BotDiedFromGroupPacketFactor());
                     deserializer.register(new GroupTitleChangedReceivedPacketFactor());
                     deserializer.register(new PrivateFriendMessageReceivedPacketFactor());
+                    deserializer.register(new PrivateTemporaryMessageReceivedPacketFactor());
                     deserializer.register(new PrivateFriendMessageSentPacketFactor());
+                    deserializer.register(new PrivateTemporaryMessageSentPacketFactor());
                     deserializer.register(new PrivateMessageRecallPacketFactor());
                     deserializer.register(new EchoResultPacketFactor());
                     deserializer.register(new InvalidDataReceivedPacketFactor());

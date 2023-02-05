@@ -16,6 +16,6 @@ public class CqAtFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:at";
+        return "at";
     }
 }

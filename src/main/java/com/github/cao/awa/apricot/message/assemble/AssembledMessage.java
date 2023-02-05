@@ -102,6 +102,15 @@ public class AssembledMessage extends Message<MessageElement, AssembledMessage> 
         return this;
     }
 
+    public <T extends MessageElement> AssembledMessage skipTo(Class<T> target) {
+        AssembledMessage message = new AssembledMessage(
+                this.elements,
+                this.incinerate
+        );
+        message.skip(target);
+        return message;
+    }
+
     public <T extends MessageElement> AssembledMessage clear(Class<T> target) {
         this.elements.removeIf(target::isInstance);
         return this;

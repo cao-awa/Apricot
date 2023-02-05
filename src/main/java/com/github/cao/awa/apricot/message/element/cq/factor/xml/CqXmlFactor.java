@@ -20,6 +20,6 @@ public class CqXmlFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:xml";
+        return "xml";
     }
 }

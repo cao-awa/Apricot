@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin.internal.core.lawn;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.echo.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message.*;
+import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.reload.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -36,6 +37,7 @@ public class LawnCore extends Plugin {
                 new MessageExport()
         );
         registerHandlers(new InternalEchoResultHandler());
+        registerHandlers(new Reloading());
     }
 
     /**
@@ -50,6 +52,6 @@ public class LawnCore extends Plugin {
 
     @Override
     public String version() {
-        return "0.0.5";
+        return "1.0.5";
     }
 }

@@ -18,6 +18,6 @@ public class CqVideoFactor extends CqFactor {
 
     @Override
     public String getName() {
-        return "CQ:video";
+        return "video";
     }
 }

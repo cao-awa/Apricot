@@ -35,7 +35,7 @@ public class LawnBus extends Plugin {
 
     @Override
     public String version() {
-        return "0.0.1";
+        return "1.0.1";
     }
 
     public void privateFriendMsgRe(Consumer<PrivateFriendMessageReceivedEvent> action) {

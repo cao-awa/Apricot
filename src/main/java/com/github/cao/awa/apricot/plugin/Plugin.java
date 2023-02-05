@@ -101,6 +101,7 @@ public abstract class Plugin implements Comparable<Plugin> {
         this.handlers.get(handler.getType())
                      .add(handler);
         handler.setPlugin(this);
+        handler.reload();
     }
 
     /**
@@ -180,6 +181,10 @@ public abstract class Plugin implements Comparable<Plugin> {
         this.server = server;
     }
 
+    public boolean parallel() {
+        return true;
+    }
+
     /**
      * Let an event be fired.
      *
@@ -197,11 +202,12 @@ public abstract class Plugin implements Comparable<Plugin> {
         );
     }
 
-    public boolean parallel() {
-        return true;
-    }
-
     public boolean compulsory() {
         return this instanceof Compulsory;
+    }
+
+    public void reload() {
+        this.handlers.values()
+                     .forEach(handlers -> handlers.forEach(EventHandler::reload));
     }
 }
