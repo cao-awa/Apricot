@@ -163,7 +163,6 @@ public class ApricotRouter extends NetworkRouter {
      * @since 1.0.0
      */
     public void handleRequest(JSONObject request) {
-        System.out.println(request);
         this.getServer()
             .intensiveIo()
             .execute(
