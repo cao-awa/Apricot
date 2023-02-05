@@ -24,6 +24,7 @@ import java.util.concurrent.*;
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
     private final ApricotServer server;
+    private final Map<UUID, Plugin> cores = ApricotCollectionFactor.newConcurrentHashMap();
     private final Map<UUID, Plugin> plugins = ApricotCollectionFactor.newConcurrentHashMap();
     private final ExecutorEntrust executor;
     private boolean active = true;
@@ -125,6 +126,35 @@ public class PluginManager implements ConcurrentService {
         }
     }
 
+    public Collection<Plugin> getCores() {
+        return this.cores.values();
+    }
+
+    private void register0(Plugin plugin) {
+        plugin.setServer(this.server);
+        plugin.onInitialize();
+        if (plugin.isCore()) {
+            if (! plugin.compulsory()) {
+                throw new IllegalStateException("The core plugin must be compulsory");
+            }
+            this.cores.put(
+                    plugin.getUuid(),
+                    plugin
+            );
+        } else {
+            this.plugins.put(
+                    plugin.getUuid(),
+                    plugin
+            );
+        }
+        LOGGER.info(
+                "Plugins '{}'({}) registered {}",
+                plugin.getName(),
+                plugin.getUuid(),
+                plugin.isCore() ? "(Core plugin)" : ""
+        );
+    }
+
     public void register(Plugin plugin) {
         if (plugin.getClass()
                   .isAnnotationPresent(AutoPlugin.class)) {
@@ -136,19 +166,5 @@ public class PluginManager implements ConcurrentService {
             return;
         }
         loadPlugin(plugin);
-    }
-
-    private void register0(Plugin plugin) {
-        plugin.setServer(this.server);
-        plugin.onInitialize();
-        this.plugins.put(
-                plugin.getUuid(),
-                plugin
-        );
-        LOGGER.info(
-                "Plugins '{}'({}) registered",
-                plugin.getName(),
-                plugin.getUuid()
-        );
     }
 }

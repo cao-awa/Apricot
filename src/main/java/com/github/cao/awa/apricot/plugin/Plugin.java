@@ -3,7 +3,6 @@ package com.github.cao.awa.apricot.plugin;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.event.target.*;
-import com.github.cao.awa.apricot.plugin.requirement.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.task.intensive.*;
 import com.github.cao.awa.apricot.util.collection.*;
@@ -78,20 +77,16 @@ public abstract class Plugin implements Comparable<Plugin> {
         return true;
     }
 
-    public PluginRequirements requirements() {
-        return PluginRequirements.of();
-    }
-
     public abstract String version();
 
-    public void registerHandlers(EventHandler<?> handler, EventHandler<?>... handlers) {
+    public final void registerHandlers(EventHandler<?> handler, EventHandler<?>... handlers) {
         registerHandler(handler);
         for (EventHandler<?> eventHandler : handlers) {
             registerHandler(eventHandler);
         }
     }
 
-    public void registerHandler(EventHandler<?> handler) {
+    public final void registerHandler(EventHandler<?> handler) {
         if (! this.handlers.containsKey(handler.getType())) {
             this.handlers.put(
                     handler.getType(),
@@ -113,7 +108,7 @@ public abstract class Plugin implements Comparable<Plugin> {
      * @author 草二号机
      * @since 1.0.0
      */
-    public void fireEvent(Event<?> event) {
+    public final void fireEvent(Event<?> event) {
         this.fireEvent(
                 event,
                 null,
@@ -134,50 +129,52 @@ public abstract class Plugin implements Comparable<Plugin> {
         EventTarget target = event.getPacket()
                                   .target();
         event.pipeline()
-             .forEach(type -> this.getServer()
-                                  .intensiveIo()
-                                  .execute(
-                                          getName(),
-                                          () -> EntrustEnvironment.notNull(
-                                                  this.handlers.get(type),
-                                                  handlers -> EntrustEnvironment.operation(
-                                                          exclude == null || compulsory ?
-                                                          handlers.stream() :
-                                                          handlers.stream()
-                                                                  .filter(handler -> handler != exclude && handler.compulsory()),
-                                                          valid -> EntrustEnvironment.operation(
-                                                                  valid.filter(handler -> handler.accept(target)),
-                                                                  accepted -> accepted.forEach(handler -> EntrustEnvironment.trys(
-                                                                          () -> {
-                                                                              if (parallel()) {
-                                                                                  EntrustEnvironment.operation(
-                                                                                          handler.intensive() == IntensiveType.CPU ?
-                                                                                          this.getServer()
-                                                                                              .intensiveCpu() :
-                                                                                          this.getServer()
-                                                                                              .intensiveIo(),
-                                                                                          manager -> manager.execute(
-                                                                                                  getName(),
-                                                                                                  () -> event.fireEvent(handler)
-                                                                                          )
-                                                                                  );
-                                                                              } else {
-                                                                                  event.fireEvent(handler);
-                                                                              }
-                                                                          },
-                                                                          handler::onException
-                                                                  ))
-                                                          )
-                                                  )
-                                          )
-                                  ));
+             .forEach(type -> EntrustEnvironment.notNull(
+                     this.handlers.get(type),
+                     handlers -> EntrustEnvironment.operation(
+                             exclude == null || compulsory ?
+                             handlers.stream() :
+                             handlers.stream()
+                                     .filter(eventHandler -> eventHandler.compulsory() && eventHandler != exclude),
+                             valid -> valid.filter(handler -> handler.accept(target))
+                                           .forEach(handler -> {
+                                               if (parallel()) {
+                                                   EntrustEnvironment.operation(
+                                                           handler.intensive() == IntensiveType.CPU ?
+                                                           getServer().intensiveCpu() :
+                                                           getServer().intensiveIo(),
+                                                           manager -> manager.execute(
+                                                                   getName(),
+                                                                   () -> fireEvent(
+                                                                           handler,
+                                                                           event
+                                                                   )
+                                                           )
+                                                   );
+                                               } else {
+                                                   fireEvent(
+                                                           handler,
+                                                           event
+                                                   );
+                                               }
+                                           })
+
+                     )
+             ));
     }
 
-    public ApricotServer getServer() {
+    private static void fireEvent(EventHandler<?> handler, Event<?> event) {
+        EntrustEnvironment.trys(
+                () -> event.fireEvent(handler),
+                handler::onException
+        );
+    }
+
+    public final ApricotServer getServer() {
         return this.server;
     }
 
-    public void setServer(ApricotServer server) {
+    public final void setServer(ApricotServer server) {
         this.server = server;
     }
 
@@ -209,5 +206,9 @@ public abstract class Plugin implements Comparable<Plugin> {
     public void reload() {
         this.handlers.values()
                      .forEach(handlers -> handlers.forEach(EventHandler::reload));
+    }
+
+    public boolean isCore() {
+        return false;
     }
 }

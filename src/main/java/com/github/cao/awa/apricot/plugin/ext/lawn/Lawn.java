@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.lawn.handler.*;
 import com.github.cao.awa.apricot.plugin.ext.lawn.handler.message.recall.reproduce.*;
+import com.github.cao.awa.apricot.plugin.ext.lawn.handler.reload.*;
 import org.jetbrains.annotations.*;
 
 @AutoPlugin
@@ -21,6 +22,7 @@ public class Lawn extends Plugin {
         registerHandler(new PokeReciprocity());
         //        registerHandler(new RecallNotice());
         registerHandler(new MessageReproducer());
+        registerHandlers(new Reloading());
     }
 
     @Override

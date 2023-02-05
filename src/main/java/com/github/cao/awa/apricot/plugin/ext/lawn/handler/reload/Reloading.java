@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.reload;
+package com.github.cao.awa.apricot.plugin.ext.lawn.handler.reload;
 
 import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;

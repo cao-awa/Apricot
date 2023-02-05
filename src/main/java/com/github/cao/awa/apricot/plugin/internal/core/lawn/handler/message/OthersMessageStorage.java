@@ -1,6 +1,5 @@
 package com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message;
 
-import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.cq.image.*;
@@ -12,7 +11,7 @@ import com.github.cao.awa.apricot.task.intensive.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 
-public class OthersMessageStorage extends MessageReceivedEventHandler implements Compulsory {
+public class OthersMessageStorage extends MessageReceivedEventHandler {
     private static final Logger LOGGER = LogManager.getLogger("MessageStorage");
 
     /**

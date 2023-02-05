@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.server.service.event;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.event.target.*;
+import com.github.cao.awa.apricot.mathematic.integer.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.*;
 import com.github.cao.awa.apricot.server.service.event.exclusive.*;
@@ -10,7 +11,6 @@ import com.github.cao.awa.apricot.server.service.plugin.*;
 import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.time.*;
-import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -42,53 +42,52 @@ public class EventManager implements ConcurrentService {
             EventTarget target = event.getPacket()
                                       .target();
             EventExclusive exclusive = currentExclusives.get(target);
-            this.executor.execute(
-                    "EventManager",
-                    () -> {
-                        // Handle exclusive.
-                        final boolean blocked = exclusive != null;
-                        if (blocked) {
-                            EventHandler<?> handler = exclusive.handler();
 
-                            // Fire event for exclusive handler.
+            // Core plugin must be process the event.
+            this.plugins.getCores()
+                        .forEach(plugin -> plugin.fireEvent(event));
+
+            // Handle exclusive.
+            final boolean blocked = exclusive != null;
+            if (blocked) {
+                EventHandler<?> handler = exclusive.handler();
+
+                // Fire event for exclusive handler.
+                this.executor.execute(
+                        "EventManager",
+                        () -> {
                             event.setExclusive(true);
                             event.fireEvent(handler);
-
-                            // Count down the exclusive.
-                            if (exclusive.counts()
-                                         .set(exclusive.counts()
-                                                       .get() - 1)
-                                         .get() == 0) {
-                                // Remove it when count to zero.
-                                this.exclusives.remove(target);
-                                currentExclusives.remove(target);
-                            }
                         }
+                );
 
-                        // Handle event.
-                        this.plugins.getPlugins()
-                                    .forEach(plugin -> this.executor.execute(
-                                            "EventManager",
-                                            () -> {
-                                                // Handling event exclusive.
-                                                if (blocked && exclusive.blocked(plugin)) {
-                                                    // Fire event for compulsory handlers.
-                                                    event.setExclusive(false);
-                                                    plugin.fireEvent(
-                                                            event,
-                                                            exclusive.handler()
-                                                    );
+                // Count down the exclusive.
+                if (exclusive.counts()
+                             .subtract()
+                             .get() == 0) {
+                    // Remove it when count to zero.
+                    this.exclusives.remove(target);
+                    currentExclusives.remove(target);
+                }
+            }
 
-                                                    // Do not let event be fired again with normally.
-                                                    return;
-                                                }
+            event.setExclusive(false);
+            // Handle event.
+            this.plugins.getPlugins()
+                        .forEach(plugin -> {
+                            // Handling event exclusive.
+                            if (blocked && exclusive.blocked(plugin)) {
+                                // Fire event for compulsory handlers.
+                                plugin.fireEvent(
+                                        event,
+                                        exclusive.handler()
+                                );
+                            } else {
+                                // Fire event normally.
+                                plugin.fireEvent(event);
+                            }
+                        });
 
-                                                // Fire event normally.
-                                                plugin.fireEvent(event);
-                                            }
-                                    ));
-                    }
-            );
         }
     }
 
@@ -101,7 +100,7 @@ public class EventManager implements ConcurrentService {
                 target,
                 new EventExclusive(
                         handler,
-                        Receptacle.of(1)
+                        IntegerReceptacle.of(1)
                 )
         );
     }
@@ -123,7 +122,7 @@ public class EventManager implements ConcurrentService {
                 target,
                 new EventExclusive(
                         handler,
-                        Receptacle.of(counts),
+                        IntegerReceptacle.of(counts),
                         TimeUtil.millions(),
                         timeout,
                         () -> {
@@ -152,7 +151,7 @@ public class EventManager implements ConcurrentService {
                 target,
                 new EventExclusive(
                         handler,
-                        Receptacle.of(counts),
+                        IntegerReceptacle.of(counts),
                         recorded,
                         timeout,
                         callback,
@@ -196,7 +195,7 @@ public class EventManager implements ConcurrentService {
                 target,
                 new EventExclusive(
                         handler,
-                        Receptacle.of(counts),
+                        IntegerReceptacle.of(counts),
                         recorded,
                         timeout,
                         callback,

@@ -34,17 +34,33 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
         GroupMessageReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
 
+        // Do not response commands.
+        if (MessageProcess.command(
+                packet.getMessage(),
+                "/"
+        )) {
+            return;
+        }
+
         if (MessageProcess.isAt(
                 packet.getMessage(),
                 packet.getBotId()
         )) {
-            System.out.println("???");
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     new AssembledMessage().participate(new TextMessageElement(EntrustEnvironment.select(
                             this.shortResponse,
                             RANDOM
                     ))),
+                    packet.getResponseId()
+            ));
+        } else if (MessageProcess.afterAt(
+                packet.getMessage(),
+                packet.getBotId()
+        )) {
+            proxy.send(new SendMessagePacket(
+                    packet.getType(),
+                    new AssembledMessage().participate(new TextMessageElement("我只是一只Bot，我看不懂")),
                     packet.getResponseId()
             ));
         }
