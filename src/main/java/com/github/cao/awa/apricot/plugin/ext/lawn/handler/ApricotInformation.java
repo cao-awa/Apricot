@@ -43,7 +43,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
             proxy.server()
                  .getPlugins()
                  .forEach(plugin -> {
-                     builder.append(plugin.getName())
+                     builder.append(plugin.name())
                             .append(" ")
                             .append(plugin.version())
                             .append("\n");

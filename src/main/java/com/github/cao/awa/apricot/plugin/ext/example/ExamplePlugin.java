@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.example.disinformation.*;
 import com.github.cao.awa.apricot.plugin.ext.example.encrypt.*;
 import com.github.cao.awa.apricot.plugin.ext.example.forward.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -19,8 +20,11 @@ public class ExamplePlugin extends Plugin {
     }
 
     @Override
-    public @NotNull String getName() {
-        return "生草机-示例";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Example",
+                "生草机-示例"
+        );
     }
 
     @Override

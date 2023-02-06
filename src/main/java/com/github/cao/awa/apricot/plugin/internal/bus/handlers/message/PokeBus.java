@@ -25,12 +25,7 @@ public class PokeBus extends PokeReceivedEventHandler implements BusHandler<Poke
     public void onPoke(PokeReceivedEvent<?> event) {
         ApricotServer server = event.getProxy()
                                     .server();
-        this.handlers.forEach(handler -> {
-            server.execute(
-                    getPlugin().getName(),
-                    () -> handler.accept(event)
-            );
-        });
+        this.handlers.forEach(handler -> server.execute(() -> handler.accept(event)));
     }
 
     @Override

@@ -29,7 +29,6 @@ public class ApricotRouter extends NetworkRouter {
     //    private final Set<ReadonlyPacket> broadcasts = ApricotCollectionFactor.newHashSet();
     private ChannelHandlerContext context;
     private Channel channel;
-    private static final int LIMIT_OF_QQ_CONTENT = 2430 * 2 + 4096;
 
     public ApricotRouter(@NotNull ApricotServer server) {
         super(server);
@@ -76,11 +75,13 @@ public class ApricotRouter extends NetworkRouter {
      */
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        this.getServer().getTrafficsCounter()
-                   .in(frame.content()
-                            .writerIndex());
-        this.getServer().getPacketsCounter()
-                   .in(1);
+        this.getServer()
+            .getTrafficsCounter()
+            .in(frame.content()
+                     .writerIndex());
+        this.getServer()
+            .getPacketsCounter()
+            .in(1);
         handleFragment(frame);
     }
 
@@ -129,10 +130,6 @@ public class ApricotRouter extends NetworkRouter {
                 handleFrame(new TextWebSocketFrame(this.stitching.toString()));
                 // Let stitching be clear.
                 this.stitching.setLength(0);
-            } else if (this.stitching.length() > LIMIT_OF_QQ_CONTENT) {
-                // Reset largest packet
-                this.stitching.setLength(0);
-                disconnect("Packet too large");
             }
         } else {
             // The frame is unsupported, do not process this.
@@ -165,11 +162,8 @@ public class ApricotRouter extends NetworkRouter {
     public void handleRequest(JSONObject request) {
         this.getServer()
             .intensiveIo()
-            .execute(
-                    "ApricotRouter",
-                    () -> handleRequest(this.getServer()
-                                            .createPacket(request))
-            );
+            .execute(() -> handleRequest(getServer()
+                                                 .createPacket(request)));
     }
 
     /**
@@ -182,6 +176,18 @@ public class ApricotRouter extends NetworkRouter {
      */
     public void handleRequest(ReadonlyPacket request) {
         this.dispenser.handle(request);
+    }
+
+    /**
+     * Disconnect with reason.
+     *
+     * @param reason
+     *         disconnect reason
+     * @author cao_awa
+     * @since 1.0.0
+     */
+    public void disconnect(String reason) {
+        this.dispenser.disconnect(reason);
     }
 
     /**
@@ -241,18 +247,6 @@ public class ApricotRouter extends NetworkRouter {
      */
     public void disconnect() {
         this.dispenser.disconnect();
-    }
-
-    /**
-     * Disconnect with reason.
-     *
-     * @param reason
-     *         disconnect reason
-     * @author cao_awa
-     * @since 1.0.0
-     */
-    public void disconnect(String reason) {
-        this.dispenser.disconnect(reason);
     }
 
     public Channel getChannel() {

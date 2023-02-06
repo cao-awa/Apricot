@@ -53,8 +53,8 @@ public class EventManager implements ConcurrentService {
                 EventHandler<?> handler = exclusive.handler();
 
                 // Fire event for exclusive handler.
-                this.executor.execute(
-                        "EventManager",
+                getServer().execute(
+                        handler.intensive(),
                         () -> {
                             event.setExclusive(true);
                             event.fireEvent(handler);
@@ -159,7 +159,6 @@ public class EventManager implements ConcurrentService {
                 )
         );
         this.executor.schedule(
-                "EventManager",
                 timeout,
                 TimeUnit.MILLISECONDS,
                 () -> {
@@ -203,7 +202,6 @@ public class EventManager implements ConcurrentService {
                 )
         );
         this.executor.schedule(
-                "EventManager",
                 timeout,
                 TimeUnit.MILLISECONDS,
                 () -> {

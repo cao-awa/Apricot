@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin.ext.captcha;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.captcha.handler.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
 @AutoPlugin
@@ -13,8 +14,11 @@ public class CaptchaPlugin extends Plugin {
     public static final CaptchaPass CAPTCHA_PASS = new CaptchaPass();
 
     @Override
-    public @NotNull String getName() {
-        return "Captcha";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Captcha",
+                "Captcha"
+        );
     }
 
     @Override

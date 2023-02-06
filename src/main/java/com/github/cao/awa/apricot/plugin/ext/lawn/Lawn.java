@@ -5,13 +5,17 @@ import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.lawn.handler.*;
 import com.github.cao.awa.apricot.plugin.ext.lawn.handler.message.recall.reproduce.*;
 import com.github.cao.awa.apricot.plugin.ext.lawn.handler.reload.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
 @AutoPlugin
 public class Lawn extends Plugin {
     @Override
-    public @NotNull String getName() {
-        return "生草机";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Lawn",
+                "生草机"
+        );
     }
 
     @Override

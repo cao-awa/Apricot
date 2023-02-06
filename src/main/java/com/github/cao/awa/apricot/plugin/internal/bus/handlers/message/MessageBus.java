@@ -25,12 +25,7 @@ public class MessageBus extends MessageEventHandler implements BusHandler<Messag
     public void onMessage(MessageEvent<?> event) {
         ApricotServer server = event.getProxy()
                                     .server();
-        this.handlers.forEach(handler -> {
-            server.execute(
-                    getPlugin().getName(),
-                    () -> handler.accept(event)
-            );
-        });
+        this.handlers.forEach(handler -> server.execute(() -> handler.accept(event)));
     }
 
     @Override

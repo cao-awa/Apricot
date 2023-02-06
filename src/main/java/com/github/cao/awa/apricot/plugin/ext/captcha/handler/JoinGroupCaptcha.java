@@ -1,8 +1,7 @@
 package com.github.cao.awa.apricot.plugin.ext.captcha.handler;
 
 import com.alibaba.fastjson2.*;
-import com.github.cao.awa.apricot.config.*;
-import com.github.cao.awa.apricot.config.util.*;
+import com.github.cao.awa.apricot.config.plugin.handler.*;
 import com.github.cao.awa.apricot.event.handler.member.change.increase.*;
 import com.github.cao.awa.apricot.event.receive.member.change.increase.*;
 import com.github.cao.awa.apricot.event.target.*;
@@ -18,24 +17,15 @@ import com.github.cao.awa.apricot.network.packet.send.group.mute.personal.normal
 import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.plugin.ext.captcha.*;
-import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.server.service.event.exclusive.*;
-import com.github.cao.awa.apricot.util.io.*;
-import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
-import java.io.*;
 import java.util.*;
 import java.util.function.*;
 
 public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
+    private static final String NAME = "JoinGroup";
     private static final Random RANDOM = new Random();
-    private final Configure configure = ConfigUtil.fromFile(
-            "configs/plugins/ext/captcha/config.conf",
-            () -> {
-                return IOUtil.read(ResourcesLoader.get("plugins/captcha/config.conf"));
-            }
-    );
 
     /**
      * Process event.
@@ -54,7 +44,8 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
 
         CalculateTester tester = CalculateTester.select();
 
-        boolean mute = this.configure.getBoolean("mute");
+        boolean mute = getPlugin().config(NAME)
+                                  .is("mute");
 
         EventTarget target = mute ? new EventTarget(
                 - 1,
@@ -154,7 +145,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                 }
         );
 
-        if (this.configure.getBoolean("mute")) {
+        if (mute) {
             proxy.send(new SendGroupMuteNormalPacket(
                     packet.getGroupId(),
                     packet.getUserId(),
@@ -165,24 +156,23 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
 
     @Override
     public boolean accept(EventTarget target) {
-        return EntrustEnvironment.get(
-                () -> {
-                    List<Long> list = JSONObject.parse(IOUtil.read(new FileInputStream("configs/plugins/internal/captcha/whitelist.json")))
-                                                .getJSONArray("lists")
-                                                .toList(Long.TYPE);
-                    return target.group() != - 1 && list.contains(target.group());
-                },
-                false
-        );
+        return getPlugin().isAllow(target) && getPlugin().config(NAME)
+                                                         .array("allows")
+                                                         .contains(target.group());
     }
 
     @Override
     public void reload() {
-        this.configure.setDefault(
+        ApsConfig config = getPlugin().config(NAME);
+
+        config.putIfAbsent(
                 "mute",
                 false
         );
-        this.configure.reload();
+        config.putIfAbsent(
+                "allows",
+                JSONArray::new
+        );
     }
 
     private static final class CalculateTester {

@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.echo.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
 import java.util.*;
@@ -23,8 +24,11 @@ public class LawnCore extends Plugin implements Compulsory {
     }
 
     @Override
-    public @NotNull String getName() {
-        return "生草机核心";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Lawn_core",
+                "生草机核心"
+        );
     }
 
     @Override

@@ -98,10 +98,7 @@ public class PluginManager implements ConcurrentService {
                             Plugin plugin = (Plugin) clazz.getDeclaredConstructor()
                                                           .newInstance();
                             if (shouldAsync && plugin.canAsync()) {
-                                this.executor.execute(
-                                        "PluginManager",
-                                        () -> loadPlugin(plugin)
-                                );
+                                this.executor.execute(() -> loadPlugin(plugin));
                             } else {
                                 blockLoading.add(plugin);
                             }
@@ -126,10 +123,6 @@ public class PluginManager implements ConcurrentService {
         }
     }
 
-    public Collection<Plugin> getCores() {
-        return this.cores.values();
-    }
-
     private void register0(Plugin plugin) {
         plugin.setServer(this.server);
         plugin.onInitialize();
@@ -149,10 +142,14 @@ public class PluginManager implements ConcurrentService {
         }
         LOGGER.info(
                 "Plugins '{}'({}) registered {}",
-                plugin.getName(),
+                plugin.name(),
                 plugin.getUuid(),
                 plugin.isCore() ? "(Core plugin)" : ""
         );
+    }
+
+    public Collection<Plugin> getCores() {
+        return this.cores.values();
     }
 
     public void register(Plugin plugin) {
@@ -160,7 +157,7 @@ public class PluginManager implements ConcurrentService {
                   .isAnnotationPresent(AutoPlugin.class)) {
             LOGGER.warn(
                     "The plugin '{}'({}) already annotation by '@AutoPlugin', do not register it manually",
-                    plugin.getName(),
+                    plugin.name(),
                     plugin.getUuid()
             );
             return;

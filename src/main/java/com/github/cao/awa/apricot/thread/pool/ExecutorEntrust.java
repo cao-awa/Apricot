@@ -1,7 +1,6 @@
 package com.github.cao.awa.apricot.thread.pool;
 
 import com.github.cao.awa.apricot.anntations.*;
-import com.github.cao.awa.apricot.util.thread.*;
 import com.github.cao.awa.apricot.util.time.*;
 import org.jetbrains.annotations.*;
 
@@ -9,31 +8,24 @@ import java.util.concurrent.*;
 
 @Stable
 public final class ExecutorEntrust implements Executor {
-    private static final @NotNull ThreadLocal<String> last = ThreadLocal.withInitial(() -> "");
     private final @NotNull Executor executor;
 
     public ExecutorEntrust(@NotNull Executor executor) {
         this.executor = executor;
     }
 
-    public void schedule(@NotNull String entrust, long delay, long interval, @NotNull TimeUnit unit, @NotNull Runnable command) {
+    public void schedule(long delay, long interval, @NotNull TimeUnit unit, @NotNull Runnable command) {
         if (this.executor instanceof ScheduledExecutorService scheduled) {
             if (interval > 0) {
                 scheduled.scheduleAtFixedRate(
-                        () -> execute0(
-                                entrust,
-                                command
-                        ),
+                        command,
                         delay,
                         interval,
                         unit
                 );
             } else {
                 scheduled.schedule(
-                        () -> execute0(
-                                entrust,
-                                command
-                        ),
+                        command,
                         delay,
                         unit
                 );
@@ -43,7 +35,6 @@ public final class ExecutorEntrust implements Executor {
                 throw new IllegalStateException("The executor is not supports to schedule");
             }
             schedule(
-                    entrust,
                     delay,
                     unit,
                     command
@@ -51,47 +42,23 @@ public final class ExecutorEntrust implements Executor {
         }
     }
 
-    private void execute0(@NotNull String entrust, @NotNull Runnable command) {
-        if (! entrust.equals(last.get())) {
-            ThreadUtil.setName(entrust);
-            last.set(entrust);
-        }
-        command.run();
-    }
 
-    public void schedule(@NotNull String entrust, long delay, @NotNull TimeUnit unit, @NotNull Runnable command) {
+    public void schedule(long delay, @NotNull TimeUnit unit, @NotNull Runnable command) {
         if (this.executor instanceof ScheduledExecutorService scheduled) {
             scheduled.schedule(
-                    () -> execute0(
-                            entrust,
-                            command
-                    ),
+                    command,
                     delay,
                     unit
             );
         } else {
-            execute(
-                    entrust,
-                    () -> {
-                        TimeUtil.coma(unit.convert(
-                                delay,
-                                TimeUnit.MILLISECONDS
-                        ));
-                        command.run();
-                    }
-            );
+            execute(() -> {
+                TimeUtil.coma(unit.convert(
+                        delay,
+                        TimeUnit.MILLISECONDS
+                ));
+                command.run();
+            });
         }
-    }
-
-    public void execute(@NotNull String entrust, @NotNull Runnable command) {
-        this.executor.execute(() -> execute0(
-                entrust,
-                command
-        ));
-    }
-
-    public Executor executor() {
-        return this.executor;
     }
 
     /**
@@ -109,10 +76,11 @@ public final class ExecutorEntrust implements Executor {
      */
     @Override
     public void execute(@NotNull Runnable command) {
-        this.execute(
-                "Anonymous",
-                command
-        );
+        this.executor.execute(command);
+    }
+
+    public Executor executor() {
+        return this.executor;
     }
 
     public void shutdown() {

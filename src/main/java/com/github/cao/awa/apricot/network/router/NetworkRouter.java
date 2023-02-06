@@ -10,7 +10,7 @@ import org.jetbrains.annotations.*;
 public abstract class NetworkRouter extends SimpleChannelInboundHandler<WebSocketFrame> {
     private final @NotNull ApricotServer server;
 
-    public @NotNull ApricotServer getServer() {
+    public final @NotNull ApricotServer getServer() {
         return this.server;
     }
 

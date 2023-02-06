@@ -10,6 +10,7 @@ import com.github.cao.awa.apricot.event.receive.message.recall.personal.*;
 import com.github.cao.awa.apricot.event.receive.poke.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.internal.bus.handlers.message.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
 import java.util.function.*;
@@ -20,8 +21,11 @@ public class LawnBus extends Plugin {
     private static final RecallBus recall = new RecallBus();
 
     @Override
-    public @NotNull String getName() {
-        return "生草机巴士";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Lawn_bus",
+                "生草机巴士"
+        );
     }
 
     @Override

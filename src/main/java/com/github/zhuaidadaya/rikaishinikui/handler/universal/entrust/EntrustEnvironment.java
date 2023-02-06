@@ -1,5 +1,6 @@
 package com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust;
 
+import com.alibaba.fastjson2.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.function.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 import org.jetbrains.annotations.*;
@@ -320,6 +321,10 @@ public class EntrustEnvironment {
 
     public static <T> T select(List<T> list, Random random) {
         return list.get(random.nextInt(list.size()));
+    }
+
+    public static <T> T select(JSONArray list, Random random) {
+        return cast(list.get(random.nextInt(list.size())));
     }
 
     public static <T> T desert(List<T> list, Random random) {

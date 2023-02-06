@@ -1,10 +1,12 @@
 package com.github.cao.awa.apricot.plugin;
 
+import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.config.plugin.handler.*;
 import com.github.cao.awa.apricot.event.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.event.target.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.task.intensive.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.jetbrains.annotations.*;
@@ -20,6 +22,10 @@ import java.util.*;
  * @since 1.0.0
  */
 public abstract class Plugin implements Comparable<Plugin> {
+    private final PluginConfig configs = new PluginConfig(
+            this,
+            isCore() ? "core" : "ext"
+    );
     private final Map<String, List<EventHandler<?>>> handlers = ApricotCollectionFactor.newHashMap();
     private ApricotServer server;
 
@@ -65,11 +71,12 @@ public abstract class Plugin implements Comparable<Plugin> {
     }
 
     public UUID getUuid() {
-        return UUID.nameUUIDFromBytes(getName().getBytes(StandardCharsets.UTF_8));
+        return UUID.nameUUIDFromBytes(name().name()
+                                            .getBytes(StandardCharsets.UTF_8));
     }
 
     @NotNull
-    public abstract String getName();
+    public abstract PluginName name();
 
     public abstract void onInitialize();
 
@@ -139,16 +146,11 @@ public abstract class Plugin implements Comparable<Plugin> {
                              valid -> valid.filter(handler -> handler.accept(target))
                                            .forEach(handler -> {
                                                if (parallel()) {
-                                                   EntrustEnvironment.operation(
-                                                           handler.intensive() == IntensiveType.CPU ?
-                                                           getServer().intensiveCpu() :
-                                                           getServer().intensiveIo(),
-                                                           manager -> manager.execute(
-                                                                   getName(),
-                                                                   () -> fireEvent(
-                                                                           handler,
-                                                                           event
-                                                                   )
+                                                   getServer().execute(
+                                                           handler.intensive(),
+                                                           () -> fireEvent(
+                                                                   handler,
+                                                                   event
                                                            )
                                                    );
                                                } else {
@@ -195,7 +197,7 @@ public abstract class Plugin implements Comparable<Plugin> {
         this.fireEvent(
                 event,
                 exclude,
-                this.compulsory()
+                compulsory()
         );
     }
 
@@ -204,8 +206,34 @@ public abstract class Plugin implements Comparable<Plugin> {
     }
 
     public void reload() {
+        this.configs.reload();
+        this.configs.reloadAll();
+
         this.handlers.values()
                      .forEach(handlers -> handlers.forEach(EventHandler::reload));
+    }
+
+    public JSONArray getBotAllows() {
+        return this.configs.config()
+                           .array("allows");
+    }
+
+    public ApsConfig config() {
+        return this.configs.config();
+    }
+
+    public ApsConfig config(String handlerName) {
+        return this.configs.config(handlerName);
+    }
+
+    public boolean isAllow(EventTarget target) {
+        return isAllow(target.bot());
+    }
+
+    public boolean isAllow(long botId) {
+        return this.configs.config()
+                           .array("allows")
+                           .contains(botId);
     }
 
     public boolean isCore() {

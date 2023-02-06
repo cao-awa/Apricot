@@ -48,10 +48,7 @@ public class EchoManager implements ConcurrentService {
             }
             if (this.echos.containsKey(identifier)) {
                 Consumer<EchoResultPacket> action = this.echos.get(identifier);
-                this.executor.execute(
-                        "EchoManager",
-                        () -> action.accept(packet)
-                );
+                this.executor.execute(() -> action.accept(packet));
                 this.echos.remove(identifier);
             } else {
                 LOGGER.warn("Echo identifier not found, ignored this echo");

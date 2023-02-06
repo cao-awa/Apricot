@@ -17,16 +17,14 @@ public class TaskManager implements ConcurrentService {
         this.scheduler = scheduler == null ? executor : scheduler;
     }
 
-    public void execute(String name, Runnable runnable) {
+    public void execute(Runnable runnable) {
         this.executor.execute(
-                name,
                 runnable
         );
     }
 
-    public void schedule(String entrust, long delay, long interval, TimeUnit unit, Runnable command) {
+    public void schedule(long delay, long interval, TimeUnit unit, Runnable command) {
         this.scheduler.schedule(
-                entrust,
                 delay,
                 interval,
                 unit,
@@ -34,9 +32,8 @@ public class TaskManager implements ConcurrentService {
         );
     }
 
-    public void schedule(String entrust, long delay, TimeUnit unit, Runnable command) {
+    public void schedule(long delay, TimeUnit unit, Runnable command) {
         this.scheduler.schedule(
-                entrust,
                 delay,
                 unit,
                 command

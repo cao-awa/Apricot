@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin.ext.grass;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.*;
+import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
 /**
@@ -14,8 +15,11 @@ import org.jetbrains.annotations.*;
 @AutoPlugin
 public class GrassPlugin extends Plugin {
     @Override
-    public @NotNull String getName() {
-        return "草二号机";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Grass",
+                "草二号机"
+        );
     }
 
     @Override

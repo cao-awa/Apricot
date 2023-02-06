@@ -25,7 +25,7 @@ public abstract class EventHandler<T extends Event<?>> {
     public abstract String getType();
 
     public boolean accept(EventTarget target) {
-        return true;
+        return getPlugin().isAllow(target);
     }
 
     public void onExclusive(T event) {

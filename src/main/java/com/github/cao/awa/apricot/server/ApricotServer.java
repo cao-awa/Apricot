@@ -65,6 +65,7 @@ import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
 import com.github.cao.awa.apricot.server.service.task.*;
+import com.github.cao.awa.apricot.task.intensive.*;
 import com.github.cao.awa.apricot.thread.pool.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.io.*;
@@ -442,20 +443,16 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        this.intensiveIo()
-            .execute(
-                    "ApricotNetwork",
-                    () -> EntrustEnvironment.trys(
-                            () -> this.networkIo.start(configs.getInteger("SERVER_PORT")),
-                            ex -> {
-                                LOGGER.error(
-                                        "Apricot network failed to startup",
-                                        ex
-                                );
-                                shutdown();
-                            }
-                    )
-            );
+        intensiveIo().execute(() -> EntrustEnvironment.trys(
+                () -> this.networkIo.start(configs.getInteger("SERVER_PORT")),
+                ex -> {
+                    LOGGER.error(
+                            "Apricot network failed to startup",
+                            ex
+                    );
+                    shutdown();
+                }
+        ));
     }
 
     public TaskManager intensiveIo() {
@@ -479,11 +476,16 @@ public class ApricotServer {
         return this.cpuTaskManager;
     }
 
-    public void execute(String entrust, Runnable runnable) {
-        this.cpuTaskManager.execute(
-                entrust,
-                runnable
-        );
+    public void execute(Runnable runnable) {
+        this.cpuTaskManager.execute(runnable);
+    }
+
+    public void execute(IntensiveType type, Runnable runnable) {
+        if (type == IntensiveType.CPU) {
+            this.cpuTaskManager.execute(runnable);
+        } else {
+            this.ioTaskManager.execute(runnable);
+        }
     }
 
     public <T> CompletableFuture<T> future(Supplier<T> runnable) {
@@ -511,18 +513,16 @@ public class ApricotServer {
         return startupPerformance.get();
     }
 
-    public void schedule(String entrust, long delay, TimeUnit unit, Runnable runnable) {
+    public void schedule(long delay, TimeUnit unit, Runnable runnable) {
         this.cpuTaskManager.schedule(
-                entrust,
                 delay,
                 unit,
                 runnable
         );
     }
 
-    public void schedule(String entrust, long delay, long interval, TimeUnit unit, Runnable runnable) {
+    public void schedule(long delay, long interval, TimeUnit unit, Runnable runnable) {
         this.cpuTaskManager.schedule(
-                entrust,
                 delay,
                 interval,
                 unit,
