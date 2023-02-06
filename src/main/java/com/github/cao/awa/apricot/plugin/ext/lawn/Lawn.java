@@ -26,7 +26,7 @@ public class Lawn extends Plugin {
         registerHandler(new PokeReciprocity());
         //        registerHandler(new RecallNotice());
         registerHandler(new MessageReproducer());
-        registerHandlers(new Reloading());
+        registerHandler(new Reloading());
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.event.handler;
 
+import com.github.cao.awa.apricot.config.plugin.handler.*;
 import com.github.cao.awa.apricot.event.receive.*;
 import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.plugin.*;
@@ -26,6 +27,14 @@ public abstract class EventHandler<T extends Event<?>> {
 
     public boolean accept(EventTarget target) {
         return getPlugin().isAllow(target);
+    }
+
+    public ApsConfig config() {
+        return getPlugin().config();
+    }
+
+    public ApsConfig config(String name) {
+        return getPlugin().config(name);
     }
 
     public void onExclusive(T event) {

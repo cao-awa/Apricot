@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.banner.*;
 import com.github.cao.awa.apricot.config.*;
+import com.github.cao.awa.apricot.config.plugin.handler.*;
 import com.github.cao.awa.apricot.database.message.store.*;
 import com.github.cao.awa.apricot.database.simple.serial.*;
 import com.github.cao.awa.apricot.event.receive.*;
@@ -111,8 +112,16 @@ public class ApricotServer {
     private TaskManager ioTaskManager;
     private ApricotServerNetworkIo networkIo;
     private MessageDatabase messagesHeadOffice;
+    private final ApsConfig apsConfig = new ApsConfig(
+            "configs/plugins/core/Apricot/Apricot.json",
+            "plugins/Apricot/Apricot.json"
+    );
 
     public ApricotServer() {
+    }
+
+    public ApsConfig apsConfig() {
+        return this.apsConfig;
     }
 
     public EventManager getEventManager() {

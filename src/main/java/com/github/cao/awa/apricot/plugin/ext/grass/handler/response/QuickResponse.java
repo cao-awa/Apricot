@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler;
+package com.github.cao.awa.apricot.plugin.ext.grass.handler.response;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.message.received.group.*;
@@ -31,13 +31,15 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
         GroupMessageReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
 
-        JSONArray responses = getPlugin().config(NAME)
-                                         .array("quick_responses");
+        JSONArray responses = config(NAME).array("quick_responses");
 
         // Do not response commands.
         if (MessageProcess.command(
                 packet.getMessage(),
                 "/"
+        ) || MessageProcess.command(
+                packet.getMessage(),
+                "禁言我"
         )) {
             return;
         }
@@ -64,10 +66,5 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
                     packet.getResponseId()
             ));
         }
-    }
-
-    @Override
-    public void onException(Exception exception) {
-        exception.printStackTrace();
     }
 }

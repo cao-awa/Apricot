@@ -227,13 +227,38 @@ public abstract class Plugin implements Comparable<Plugin> {
     }
 
     public boolean isAllow(EventTarget target) {
-        return isAllow(target.bot());
+        if (target.group() == - 1) {
+            return isAllow(
+                    target.bot(),
+                    target.person()
+            ) && ! blocked(target.person());
+        } else {
+            return isAllow(
+                    target.bot(),
+                    target.group()
+            ) && ! blocked(target.person()) && ! blocked(target.group());
+        }
+    }
+
+    public boolean isAllow(long botId, long license) {
+        JSONArray licenses = this.configs.config()
+                                         .array("licences");
+
+        return isAllow(botId) && (licenses.contains("*") || licenses.contains(license));
     }
 
     public boolean isAllow(long botId) {
         return this.configs.config()
                            .array("allows")
                            .contains(botId);
+    }
+
+    public boolean blocked(long license) {
+        return this.configs.config()
+                           .array("blocked")
+                           .contains(license) || getServer().apsConfig()
+                                                            .array("blocked")
+                                                            .contains(license);
     }
 
     public boolean isCore() {

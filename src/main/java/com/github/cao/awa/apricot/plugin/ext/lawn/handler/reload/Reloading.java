@@ -33,6 +33,9 @@ public class Reloading extends MessageEventHandler {
                 message,
                 "/reload"
         )) {
+            server.apsConfig()
+                  .reload();
+
             server.getPlugins()
                   .forEach(Plugin::reload);
 

@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.config.util.*;
 import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.util.io.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+import org.jetbrains.annotations.*;
 
 import java.io.*;
 import java.util.function.*;
@@ -14,7 +15,7 @@ public class ApsConfig {
     private final Function<JSONObject, JSONObject> configLoader;
     private final JSONObject configure = new JSONObject();
 
-    public ApsConfig(String config, String defaultConfig) {
+    public ApsConfig(@NotNull String config, @NotNull String defaultConfig) {
         this.configFile = new File(config);
         this.configLoader = json -> ConfigUtil.jsonFile(
                 json,
@@ -24,11 +25,13 @@ public class ApsConfig {
         reload();
     }
 
+    @NotNull
     public ApsConfig reload() {
         this.configLoader.apply(this.configure);
         return this;
     }
 
+    @NotNull
     public ApsConfig write() {
         EntrustEnvironment.trys(() -> IOUtil.write(
                 new FileWriter(configFile),
@@ -37,11 +40,12 @@ public class ApsConfig {
         return this;
     }
 
-    public JSONArray array(String key) {
+    @NotNull
+    public JSONArray array(@NotNull String key) {
         JSONArray array = this.configure.getJSONArray(key);
         if (array == null) {
             array = new JSONArray();
-            this.configure.put(
+            put(
                     key,
                     array
             );
@@ -49,23 +53,102 @@ public class ApsConfig {
         return array;
     }
 
-    public boolean bool(String key) {
-        return this.configure.containsKey(key) && this.configure.getBoolean(key);
+    @NotNull
+    public String str(@NotNull String key) {
+        return get(
+                key,
+                () -> ""
+        );
     }
 
-    public boolean is(String key) {
-        return this.configure.containsKey(key) && this.configure.getBoolean(key);
+    @NotNull
+    public <T> ApsConfig put(@NotNull String key, T target) {
+        this.configure.put(
+                key,
+                target
+        );
+        write();
+        return this;
     }
 
-    public int integer(String key) {
-        return this.configure.containsKey(key) ? this.configure.getInteger(key) : 0;
+    public boolean bool(@NotNull String key) {
+        return get(
+                key,
+                () -> false
+        );
     }
 
-    public long longInteger(String key) {
-        return this.configure.containsKey(key) ? this.configure.getLong(key) : 0;
+    public float floatPoint(@NotNull String key) {
+        return get(
+                key,
+                () -> 0F
+        );
     }
 
-    public <T> ApsConfig putIfAbsent(String key, Supplier<T> creator) {
+    public double doubleFloat(@NotNull String key) {
+        return get(
+                key,
+                () -> 0D
+        );
+    }
+
+    @NotNull
+    public JSONObject map(@NotNull String key) {
+        JSONObject map = this.configure.getJSONObject(key);
+        if (map == null) {
+            map = new JSONObject();
+            put(
+                    key,
+                    map
+            );
+        }
+        return map;
+    }
+
+    public <T> T get(@NotNull String key, @NotNull Supplier<T> creator) {
+        T target = get(key);
+        if (target == null) {
+            target = creator.get();
+            put(
+                    key,
+                    target
+            );
+        }
+        return target;
+    }
+
+    public boolean is(@NotNull String key) {
+        return bool(key);
+    }
+
+    public <T> boolean is(@NotNull String key, T target) {
+        T element = get(key);
+        return element == null ?
+               target == null :
+               element.getClass()
+                      .isInstance(target) && element.equals(target);
+    }
+
+    public <T> T get(@NotNull String key) {
+        return EntrustEnvironment.cast(this.configure.get(key));
+    }
+
+    public int integer(@NotNull String key) {
+        return get(
+                key,
+                () -> 0
+        );
+    }
+
+    public long longInteger(@NotNull String key) {
+        return get(
+                key,
+                () -> 0L
+        );
+    }
+
+    @NotNull
+    public <T> ApsConfig putIfAbsent(@NotNull String key, Supplier<T> creator) {
         if (! this.configure.containsKey(key)) {
             this.configure.put(
                     key,
@@ -75,7 +158,8 @@ public class ApsConfig {
         return this;
     }
 
-    public <T> ApsConfig putIfAbsent(String key, T creator) {
+    @NotNull
+    public <T> ApsConfig putIfAbsent(@NotNull String key, T creator) {
         if (! this.configure.containsKey(key)) {
             this.configure.put(
                     key,
@@ -85,7 +169,8 @@ public class ApsConfig {
         return this;
     }
 
-    public <T> ApsConfig putIfPresent(String key, Supplier<T> creator) {
+    @NotNull
+    public <T> ApsConfig putIfPresent(@NotNull String key, Supplier<T> creator) {
         if (this.configure.containsKey(key)) {
             this.configure.put(
                     key,
@@ -95,7 +180,8 @@ public class ApsConfig {
         return this;
     }
 
-    public <T> ApsConfig putIfPresent(String key, T creator) {
+    @NotNull
+    public <T> ApsConfig putIfPresent(@NotNull String key, T creator) {
         if (this.configure.containsKey(key)) {
             this.configure.put(
                     key,

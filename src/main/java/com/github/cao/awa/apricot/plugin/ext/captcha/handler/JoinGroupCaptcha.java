@@ -44,8 +44,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
 
         CalculateTester tester = CalculateTester.select();
 
-        boolean mute = getPlugin().config(NAME)
-                                  .is("mute");
+        boolean mute = config(NAME).is("mute");
 
         EventTarget target = mute ? new EventTarget(
                 - 1,
@@ -156,14 +155,13 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
 
     @Override
     public boolean accept(EventTarget target) {
-        return getPlugin().isAllow(target) && getPlugin().config(NAME)
-                                                         .array("allows")
-                                                         .contains(target.group());
+        return getPlugin().isAllow(target) && config(NAME).array("allows")
+                                                          .contains(target.group());
     }
 
     @Override
     public void reload() {
-        ApsConfig config = getPlugin().config(NAME);
+        ApsConfig config = config(NAME);
 
         config.putIfAbsent(
                 "mute",
