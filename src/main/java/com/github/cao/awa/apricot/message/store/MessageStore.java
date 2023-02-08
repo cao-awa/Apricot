@@ -21,11 +21,11 @@ public class MessageStore {
     private AssembledMessage message;
     private long senderId;
     private long targetId;
-    private int messageId;
+    private long messageId;
     private long timestamp;
     private boolean recalled;
 
-    public MessageStore(MessageType type, AssembledMessage message, long senderId, long targetId, int messageId, long timestamp, boolean recalled) {
+    public MessageStore(MessageType type, AssembledMessage message, long senderId, long targetId, long messageId, long timestamp, boolean recalled) {
         this.type = type;
         this.message = message;
         this.senderId = senderId;
@@ -70,9 +70,9 @@ public class MessageStore {
                 sign = 256 + sign;
             }
             // Read message id.
-            int messageId = Base256.intFromBuf(reader.reverseRound(
-                    4,
-                    isDynamic ? sign % 3 == 0 ? reader.read() : 4 : 4
+            long messageId = Base256.longFromBuf(reader.reverseRound(
+                    8,
+                    isDynamic ? sign % 3 == 0 ? reader.read() : 8 : 8
             ));
             // Read sender id.
             long senderId = Base256.longFromBuf(reader.reverseRound(
@@ -148,7 +148,7 @@ public class MessageStore {
                 ),
                 json.getLong("s"),
                 json.getLong("a"),
-                json.getInteger("r"),
+                json.getLong("r"),
                 json.getLong("t"),
                 json.containsKey("c")
         );
@@ -195,7 +195,7 @@ public class MessageStore {
             Receptacle<Integer> sign = Receptacle.of(1);
 
             // Skip the message id.
-            byte[] messageId = Base256.intToBuf(this.messageId);
+            byte[] messageId = Base256.longToBuf(this.messageId);
             messageId = skip(
                     messageId,
                     sign,
@@ -380,11 +380,11 @@ public class MessageStore {
         this.targetId = targetId;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 
-    public void setMessageId(int messageId) {
+    public void setMessageId(long messageId) {
         this.messageId = messageId;
     }
 

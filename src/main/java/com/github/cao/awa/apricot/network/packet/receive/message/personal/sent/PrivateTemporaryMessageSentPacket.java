@@ -13,9 +13,9 @@ public class PrivateTemporaryMessageSentPacket extends PrivateMessageSentPacket 
     private final long targetId;
     private final long responseId;
     private final long timestamp;
-    private final int messageId;
+    private final long messageId;
 
-    public PrivateTemporaryMessageSentPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long targetId, long responseId, long timestamp, int messageId) {
+    public PrivateTemporaryMessageSentPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long targetId, long responseId, long timestamp, long messageId) {
         this.message = message;
         this.botId = botId;
         this.targetId = targetId;
@@ -45,7 +45,7 @@ public class PrivateTemporaryMessageSentPacket extends PrivateMessageSentPacket 
         return this.timestamp;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

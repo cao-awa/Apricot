@@ -46,7 +46,7 @@ public class MessageReproducer extends MessageEventHandler {
                                            .get(Long.parseLong(arg));
                 if (store == null) {
                     store = server.getMessagesHeadOffice()
-                                  .getFromId(Integer.parseInt(arg));
+                                  .getFromId(Long.parseLong(arg));
                 }
 
                 //                System.out.println("'" + arg + "'来自" + (store.getTargetId() == store.getSenderId() ?
@@ -61,6 +61,7 @@ public class MessageReproducer extends MessageEventHandler {
                 store.getMessage()
                      .forEach(response::participate);
             } catch (Exception e) {
+                e.printStackTrace();
                 response.participate(new TextMessageElement("无法找到消息： '" + arg + "'"));
             }
             proxy.send(new SendMessagePacket(

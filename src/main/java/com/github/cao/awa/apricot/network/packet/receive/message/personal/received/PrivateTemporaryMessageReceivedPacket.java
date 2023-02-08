@@ -12,9 +12,9 @@ public class PrivateTemporaryMessageReceivedPacket extends PrivateMessageReceive
     private final IgnoredIdMessageSender sender;
     private final long responseId;
     private final long timestamp;
-    private final int messageId;
+    private final long messageId;
 
-    public PrivateTemporaryMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, int messageId) {
+    public PrivateTemporaryMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, long messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
@@ -43,7 +43,7 @@ public class PrivateTemporaryMessageReceivedPacket extends PrivateMessageReceive
         return this.timestamp;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

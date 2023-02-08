@@ -103,6 +103,10 @@ public class ApricotServer {
             RESOURCE_DATABASE_PATH,
             this
     );
+    private final ApsConfig apsConfig = new ApsConfig(
+            "configs/plugins/core/Apricot/Apricot.json",
+            "plugins/Apricot/Apricot.json"
+    );
     public LawnBus eventBus;
     private boolean active = false;
     private PluginManager plugins;
@@ -112,10 +116,6 @@ public class ApricotServer {
     private TaskManager ioTaskManager;
     private ApricotServerNetworkIo networkIo;
     private MessageDatabase messagesHeadOffice;
-    private final ApsConfig apsConfig = new ApsConfig(
-            "configs/plugins/core/Apricot/Apricot.json",
-            "plugins/Apricot/Apricot.json"
-    );
 
     public ApricotServer() {
     }
@@ -148,7 +148,7 @@ public class ApricotServer {
     }
 
     @NotNull
-    public GetMessageResponsePacket getMessage(ApricotProxy proxy, int messageId) {
+    public GetMessageResponsePacket getMessage(ApricotProxy proxy, long messageId) {
         long ownId = this.messagesHeadOffice.getConvert(messageId);
         MessageStore store = this.messagesHeadOffice.get(ownId);
         if (store == null) {
@@ -183,7 +183,7 @@ public class ApricotServer {
             }
             GetMessageResponsePacket packet = response.get();
             this.messagesHeadOffice.set(
-                    TimeUtil.nano(),
+                    packet.getOwnId(),
                     new MessageStore(
                             packet.getType(),
                             packet.getMessage(),

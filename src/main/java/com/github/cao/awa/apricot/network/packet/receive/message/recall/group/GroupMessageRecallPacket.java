@@ -13,9 +13,9 @@ public class GroupMessageRecallPacket extends MessageRecallPacket {
     private final long timestamp;
     private final long operatorId;
     private final long groupId;
-    private final int messageId;
+    private final long messageId;
 
-    public GroupMessageRecallPacket(long botId, long senderId, long timestamp, long operatorId, long groupId, int messageId) {
+    public GroupMessageRecallPacket(long botId, long senderId, long timestamp, long operatorId, long groupId, long messageId) {
         this.botId = botId;
         this.senderId = senderId;
         this.timestamp = timestamp;
@@ -37,7 +37,7 @@ public class GroupMessageRecallPacket extends MessageRecallPacket {
         return MessageType.GROUP;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

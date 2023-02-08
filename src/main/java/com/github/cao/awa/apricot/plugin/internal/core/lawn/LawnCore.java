@@ -1,6 +1,7 @@
 package com.github.cao.awa.apricot.plugin.internal.core.lawn;
 
 import com.github.cao.awa.apricot.event.handler.*;
+import com.github.cao.awa.apricot.event.target.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.echo.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message.*;
@@ -43,6 +44,11 @@ public class LawnCore extends Plugin implements Compulsory {
         registerHandlers(new InternalEchoResultHandler());
     }
 
+    @Override
+    public String version() {
+        return "1.0.5";
+    }
+
     /**
      * The core plugin need ordered to pipeline, parallel may cause information be incorrect.
      *
@@ -53,12 +59,27 @@ public class LawnCore extends Plugin implements Compulsory {
         return false;
     }
 
-    public boolean isCore() {
+    @Override
+    public boolean isAllow(EventTarget target) {
         return true;
     }
 
     @Override
-    public String version() {
-        return "1.0.5";
+    public boolean isAllow(long botId, long license) {
+        return true;
+    }
+
+    @Override
+    public boolean isAllow(long botId) {
+        return true;
+    }
+
+    @Override
+    public boolean blocked(long license) {
+        return false;
+    }
+
+    public boolean isCore() {
+        return true;
     }
 }

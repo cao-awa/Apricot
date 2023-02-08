@@ -12,9 +12,9 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
     private final IgnoredIdMessageSender sender;
     private final long responseId;
     private final long timestamp;
-    private final int messageId;
+    private final long messageId;
 
-    public GroupAnonymousMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, int messageId) {
+    public GroupAnonymousMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, long messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
@@ -43,7 +43,7 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
         return this.timestamp;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

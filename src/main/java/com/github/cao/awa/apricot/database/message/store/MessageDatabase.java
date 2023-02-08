@@ -45,7 +45,7 @@ public class MessageDatabase extends ApricotDatabase<Long, MessageStore> {
                      .getBytes(StandardCharsets.UTF_8)
         );
         this.convert.put(
-                Base256.intToBuf(value.getMessageId()),
+                Base256.longToBuf(value.getMessageId()),
                 Base256.longToBuf(key)
         );
     }
@@ -65,22 +65,22 @@ public class MessageDatabase extends ApricotDatabase<Long, MessageStore> {
         return result;
     }
 
-    public void setFromId(int id, MessageStore value) {
+    public void setFromId(long id, MessageStore value) {
         set(
                 getConvert(id),
                 value
         );
     }
 
-    public long getConvert(int id) {
+    public long getConvert(long id) {
         try {
-            return Base256.longFromBuf(this.convert.get(Base256.intToBuf(id)));
+            return Base256.longFromBuf(this.convert.get(Base256.longToBuf(id)));
         } catch (Exception e) {
             return - 1;
         }
     }
 
-    public MessageStore getFromId(int id) {
+    public MessageStore getFromId(long id) {
         return get(getConvert(id));
     }
 

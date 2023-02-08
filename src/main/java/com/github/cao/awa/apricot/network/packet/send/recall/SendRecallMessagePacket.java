@@ -8,17 +8,17 @@ import com.github.cao.awa.apricot.network.router.*;
 import java.util.function.*;
 
 public class SendRecallMessagePacket extends WritablePacket<NoResponsePacket> {
-    private int messageId;
+    private long messageId;
 
-    public SendRecallMessagePacket(int messageId) {
+    public SendRecallMessagePacket(long messageId) {
         this.messageId = messageId;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 
-    public void setMessageId(int messageId) {
+    public void setMessageId(long messageId) {
         this.messageId = messageId;
     }
 

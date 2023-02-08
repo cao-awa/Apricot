@@ -49,7 +49,8 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                       EntrustEnvironment.trys(
                               () -> {
                                   server.download(
-                                          image.getFile(),
+                                          image.getFile()
+                                               .getName(),
                                           image.getUrl()
                                   );
                               },
@@ -57,17 +58,6 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                       );
                   }
               });
-
-//        LOGGER.info(
-//                "|{}/{}| ({}) {}: {}",
-//                packet.getMessageId(),
-//                packet.getOwnId(),
-//                packet.getSenderId(),
-//                packet.getSender()
-//                      .getName(),
-//                packet.getMessage()
-//                      .toPlainText()
-//        );
     }
 
     /**

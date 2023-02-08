@@ -49,7 +49,8 @@ public class SelfMessageStore extends MessageSentEventHandler {
                       EntrustEnvironment.trys(
                               () -> {
                                   server.download(
-                                          image.getFile(),
+                                          image.getFile()
+                                               .getName(),
                                           image.getUrl()
                                   );
                               },

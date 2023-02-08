@@ -11,13 +11,13 @@ import com.github.cao.awa.apricot.util.message.*;
 public class GetMessageResponsePacket extends ResponsePacket {
     private final BasicMessageSender sender;
     private final MessageType type;
-    private final int messageId;
+    private final long messageId;
     private final long ownId;
     private final long targetId;
     private final AssembledMessage message;
     private final long timestamp;
 
-    public GetMessageResponsePacket(BasicMessageSender sender, AssembledMessage message, MessageType type, long targetId, int messageId, long ownId, long timestamp) {
+    public GetMessageResponsePacket(BasicMessageSender sender, AssembledMessage message, MessageType type, long targetId, long messageId, long ownId, long timestamp) {
         this.sender = sender;
         this.type = type;
         this.targetId = targetId;
@@ -28,7 +28,7 @@ public class GetMessageResponsePacket extends ResponsePacket {
     }
 
     public static GetMessageResponsePacket create(ApricotServer server, JSONObject json) {
-        int messageId = json.getInteger("message_id");
+        long messageId = json.getInteger("message_id");
         BasicMessageSender sender = new BasicMessageSender(
                 json.getLong("user_id"),
                 json.getString("nickname")
@@ -56,7 +56,7 @@ public class GetMessageResponsePacket extends ResponsePacket {
         return this.type;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

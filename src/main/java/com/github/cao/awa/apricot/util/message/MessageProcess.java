@@ -45,4 +45,9 @@ public class MessageProcess {
                       .toPlainText()
                       .startsWith(prefix);
     }
+
+    public static String plain(AssembledMessage message) {
+        return message.carver(TextMessageElement.class)
+                      .toPlainText();
+    }
 }

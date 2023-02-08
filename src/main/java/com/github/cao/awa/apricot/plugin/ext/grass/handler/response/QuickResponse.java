@@ -14,7 +14,8 @@ import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import java.util.*;
 
 public class QuickResponse extends GroupMessageReceivedEventHandler {
-    public static final String NAME = "QuickResponse";
+    public static final String QUICK_RESPONSE = "QuickResponse";
+    public static final String WORD_RESPONSE = "WordResponse";
     private static final Random RANDOM = new Random();
 
     /**
@@ -31,8 +32,6 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
         GroupMessageReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.getProxy();
 
-        JSONArray responses = config(NAME).array("quick_responses");
-
         // Do not response commands.
         if (MessageProcess.command(
                 packet.getMessage(),
@@ -48,6 +47,8 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
                 packet.getMessage(),
                 packet.getBotId()
         )) {
+            JSONArray responses = config(QUICK_RESPONSE).array("quick_responses");
+
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     new AssembledMessage().participate(new TextMessageElement(EntrustEnvironment.select(
@@ -60,11 +61,21 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
                 packet.getMessage(),
                 packet.getBotId()
         )) {
-            proxy.send(new SendMessagePacket(
-                    packet.getType(),
-                    new AssembledMessage().participate(new TextMessageElement("我只是一只Bot，我看不懂")),
-                    packet.getResponseId()
-            ));
+            String response = config(WORD_RESPONSE).map("word_responses")
+                                                   .getString(MessageProcess.plain(packet.getMessage()));
+            if (response == null) {
+                //                proxy.send(new SendMessagePacket(
+                //                        packet.getType(),
+                //                        new AssembledMessage().participate(new TextMessageElement("我只是一只Bot，我看不懂")),
+                //                        packet.getResponseId()
+                //                ));
+            } else {
+                proxy.send(new SendMessagePacket(
+                        packet.getType(),
+                        new AssembledMessage().participate(new TextMessageElement(response)),
+                        packet.getResponseId()
+                ));
+            }
         }
     }
 }

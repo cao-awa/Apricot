@@ -2,8 +2,11 @@ package com.github.cao.awa.apricot.plugin.ext.grass;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.delete.*;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hitokoto.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.mute.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.response.*;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.wordle.*;
 import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
 
@@ -27,6 +30,9 @@ public class GrassPlugin extends Plugin {
     public void onInitialize() {
         registerHandler(new QuickResponse());
         registerHandler(new MuteMe());
+        registerHandler(new Hitokoto());
+        registerHandler(new FastDelete());
+        registerHandler(new WordleGame());
     }
 
     @Override

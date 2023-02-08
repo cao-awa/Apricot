@@ -11,9 +11,9 @@ public class PrivateMessageRecallPacket extends MessageRecallPacket {
     private final long botId;
     private final long responseId;
     private final long timestamp;
-    private final int messageId;
+    private final long messageId;
 
-    public PrivateMessageRecallPacket(long botId, long responseId, long timestamp, int messageId) {
+    public PrivateMessageRecallPacket(long botId, long responseId, long timestamp, long messageId) {
         this.botId = botId;
         this.responseId = responseId;
         this.timestamp = timestamp;
@@ -25,7 +25,7 @@ public class PrivateMessageRecallPacket extends MessageRecallPacket {
         return MessageType.PRIVATE;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return this.messageId;
     }
 

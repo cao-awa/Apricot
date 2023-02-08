@@ -8,17 +8,17 @@ import com.github.cao.awa.apricot.network.router.*;
 import java.util.function.*;
 
 public class GetMessagePacket extends WritablePacket<GetMessageResponsePacket> {
-    public int messageId;
+    public long messageId;
 
-    public GetMessagePacket(int messageId) {
+    public GetMessagePacket(long messageId) {
         this.messageId = messageId;
     }
 
-    public int getMessageId() {
+    public long getMessageId() {
         return messageId;
     }
 
-    public void setMessageId(int messageId) {
+    public void setMessageId(long messageId) {
         this.messageId = messageId;
     }
 
