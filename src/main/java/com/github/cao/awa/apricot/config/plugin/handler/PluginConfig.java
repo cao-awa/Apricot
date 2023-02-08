@@ -14,8 +14,8 @@ public class PluginConfig {
     public PluginConfig(Plugin plugin, String prefix) {
         this.configPath = "configs/plugins/" + prefix + "/" + plugin.name()
                                                                     .eName();
-        this.defaultConfigPath = "plugins/" + plugin.name()
-                                                    .eName();
+        this.defaultConfigPath = "assets/plugins/" + plugin.name()
+                                                           .eName();
         this.pluginConfig = new ApsConfig(
                 this.configPath + "/" + plugin.name()
                                               .eName() + ".json",

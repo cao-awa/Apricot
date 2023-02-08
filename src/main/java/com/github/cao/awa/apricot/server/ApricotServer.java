@@ -105,7 +105,7 @@ public class ApricotServer {
     );
     private final ApsConfig apsConfig = new ApsConfig(
             "configs/plugins/core/Apricot/Apricot.json",
-            "plugins/Apricot/Apricot.json"
+            "assets/plugins/Apricot/Apricot.json"
     );
     public LawnBus eventBus;
     private boolean active = false;
@@ -285,7 +285,7 @@ public class ApricotServer {
 
     public void setupDirectories() {
         boolean config = new File("configs").mkdirs();
-        boolean plugins = new File("plugins").mkdirs();
+        boolean plugins = new File("assets/plugins").mkdirs();
     }
 
     public void setupPlugins() {

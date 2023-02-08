@@ -147,7 +147,7 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
                 file.createNewFile();
                 IOUtil.write(
                         new FileOutputStream(file),
-                        ResourcesLoader.get("plugins/Grass/Wordle/Words/words_" + i + ".lang")
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/words_" + i + ".lang")
                 );
             } catch (Exception e) {
                 e.printStackTrace();
@@ -162,23 +162,23 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
             FileUtil.mkdirs(new File("configs/plugins/ext/Grass/Wordle/Words/verify/"));
             IOUtil.write(
                     new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000004.log"),
-                    ResourcesLoader.get("plugins/Grass/Wordle/Words/verify/000004.log")
+                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000004.log")
             );
             IOUtil.write(
                     new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000005.ldb"),
-                    ResourcesLoader.get("plugins/Grass/Wordle/Words/verify/000005.ldb")
+                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000005.ldb")
             );
             IOUtil.write(
                     new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/CURRENT"),
-                    ResourcesLoader.get("plugins/Grass/Wordle/Words/verify/CURRENT")
+                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/CURRENT")
             );
             IOUtil.write(
                     new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/LOCK"),
-                    ResourcesLoader.get("plugins/Grass/Wordle/Words/verify/LOCK")
+                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/LOCK")
             );
             IOUtil.write(
                     new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/MANIFEST-000002"),
-                    ResourcesLoader.get("plugins/Grass/Wordle/Words/verify/MANIFEST-000002")
+                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/MANIFEST-000002")
             );
 
             this.verify = new Iq80DBFactory().open(

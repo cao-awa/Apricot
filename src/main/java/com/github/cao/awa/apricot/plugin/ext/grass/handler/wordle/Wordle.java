@@ -80,7 +80,7 @@ public class Wordle {
         );
         Font mono = Font.createFont(
                 Font.TRUETYPE_FONT,
-                ResourcesLoader.get("fonts/mono/JetBrainsMono-Bold.ttf")
+                ResourcesLoader.get("assets/fonts/mono/JetBrainsMono-Bold.ttf")
         );
 
         Font font = mono.deriveFont(
@@ -125,7 +125,7 @@ public class Wordle {
         );
         Font mono = Font.createFont(
                 Font.TRUETYPE_FONT,
-                ResourcesLoader.get("fonts/mono/JetBrainsMono-Bold.ttf")
+                ResourcesLoader.get("assets/fonts/mono/JetBrainsMono-Bold.ttf")
         );
 
         Font font = mono.deriveFont(

@@ -71,7 +71,7 @@ public class PluginManager implements ConcurrentService {
 
                 Set<Class<?>> results = ApricotCollectionFactor.newHashSet();
 
-                File pluginDir = new File("plugins");
+                File pluginDir = new File("assets/plugins");
                 AnnotatedClassFinder finder = new AnnotatedClassFinder(
                         pluginDir,
                         AutoPlugin.class
