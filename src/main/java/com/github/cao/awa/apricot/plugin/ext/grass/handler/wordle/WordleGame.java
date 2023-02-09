@@ -57,6 +57,26 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        } else if (MessageProcess.plain(packet.getMessage())
+                                 .equals("/wordle stop")) {
+            Wordle wordle = this.playingGroup.get(packet.getGroupId());
+            if (wordle != null && ! wordle.getWord()
+                                          .equals("")) {
+                proxy.send(new SendMessagePacket(
+                        packet.getType(),
+                        new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
+                                              .participate(new TextMessageElement("不想玩啦？那就结束叭，答案是：" + wordle.getWord())),
+                        packet.getResponseId()
+                ));
+            } else {
+                proxy.send(new SendMessagePacket(
+                        packet.getType(),
+                        new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
+                                              .participate(new TextMessageElement("还没有正在进行中的猜字谜哦")),
+                        packet.getResponseId()
+                ));
+            }
+            this.playingGroup.remove(packet.getGroupId());
         } else {
             String plain = MessageProcess.plain(packet.getMessage());
             if (plain.length() < 3 || plain.length() > 17) {
@@ -72,7 +92,6 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
                                 packet.getGroupId(),
                                 wordle
                         );
-                        System.out.println(wordle.getWord());
                     }
                     if (wordle.getWord()
                               .length() != plain.length()) {
