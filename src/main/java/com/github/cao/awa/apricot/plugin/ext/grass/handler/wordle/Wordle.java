@@ -5,6 +5,7 @@ import com.github.cao.awa.apricot.resource.loader.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.file.*;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
+import com.github.zhuaidadaya.rikaishinikui.handler.universal.pair.*;
 
 import javax.imageio.*;
 import java.awt.*;
@@ -221,7 +222,8 @@ public class Wordle {
             return false;
         }
         Map<Character, Integer> charCounts = ApricotCollectionFactor.newHashMap();
-        for (char c : this.word.toCharArray()) {
+        char[] word = this.word.toCharArray();
+        for (char c : word) {
             charCounts.put(
                     c,
                     charCounts.getOrDefault(
@@ -240,9 +242,11 @@ public class Wordle {
         int baseX = (this.rows - 1) * (this.word.length() * this.size + this.word.length() * this.sp) + (this.rows - 1) * this.sp;
 
         char[] chars = str.toCharArray();
+        Pair<Character, Color>[] prepares = new Pair[chars.length];
+        Map<Character, Integer> greenCount = ApricotCollectionFactor.newHashMap();
         for (int i = 0; i < chars.length; i++) {
             char c = chars[i];
-            boolean match = c == this.word.charAt(i);
+            boolean match = c == word[i];
             boolean has = this.word.contains(String.valueOf(c));
             boolean hasMore = charCounts.getOrDefault(
                     c,
@@ -255,6 +259,20 @@ public class Wordle {
                             0
                     ) - 1
             );
+            Color color = match ? GREEN : has ? hasMore ? YELLOW : GRAY : GRAY;
+            prepares[i] = new Pair<>(
+                    c,
+                    color
+            );
+            if (color == GREEN) {
+                greenCount.put(
+                        c,
+                        greenCount.getOrDefault(
+                                c,
+                                0
+                        ) + 1
+                );
+            }
             drawTip(
                     c,
                     false,
@@ -264,12 +282,35 @@ public class Wordle {
             drawChar(
                     this.mainGraphics,
                     c,
-                    hasMore ? match ? GREEN : has ? YELLOW : GRAY : GRAY,
+                    color,
                     Color.WHITE,
                     this.sp + (this.sp * i + this.size * i) + baseX,
                     this.sp + (this.curLines - 1) * (this.sp + this.size),
                     this.size
             );
+        }
+
+        for (int i = 0; i < prepares.length; i++) {
+            Pair<Character, Color> color = prepares[i];
+            if (color.right() == YELLOW) {
+                if (greenCount.getOrDefault(
+                        color.left(),
+                        0
+                ) > 0 && charCounts.getOrDefault(
+                        color.left(),
+                        0
+                ) < 1) {
+                    drawChar(
+                            this.mainGraphics,
+                            color.left(),
+                            GRAY,
+                            Color.WHITE,
+                            this.sp + (this.sp * i + this.size * i) + baseX,
+                            this.sp + (this.curLines - 1) * (this.sp + this.size),
+                            this.size
+                    );
+                }
+            }
         }
 
         this.isDone = this.word.equals(str);

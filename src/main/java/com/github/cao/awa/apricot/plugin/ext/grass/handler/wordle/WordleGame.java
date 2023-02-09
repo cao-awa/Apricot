@@ -22,9 +22,9 @@ import java.io.*;
 import java.util.*;
 
 public class WordleGame extends GroupMessageReceivedEventHandler {
-    private DB verify;
     private static final Random RANDOM = new Random();
     private final Map<Long, Wordle> playingGroup = ApricotCollectionFactor.newConcurrentHashMap();
+    private DB verify;
 
     /**
      * Process event.
@@ -155,32 +155,29 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
         }
 
         try {
-            if (new File("configs/plugins/ext/Grass/Wordle/Words/verify/LOCK").isFile()) {
-                return;
+            if (! new File("configs/plugins/ext/Grass/Wordle/Words/verify/LOCK").isFile()) {
+                FileUtil.mkdirs(new File("configs/plugins/ext/Grass/Wordle/Words/verify/"));
+                IOUtil.write(
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000004.log"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000004.log")
+                );
+                IOUtil.write(
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000005.ldb"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000005.ldb")
+                );
+                IOUtil.write(
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/CURRENT"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/CURRENT")
+                );
+                IOUtil.write(
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/LOCK"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/LOCK")
+                );
+                IOUtil.write(
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/MANIFEST-000002"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/MANIFEST-000002")
+                );
             }
-
-            FileUtil.mkdirs(new File("configs/plugins/ext/Grass/Wordle/Words/verify/"));
-            IOUtil.write(
-                    new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000004.log"),
-                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000004.log")
-            );
-            IOUtil.write(
-                    new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000005.ldb"),
-                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000005.ldb")
-            );
-            IOUtil.write(
-                    new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/CURRENT"),
-                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/CURRENT")
-            );
-            IOUtil.write(
-                    new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/LOCK"),
-                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/LOCK")
-            );
-            IOUtil.write(
-                    new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/MANIFEST-000002"),
-                    ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/MANIFEST-000002")
-            );
-
             this.verify = new Iq80DBFactory().open(
                     new File("configs/plugins/ext/Grass/Wordle/Words/verify"),
                     new Options().createIfMissing(true)
