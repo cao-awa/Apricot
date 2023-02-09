@@ -65,7 +65,8 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
                 proxy.send(new SendMessagePacket(
                         packet.getType(),
                         new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                              .participate(new TextMessageElement("不想玩啦？那就结束叭，答案是：" + wordle.getWord())),
+                                              .participate(new TextMessageElement("不想玩啦？那就结束叭，答案是：" + wordle.getWord()
+                                                                                                            .toLowerCase())),
                         packet.getResponseId()
                 ));
             } else {
