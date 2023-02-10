@@ -87,18 +87,13 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
             if (wordle != null) {
                 try {
                     if (wordle.getWord()
-                              .equals("")) {
-                        wordle = new Wordle(randomWord(plain.length()));
-                        this.playingGroup.put(
-                                packet.getGroupId(),
-                                wordle
-                        );
-                    }
-                    if (wordle.getWord()
                               .length() != plain.length()) {
                         return;
                     }
-                    if (verify.get(plain.getBytes()) == null) {
+                    if (! plain.matches("^[a-zA-Z]*")) {
+                        return;
+                    }
+                    if (this.verify.get(plain.getBytes()) == null) {
                         proxy.send(new SendMessagePacket(
                                 packet.getType(),
                                 new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
@@ -106,6 +101,14 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
                                 packet.getResponseId()
                         ));
                         return;
+                    }
+                    if (wordle.getWord()
+                              .equals("")) {
+                        wordle = new Wordle(randomWord(plain.length()));
+                        this.playingGroup.put(
+                                packet.getGroupId(),
+                                wordle
+                        );
                     }
                     if (wordle.draw(plain)) {
                         proxy.send(new SendMessagePacket(
@@ -178,12 +181,16 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
             if (! new File("configs/plugins/ext/Grass/Wordle/Words/verify/LOCK").isFile()) {
                 FileUtil.mkdirs(new File("configs/plugins/ext/Grass/Wordle/Words/verify/"));
                 IOUtil.write(
-                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000004.log"),
-                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000004.log")
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000042.log"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000042.log")
                 );
                 IOUtil.write(
                         new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000005.ldb"),
                         ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000005.ldb")
+                );
+                IOUtil.write(
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/000007.ldb"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/000007.ldb")
                 );
                 IOUtil.write(
                         new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/CURRENT"),
@@ -194,8 +201,8 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
                         ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/LOCK")
                 );
                 IOUtil.write(
-                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/MANIFEST-000002"),
-                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/MANIFEST-000002")
+                        new FileOutputStream("configs/plugins/ext/Grass/Wordle/Words/verify/MANIFEST-000041"),
+                        ResourcesLoader.get("assets/plugins/Grass/Wordle/Words/verify/MANIFEST-000041")
                 );
             }
             this.verify = new Iq80DBFactory().open(

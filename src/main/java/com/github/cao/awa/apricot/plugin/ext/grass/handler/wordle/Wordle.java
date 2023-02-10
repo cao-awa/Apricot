@@ -39,8 +39,8 @@ public class Wordle {
             199,
             99
     );
-    private final int size = 64;
-    private final int sp = 4;
+    private final int size = 128;
+    private final int sp = 8;
     private final String word;
     private final List<Character> already = ApricotCollectionFactor.newArrayList();
     private final String identifier;
