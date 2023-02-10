@@ -36,6 +36,8 @@ dependencies {
     shadow 'org.lz4:lz4-java:1.8.0'
     shadow 'com.squareup.okhttp3:okhttp:5.0.0-alpha.11'
 
+    shadow("bot.inker.acj:runtime:1.3")
+
     shadow 'org.jetbrains:annotations:23.1.0'
 
     shadow 'org.reflections:reflections:0.10.2'

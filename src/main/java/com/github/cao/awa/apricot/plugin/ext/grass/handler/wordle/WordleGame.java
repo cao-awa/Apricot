@@ -86,11 +86,19 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
             Wordle wordle = this.playingGroup.get(packet.getGroupId());
             if (wordle != null) {
                 try {
-                    if (wordle.getWord()
-                              .length() != plain.length()) {
+                    if (! plain.matches("^[a-zA-Z]*")) {
                         return;
                     }
-                    if (! plain.matches("^[a-zA-Z]*")) {
+                    if (wordle.getWord()
+                              .equals("")) {
+                        wordle = new Wordle(randomWord(plain.length()));
+                        this.playingGroup.put(
+                                packet.getGroupId(),
+                                wordle
+                        );
+                    }
+                    if (wordle.getWord()
+                              .length() != plain.length()) {
                         return;
                     }
                     if (this.verify.get(plain.getBytes()) == null) {
@@ -101,14 +109,6 @@ public class WordleGame extends GroupMessageReceivedEventHandler {
                                 packet.getResponseId()
                         ));
                         return;
-                    }
-                    if (wordle.getWord()
-                              .equals("")) {
-                        wordle = new Wordle(randomWord(plain.length()));
-                        this.playingGroup.put(
-                                packet.getGroupId(),
-                                wordle
-                        );
                     }
                     if (wordle.draw(plain)) {
                         proxy.send(new SendMessagePacket(

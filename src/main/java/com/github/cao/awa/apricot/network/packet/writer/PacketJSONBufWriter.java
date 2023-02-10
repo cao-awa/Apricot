@@ -1,17 +1,19 @@
 package com.github.cao.awa.apricot.network.packet.writer;
 
 import com.alibaba.fastjson2.*;
+import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.server.*;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
 import org.jetbrains.annotations.*;
 
+@Stable
 public class PacketJSONBufWriter {
     private static final Logger LOGGER = LogManager.getLogger("PacketWriter");
+    private static final @NotNull ThreadLocal<JSONObject> JSONS = new ThreadLocal<>();
     private final @NotNull ApricotServer server;
     private final @NotNull Channel channel;
-    private static final @NotNull ThreadLocal<JSONObject> JSONS = new ThreadLocal<>();
 
     public PacketJSONBufWriter(@NotNull ApricotServer server, @NotNull Channel channel) {
         this.server = server;
@@ -20,6 +22,15 @@ public class PacketJSONBufWriter {
 
     public JSONObject take() {
         return ensure();
+    }
+
+    private JSONObject ensure() {
+        JSONObject json = JSONS.get();
+        if (json == null) {
+            json = new JSONObject();
+            JSONS.set(json);
+        }
+        return json;
     }
 
     public JSONObject take(String key) {
@@ -35,15 +46,6 @@ public class PacketJSONBufWriter {
             );
         }
         return result;
-    }
-
-    private JSONObject ensure() {
-        JSONObject json = JSONS.get();
-        if (json == null) {
-            json = new JSONObject();
-            JSONS.set(json);
-        }
-        return json;
     }
 
     public void done() {

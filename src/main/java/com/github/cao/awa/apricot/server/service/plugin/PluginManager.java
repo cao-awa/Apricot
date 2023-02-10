@@ -71,17 +71,10 @@ public class PluginManager implements ConcurrentService {
 
                 Set<Class<?>> results = ApricotCollectionFactor.newHashSet();
 
-                File pluginDir = new File("assets/plugins");
-                AnnotatedClassFinder finder = new AnnotatedClassFinder(
-                        pluginDir,
-                        AutoPlugin.class
-                );
-                results.addAll(finder.getClasses()
-                                     .values());
-
                 results.addAll(apricotJar.isFile() ?
                                new Reflections(new ConfigurationBuilder().addUrls(apricotJar.toURI()
                                                                                             .toURL())
+                                                                         .addUrls(JarSearchLoader.load(new File("plugins")))
                                                                          .addScanners(Scanners.TypesAnnotated)).getTypesAnnotatedWith(AutoPlugin.class) :
                                new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(""))
                                                                          .addScanners(Scanners.TypesAnnotated)).getTypesAnnotatedWith(AutoPlugin.class));
@@ -103,13 +96,11 @@ public class PluginManager implements ConcurrentService {
                                 blockLoading.add(plugin);
                             }
                         },
-                        ex -> {
-                            LOGGER.info(
-                                    "Failed to register auto plugin: {}",
-                                    clazz.getName(),
-                                    ex
-                            );
-                        }
+                        ex -> LOGGER.info(
+                                "Failed to register auto plugin: {}",
+                                clazz.getName(),
+                                ex
+                        )
                 );
             }
 
