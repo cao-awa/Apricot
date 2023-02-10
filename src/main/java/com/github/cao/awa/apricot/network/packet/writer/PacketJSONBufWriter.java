@@ -11,52 +11,57 @@ public class PacketJSONBufWriter {
     private static final Logger LOGGER = LogManager.getLogger("PacketWriter");
     private final @NotNull ApricotServer server;
     private final @NotNull Channel channel;
-    private final @NotNull ThreadLocal<JSONObject> json;
+    private static final @NotNull ThreadLocal<JSONObject> JSONS = new ThreadLocal<>();
 
     public PacketJSONBufWriter(@NotNull ApricotServer server, @NotNull Channel channel) {
         this.server = server;
         this.channel = channel;
-        this.json = new ThreadLocal<>();
-        this.json.set(new JSONObject());
     }
 
     public JSONObject take() {
-        JSONObject json = this.json.get();
+        return ensure();
+    }
+
+    public JSONObject take(String key) {
+        JSONObject json = ensure();
+        JSONObject result;
+        if (json.containsKey(key)) {
+            result = json.getJSONObject(key);
+        } else {
+            result = new JSONObject();
+            json.put(
+                    key,
+                    result
+            );
+        }
+        return result;
+    }
+
+    private JSONObject ensure() {
+        JSONObject json = JSONS.get();
         if (json == null) {
             json = new JSONObject();
-            this.json.set(json);
+            JSONS.set(json);
         }
         return json;
     }
 
-    public JSONObject take(String key) {
-        final JSONObject json = this.json.get();
-        if (! json.containsKey(key)) {
-            json.put(
-                    key,
-                    new JSONObject()
-            );
-        }
-        return json.getJSONObject(key);
-    }
-
     public void done() {
-        final JSONObject json = this.json.get();
+        final JSONObject json = JSONS.get();
         if (json.size() == 0) {
             LOGGER.trace("Has an occurs not completed writing, ignored");
             return;
         }
-        String information = json.toString();
-        TextWebSocketFrame frame = new TextWebSocketFrame(information);
+        final String information = json.toString();
         this.server.getTrafficsCounter()
                    .out(information.length());
         this.server.getPacketsCounter()
                    .out(1);
-        this.channel.writeAndFlush(frame);
+        this.channel.writeAndFlush(new TextWebSocketFrame(information));
         flush();
     }
 
     public void flush() {
-        this.json.set(new JSONObject());
+        JSONS.remove();
     }
 }

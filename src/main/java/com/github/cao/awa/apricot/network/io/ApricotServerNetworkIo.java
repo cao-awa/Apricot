@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.io.channel.*;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.thread.pool.*;
+import com.github.cao.awa.apricot.util.thread.*;
 import io.netty.bootstrap.*;
 import io.netty.channel.*;
 import io.netty.channel.epoll.*;
@@ -45,6 +46,8 @@ public class ApricotServerNetworkIo {
     }
 
     public void start(final int port) throws Exception {
+        ThreadUtil.setName("ApricotNetworkIo");
+
         boolean expectEpoll = server.useEpoll();
         boolean epoll = Epoll.isAvailable();
 
