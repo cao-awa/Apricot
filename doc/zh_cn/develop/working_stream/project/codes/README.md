@@ -19,5 +19,6 @@
 * RandomIdentifier
 * InformationCompressor
 * Configure
+* ApsConfig
 * ApricotDatabase
 * ResourceLoader / ResourceDispenser
