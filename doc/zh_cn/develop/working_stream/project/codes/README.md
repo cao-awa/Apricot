@@ -12,7 +12,7 @@
 ## 内部库
 * EntrustEnvironment
 * ApricotCollectionFactor
-* Base256
+* [Base256](/doc/zh_cn/develop/working_stream/project/codes/math/Base256.md)
 * Receptacle
 * Affair
 * BytesReader
