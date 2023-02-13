@@ -12,10 +12,10 @@
 ## 获取代吗
 通过克隆刚创建好的分支来获取代码
 
-'''bash
+```bash
 git init
 git clone https://github.com/<用户名>/<分支名称>
-'''
+```
 
 随后在支持git、gradle的工作环境中打开此项目
 
