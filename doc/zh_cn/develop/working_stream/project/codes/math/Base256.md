@@ -58,7 +58,7 @@ public static long longFromBuf(byte[] buf) {
 }
 ```
 
-在转为字节数组时（longToBuf），将一个数字的指定部分（8bit一组）右移至最高位，强制转换为byte时只会保存那8位
+在转为字节数组时（longToBuf），将一个数字的指定部分（8bit一组）右移至最高位，强制转换为byte时只会保留那8位
 
 在还原时（longFromBuf），将各个字节转为long类型，然后左移到原先的位置后全部相加，即可得到原数字
 
