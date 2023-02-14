@@ -1,7 +1,7 @@
 # Base256 
-Base256位于``` com.github.cao.awa.apricot.mathematic.base.Base256.java ```
+Base256位于```com.github.cao.awa.apricot.mathematic.base.Base256```
 
-此类用于将数字转换为byte数组，不兼容 ``` SimInt ``` 的数字（因为SimInt本身就可以直接转字节数组）
+此类用于将数字转换为byte数组，不兼容 ```SimInt``` 的数字（因为SimInt本身就可以直接转字节数组）
 
 ## 用法 
 ```java
@@ -74,7 +74,7 @@ public static long longFromBuf(byte[] buf) {
 使用这种方式存储的int，在数字超过9999时，具有更小的存储优势
 
 \
-而要使得Base256在更小时也存在存储优势，请参考 ``` MessageStore ``` 的可变长编码
+而要使得Base256在更小时也存在存储优势，请参考 ```MessageStore``` 的可变长编码
 
 这会导致长度固定的优势失效
 
