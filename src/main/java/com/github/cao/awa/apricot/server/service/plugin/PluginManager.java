@@ -77,6 +77,7 @@ public class PluginManager implements ConcurrentService {
                                                                          .addUrls(JarSearchLoader.load(new File("plugins")))
                                                                          .addScanners(Scanners.TypesAnnotated)).getTypesAnnotatedWith(AutoPlugin.class) :
                                new Reflections(new ConfigurationBuilder().addUrls(ClasspathHelper.forPackage(""))
+                                                                         .addUrls(JarSearchLoader.load(new File("plugins")))
                                                                          .addScanners(Scanners.TypesAnnotated)).getTypesAnnotatedWith(AutoPlugin.class));
                 return results;
             }));

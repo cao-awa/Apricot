@@ -32,7 +32,7 @@ public class GrassPlugin extends Plugin {
         registerHandler(new MuteMe());
         registerHandler(new Hitokoto());
         registerHandler(new FastDelete());
-        registerHandler(new WordleGame());
+        //        registerHandler(new WordleGame());
     }
 
     @Override
