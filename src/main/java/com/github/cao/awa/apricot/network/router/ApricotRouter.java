@@ -2,11 +2,13 @@ package com.github.cao.awa.apricot.network.router;
 
 import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.anntations.*;
+import com.github.cao.awa.apricot.debug.monitor.Monitor;
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.handler.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.*;
 import com.github.cao.awa.apricot.server.*;
+import com.github.cao.awa.apricot.util.time.TimeUtil;
 import io.netty.channel.*;
 import io.netty.handler.codec.http.websocketx.*;
 import org.apache.logging.log4j.*;
@@ -26,9 +28,12 @@ public class ApricotRouter extends NetworkRouter {
     private final @NotNull ApricotProxy proxy;
     private final @NotNull StringBuilder stitching = new StringBuilder();
     private final ApricotUniqueDispenser dispenser;
-    //    private final Set<ReadonlyPacket> broadcasts = ApricotCollectionFactor.newHashSet();
     private ChannelHandlerContext context;
     private Channel channel;
+    private int packetCounter = 0;
+    private long times = TimeUtil.millions();
+    private static final int PACKET_LIMIT_PER_SECONDS = 1000;
+    private boolean alive = true;
 
     public ApricotRouter(@NotNull ApricotServer server) {
         super(server);
@@ -72,13 +77,22 @@ public class ApricotRouter extends NetworkRouter {
      */
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        getServer()
-            .getTrafficsCounter()
-            .in(frame.content()
-                     .writerIndex());
-        getServer()
-            .getPacketsCounter()
-            .in(1);
+        if (! this.alive) {
+            return;
+        }
+        this.packetCounter++;
+        if (this.packetCounter > PACKET_LIMIT_PER_SECONDS) {
+            if (TimeUtil.processMillion(this.times) < 1000) {
+                LOGGER.warn("Server are received packets more than {} in a seconds, this maybe is a DDOS, attention to attack again",
+                            PACKET_LIMIT_PER_SECONDS
+                );
+                this.disconnect("The server is being attacked by you.");
+                this.alive = false;
+            } else {
+                this.times = TimeUtil.millions();
+            }
+            return;
+        }
         handleFragment(frame);
     }
 
@@ -156,7 +170,9 @@ public class ApricotRouter extends NetworkRouter {
     public void handleRequest(JSONObject request) {
         getServer()
                 .intensiveIo()
-                .execute(() -> handleRequest(createPacket(request)));
+                .execute(() ->
+                                 handleRequest(createPacket(request))
+                );
     }
 
     private ReadonlyPacket createPacket(JSONObject request) {

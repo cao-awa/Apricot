@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.network.handler;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.dispenser.*;
 import com.github.cao.awa.apricot.network.packet.*;
+import com.github.cao.awa.apricot.network.packet.receive.meta.lifecycle.ProxyDisconnectPacket;
 
 @Stable
 public class ApricotBotRequestHandler extends RequestHandler {
@@ -12,9 +13,14 @@ public class ApricotBotRequestHandler extends RequestHandler {
 
     @Override
     public void handlePacket(ReadonlyPacket packet) {
-        packet.fireEvent(
-                getDispenser().getServer(),
-                getDispenser().getRouter().getProxy()
-        );
+        if (packet instanceof ProxyDisconnectPacket disconnectPacket) {
+            getDispenser().disconnect(disconnectPacket.getDisconnectReason());
+        } else {
+            packet.fireEvent(
+                    getDispenser().getServer(),
+                    getDispenser().getRouter()
+                                  .getProxy()
+            );
+        }
     }
 }

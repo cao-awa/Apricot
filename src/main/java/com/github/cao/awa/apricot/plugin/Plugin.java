@@ -48,16 +48,12 @@ public abstract class Plugin implements Comparable<Plugin> {
      * x.compareTo(y)==0} implies that {@code signum(x.compareTo(z))
      * == signum(y.compareTo(z))}, for all {@code z}.
      *
-     * @param o
-     *         the object to be compared.
+     * @param o the object to be compared.
      * @return a negative integer, zero, or a positive integer as this object
      * is less than, equal to, or greater than the specified object.
-     *
-     * @throws NullPointerException
-     *         if the specified object is null
-     * @throws ClassCastException
-     *         if the specified object's type prevents it
-     *         from being compared to this object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it
+     *                              from being compared to this object.
      * @apiNote It is strongly recommended, but <i>not</i> strictly required that
      * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any
      * class that implements the {@code Comparable} interface and violates
@@ -109,8 +105,7 @@ public abstract class Plugin implements Comparable<Plugin> {
     /**
      * Let an event be fired.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -126,8 +121,7 @@ public abstract class Plugin implements Comparable<Plugin> {
     /**
      * Let an event be fired.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -140,9 +134,9 @@ public abstract class Plugin implements Comparable<Plugin> {
                      this.handlers.get(type),
                      handlers -> EntrustEnvironment.operation(
                              exclude == null || compulsory ?
-                             handlers.stream() :
-                             handlers.stream()
-                                     .filter(eventHandler -> eventHandler.compulsory() && eventHandler != exclude),
+                                     handlers.stream() :
+                                     handlers.stream()
+                                             .filter(eventHandler -> eventHandler.compulsory() && eventHandler != exclude),
                              valid -> valid.filter(handler -> handler.accept(target))
                                            .forEach(handler -> {
                                                if (parallel()) {
@@ -168,7 +162,7 @@ public abstract class Plugin implements Comparable<Plugin> {
     private static void fireEvent(EventHandler<?> handler, Event<?> event) {
         EntrustEnvironment.trys(
                 () -> event.fireEvent(handler),
-                handler::onException
+                handler :: onException
         );
     }
 
@@ -187,8 +181,7 @@ public abstract class Plugin implements Comparable<Plugin> {
     /**
      * Let an event be fired.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -210,7 +203,7 @@ public abstract class Plugin implements Comparable<Plugin> {
         this.configs.reloadAll();
 
         this.handlers.values()
-                     .forEach(handlers -> handlers.forEach(EventHandler::reload));
+                     .forEach(handlers -> handlers.forEach(EventHandler :: reload));
     }
 
     public JSONArray getBotAllows() {

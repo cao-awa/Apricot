@@ -61,7 +61,6 @@ import com.github.cao.awa.apricot.plugin.internal.bus.*;
 import com.github.cao.awa.apricot.plugin.internal.core.lawn.*;
 import com.github.cao.awa.apricot.resource.dispenser.*;
 import com.github.cao.awa.apricot.resource.loader.*;
-import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.server.service.echo.*;
 import com.github.cao.awa.apricot.server.service.event.*;
 import com.github.cao.awa.apricot.server.service.plugin.*;
@@ -96,8 +95,6 @@ public class ApricotServer {
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
-    private final TrafficCounter trafficsCounter = new TrafficCounter("Traffic");
-    private final TrafficCounter packetsCounter = new TrafficCounter("Packets");
     private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.newHashMap();
     private final ResourcesDispenser resourcesDispenser = new ResourcesDispenser(
             RESOURCE_DATABASE_PATH,
@@ -217,14 +214,6 @@ public class ApricotServer {
 
     public ApricotServerNetworkIo getNetworkIo() {
         return this.networkIo;
-    }
-
-    public TrafficCounter getTrafficsCounter() {
-        return this.trafficsCounter;
-    }
-
-    public TrafficCounter getPacketsCounter() {
-        return this.packetsCounter;
     }
 
     public void startup() throws IOException {
