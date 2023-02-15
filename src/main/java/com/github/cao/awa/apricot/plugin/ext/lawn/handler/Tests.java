@@ -54,64 +54,6 @@ public class Tests extends MessageReceivedEventHandler {
         if (event.getPacket()
                  .getMessage()
                  .toPlainText()
-                 .equals(".traffic")) {
-            TrafficCounter traffics = server.getTrafficsCounter();
-            TrafficCounter packets = server.getPacketsCounter();
-
-            StringBuilder builder = new StringBuilder();
-            builder.append("--Traffic--")
-                   .append("\n");
-            builder.append("In: ")
-                   .append(traffics.getTotalIn())
-                   .append(" Bytes")
-                   .append("\n");
-            builder.append("Out: ")
-                   .append(traffics.getTotalOut())
-                   .append(" Bytes")
-                   .append("\n");
-            builder.append("--Packets--")
-                   .append("\n");
-            builder.append("In: ")
-                   .append(packets.getTotalIn())
-                   .append("\n");
-            builder.append("Out: ")
-                   .append(packets.getTotalOut())
-                   .append("\n");
-            Legacy<Long, Long> trafficsOneSecond = traffics.current();
-            Legacy<Long, Long> packetsOneSecond = packets.current();
-            builder.append("--Traffic (1s)--")
-                   .append("\n");
-            builder.append("In: ")
-                   .append(trafficsOneSecond.newly())
-                   .append(" Bytes")
-                   .append("\n");
-            builder.append("Out: ")
-                   .append(trafficsOneSecond.stale())
-                   .append(" Bytes")
-                   .append("\n");
-            builder.append("--Packets (1s)--")
-                   .append("\n");
-            builder.append("In: ")
-                   .append(packetsOneSecond.newly())
-                   .append("\n");
-            builder.append("Out: ")
-                   .append(packetsOneSecond.stale());
-
-            event.getProxy()
-                 .send(
-                         new SendMessagePacket(
-                                 packet.getType(),
-                                 new TextMessageElement(builder.toString()).toMessage(),
-                                 packet.getResponseId()
-                         ),
-                         result -> {
-                         }
-                 );
-        }
-
-        if (event.getPacket()
-                 .getMessage()
-                 .toPlainText()
                  .equals(".dummy_forward")) {
             List<ForwardMessage> messages = ApricotCollectionFactor.newArrayList();
 

@@ -54,12 +54,7 @@ public class PacketJSONBufWriter {
             LOGGER.trace("Has an occurs not completed writing, ignored");
             return;
         }
-        final String information = json.toString();
-        this.server.getTrafficsCounter()
-                   .out(information.length());
-        this.server.getPacketsCounter()
-                   .out(1);
-        this.channel.writeAndFlush(new TextWebSocketFrame(information));
+        this.channel.writeAndFlush(new TextWebSocketFrame(json.toString()));
         flush();
     }
 
