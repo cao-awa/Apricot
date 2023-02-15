@@ -63,23 +63,20 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Is called for each message of type {@link WebSocketFrame}.
      *
-     * @param ctx
-     *         the {@link ChannelHandlerContext} which this {@link SimpleChannelInboundHandler}
-     *         belongs to
-     * @param frame
-     *         the message to handle
-     * @throws Exception
-     *         is thrown if an error occurred
+     * @param ctx   the {@link ChannelHandlerContext} which this {@link SimpleChannelInboundHandler}
+     *              belongs to
+     * @param frame the message to handle
+     * @throws Exception is thrown if an error occurred
      * @author cao_awa
      * @since 1.0.0
      */
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        this.getServer()
+        getServer()
             .getTrafficsCounter()
             .in(frame.content()
                      .writerIndex());
-        this.getServer()
+        getServer()
             .getPacketsCounter()
             .in(1);
         handleFragment(frame);
@@ -88,8 +85,7 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle fragments and handle the final frame.
      *
-     * @param frame
-     *         the message
+     * @param frame the message
      * @author cao_awa
      * @since 1.0.0
      */
@@ -141,8 +137,7 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle the frame, frame should be final fragment.
      *
-     * @param frame
-     *         the message
+     * @param frame the message
      * @author cao_awa
      * @since 1.0.0
      */
@@ -153,24 +148,25 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle the json format message to packet form and handle it.
      *
-     * @param request
-     *         the request
+     * @param request the request
      * @author 草二号机
      * @author cao_awa
      * @since 1.0.0
      */
     public void handleRequest(JSONObject request) {
-        this.getServer()
-            .intensiveIo()
-            .execute(() -> handleRequest(getServer()
-                                                 .createPacket(request)));
+        getServer()
+                .intensiveIo()
+                .execute(() -> handleRequest(createPacket(request)));
+    }
+
+    private ReadonlyPacket createPacket(JSONObject request) {
+        return getServer().createPacket(request);
     }
 
     /**
      * Handle the packet.
      *
-     * @param request
-     *         the request
+     * @param request the request
      * @author cao_awa
      * @since 1.0.0
      */
@@ -181,8 +177,7 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Disconnect with reason.
      *
-     * @param reason
-     *         disconnect reason
+     * @param reason disconnect reason
      * @author cao_awa
      * @since 1.0.0
      */
@@ -193,8 +188,7 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Broadcast packet for repeat handle.
      *
-     * @param packet
-     *         the packet
+     * @param packet the packet
      * @author 草二号机
      * @since 1.0.0
      */

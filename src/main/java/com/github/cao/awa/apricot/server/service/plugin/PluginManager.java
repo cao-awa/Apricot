@@ -134,7 +134,7 @@ public class PluginManager implements ConcurrentService {
         }
         LOGGER.info(
                 "Plugins '{}'({}) registered {}",
-                plugin.name(),
+                plugin.name().eName(),
                 plugin.getUuid(),
                 plugin.isCore() ? "(Core plugin)" : ""
         );

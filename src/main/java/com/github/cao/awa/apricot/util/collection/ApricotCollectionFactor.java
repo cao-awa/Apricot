@@ -19,7 +19,8 @@ public class ApricotCollectionFactor {
     }
 
     public static <V> List<V> newArrayList() {
-        return newArrayList(0);
+        return new ArrayList<>();
+        //        return new ObjectArrayList<>();
     }
 
     public static <V> List<V> newArrayList(int capacity) {
@@ -28,7 +29,7 @@ public class ApricotCollectionFactor {
     }
 
     public static <V> List<V> newLinkedList() {
-         return new LinkedList<>();
+        return new LinkedList<>();
     }
 
     public static <V> Set<V> newHashSet() {

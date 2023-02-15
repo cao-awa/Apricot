@@ -43,7 +43,7 @@ dependencies {
     shadow 'org.reflections:reflections:0.10.2'
 }
 
-tasks.withType(JavaCompile).all {
+tasks.withType(JavaCompile).configureEach {
     options.compilerArgs += ['--enable-preview']
 }
 
