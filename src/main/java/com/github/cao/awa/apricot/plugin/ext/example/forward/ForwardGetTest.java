@@ -13,8 +13,7 @@ public class ForwardGetTest extends MessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -30,7 +29,9 @@ public class ForwardGetTest extends MessageReceivedEventHandler {
 
         if (forward.size() > 0) {
             proxy.send(new GetForwardMessagePacket(forward.get(0)
-                                                          .getId()));
+                                                          .getId()), response -> {
+                System.out.println(response.getIdentifier());
+            });
         }
     }
 }

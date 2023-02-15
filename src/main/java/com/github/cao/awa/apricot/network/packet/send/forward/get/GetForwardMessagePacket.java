@@ -8,7 +8,7 @@ import com.github.cao.awa.apricot.network.router.*;
 
 import java.util.function.*;
 
-@Unsupported
+@Planning
 public class GetForwardMessagePacket extends WritablePacket<GetForwardMessageResponsePacket> {
     public String messageId;
 
@@ -48,7 +48,7 @@ public class GetForwardMessagePacket extends WritablePacket<GetForwardMessageRes
 
     @Override
     public boolean shouldEcho() {
-        return false;
+        return true;
     }
 
     @Override

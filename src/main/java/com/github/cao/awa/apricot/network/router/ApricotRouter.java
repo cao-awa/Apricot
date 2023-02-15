@@ -94,14 +94,14 @@ public class ApricotRouter extends NetworkRouter {
             // Handle final or not finals fragment happens.
             if (frame.isFinalFragment()) {
                 // Final fragment should be direct handle.
-                handleFrame(textFrame);
+                handleFrame(textFrame.text());
 
                 // Aftermath for wrongly append fragment.
                 // In normally, this is redundancy plan, do not wish it be happens.
                 if (this.stitching.length() > 0) {
                     // Handle the wrong frame forcefully.
                     LOGGER.debug("Aftermath for wrongly append fragment");
-                    handleFrame(new TextWebSocketFrame(this.stitching.toString()));
+                    handleFrame(this.stitching.toString());
                     // Let stitching be clear.
                     this.stitching.setLength(0);
                 }
@@ -123,7 +123,7 @@ public class ApricotRouter extends NetworkRouter {
             // Let it build to a completed fragment when continuation frame is final.
             if (continuationFrame.isFinalFragment()) {
                 // Handle the completed frame.
-                handleFrame(new TextWebSocketFrame(this.stitching.toString()));
+                handleFrame(this.stitching.toString());
                 // Let stitching be clear.
                 this.stitching.setLength(0);
             }
@@ -137,12 +137,12 @@ public class ApricotRouter extends NetworkRouter {
     /**
      * Handle the frame, frame should be final fragment.
      *
-     * @param frame the message
+     * @param content the message
      * @author cao_awa
      * @since 1.0.0
      */
-    private void handleFrame(TextWebSocketFrame frame) {
-        handleRequest(JSONObject.parseObject(frame.text()));
+    private void handleFrame(String content) {
+        handleRequest(JSONObject.parseObject(content));
     }
 
     /**

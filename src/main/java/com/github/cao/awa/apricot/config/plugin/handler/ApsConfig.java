@@ -8,6 +8,7 @@ import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.jetbrains.annotations.*;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.function.*;
 
 public class ApsConfig {
@@ -20,7 +21,7 @@ public class ApsConfig {
         this.configLoader = json -> ConfigUtil.jsonFile(
                 json,
                 config,
-                () -> IOUtil.read(ResourcesLoader.get(defaultConfig))
+                () -> IOUtil.read(new InputStreamReader(ResourcesLoader.get(defaultConfig), StandardCharsets.UTF_8))
         );
         reload();
     }
