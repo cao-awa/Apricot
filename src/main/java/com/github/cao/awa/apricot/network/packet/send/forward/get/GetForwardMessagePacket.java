@@ -1,6 +1,5 @@
 package com.github.cao.awa.apricot.network.packet.send.forward.get;
 
-import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.network.packet.*;
 import com.github.cao.awa.apricot.network.packet.receive.response.forward.*;
 import com.github.cao.awa.apricot.network.packet.writer.*;
@@ -8,7 +7,6 @@ import com.github.cao.awa.apricot.network.router.*;
 
 import java.util.function.*;
 
-@Planning
 public class GetForwardMessagePacket extends WritablePacket<GetForwardMessageResponsePacket> {
     public String messageId;
 
@@ -27,8 +25,7 @@ public class GetForwardMessagePacket extends WritablePacket<GetForwardMessageRes
     /**
      * Write data to buffer.
      *
-     * @param writer
-     *         writer
+     * @param writer writer
      * @author cao_awa
      * @since 1.0.0
      */

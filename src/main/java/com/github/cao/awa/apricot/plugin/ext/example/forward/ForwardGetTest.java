@@ -8,8 +8,11 @@ import com.github.cao.awa.apricot.message.element.cq.forward.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.get.*;
 import com.github.cao.awa.apricot.network.router.*;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 public class ForwardGetTest extends MessageReceivedEventHandler {
+    private static final Logger LOGGER = LogManager.getLogger("Forwarder");
     /**
      * Process event.
      *
@@ -30,6 +33,17 @@ public class ForwardGetTest extends MessageReceivedEventHandler {
         if (forward.size() > 0) {
             proxy.send(new GetForwardMessagePacket(forward.get(0)
                                                           .getId()), response -> {
+                response.getMessages().forEach(node -> {
+                    node.ifMessage(msg -> {
+                        LOGGER.info(msg.getMessage().toPlainText() + ":awa");
+                    });
+
+                    node.forEach(inner -> {
+                        System.out.println("Next");
+                    },msg -> {
+                        LOGGER.info(msg.getMessage().toPlainText());
+                    });
+                });
                 System.out.println(response.getIdentifier());
             });
         }
