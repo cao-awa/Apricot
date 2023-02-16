@@ -4,6 +4,7 @@ import com.alibaba.fastjson2.*;
 import com.github.cao.awa.apricot.event.handler.message.received.group.*;
 import com.github.cao.awa.apricot.event.receive.message.group.received.*;
 import com.github.cao.awa.apricot.message.assemble.*;
+import com.github.cao.awa.apricot.message.element.cq.replay.ReplyMessageElement;
 import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.group.received.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
@@ -28,53 +29,57 @@ public class QuickResponse extends GroupMessageReceivedEventHandler {
      */
     @Override
     public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
-        GroupMessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
-
-        // Do not response commands.
-        if (MessageProcess.command(
-                packet.getMessage(),
-                "/"
-        ) || MessageProcess.command(
-                packet.getMessage(),
-                "禁言我"
-        )) {
-            return;
-        }
-
-        if (MessageProcess.isAt(
-                packet.getMessage(),
-                packet.getBotId()
-        )) {
-            JSONArray responses = config(QUICK_RESPONSE).array("quick_responses");
-
-            proxy.send(new SendMessagePacket(
-                    packet.getType(),
-                    new AssembledMessage().participate(new TextMessageElement(EntrustEnvironment.select(
-                            responses,
-                            RANDOM
-                    ))),
-                    packet.getResponseId()
-            ));
-        } else if (MessageProcess.afterAt(
-                packet.getMessage(),
-                packet.getBotId()
-        )) {
-            String response = config(WORD_RESPONSE).map("word_responses")
-                                                   .getString(MessageProcess.plain(packet.getMessage()));
-            if (response == null) {
-                //                proxy.send(new SendMessagePacket(
-                //                        packet.getType(),
-                //                        new AssembledMessage().participate(new TextMessageElement("我只是一只Bot，我看不懂")),
-                //                        packet.getResponseId()
-                //                ));
-            } else {
-                proxy.send(new SendMessagePacket(
-                        packet.getType(),
-                        new AssembledMessage().participate(new TextMessageElement(response)),
-                        packet.getResponseId()
-                ));
-            }
-        }
+//        GroupMessageReceivedPacket packet = event.getPacket();
+//        ApricotProxy proxy = event.getProxy();
+//
+//        // Do not response commands.
+//        if (MessageProcess.command(
+//                packet.getMessage(),
+//                "/"
+//        ) || MessageProcess.command(
+//                packet.getMessage(),
+//                "禁言我"
+//        )) {
+//            return;
+//        }
+//
+//        if (MessageProcess.startWith(packet.getMessage(), ReplyMessageElement.class)) {
+//            return;
+//        }
+//
+//        if (MessageProcess.isAt(
+//                packet.getMessage(),
+//                packet.getBotId()
+//        )) {
+//            JSONArray responses = config(QUICK_RESPONSE).array("quick_responses");
+//
+//            proxy.send(new SendMessagePacket(
+//                    packet.getType(),
+//                    new AssembledMessage().participate(new TextMessageElement(EntrustEnvironment.select(
+//                            responses,
+//                            RANDOM
+//                    ))),
+//                    packet.getResponseId()
+//            ));
+//        } else if (MessageProcess.afterAt(
+//                packet.getMessage(),
+//                packet.getBotId()
+//        )) {
+//            String response = config(WORD_RESPONSE).map("word_responses")
+//                                                   .getString(MessageProcess.plain(packet.getMessage()));
+//            if (response == null) {
+//                proxy.send(new SendMessagePacket(
+//                        packet.getType(),
+//                        new AssembledMessage().participate(new TextMessageElement("我只是一只Bot，我看不懂")),
+//                        packet.getResponseId()
+//                ));
+//            } else {
+//                proxy.send(new SendMessagePacket(
+//                        packet.getType(),
+//                        new AssembledMessage().participate(new TextMessageElement(response)),
+//                        packet.getResponseId()
+//                ));
+//            }
+//        }
     }
 }

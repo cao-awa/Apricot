@@ -45,11 +45,20 @@ public class BytesReader {
         }
     }
 
-    public BytesReader skip(byte target) {
+    public BytesReader next(byte target) {
         while (read() == target) {
         }
         this.cursor--;
         return this;
+    }
+
+    public BytesReader skip(int length) {
+        this.cursor += length;
+        return this;
+    }
+
+    public boolean readable(int length) {
+        return this.bytes.length >= this.cursor + length;
     }
 
     public int read() {

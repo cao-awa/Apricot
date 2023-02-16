@@ -6,8 +6,10 @@ import com.github.cao.awa.apricot.message.element.cq.image.*;
 import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.router.*;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.Hanasu;
 import com.github.cao.awa.apricot.server.*;
 import com.github.cao.awa.apricot.task.intensive.*;
+import com.github.cao.awa.apricot.util.message.MessageProcess;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 
@@ -58,6 +60,8 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                       );
                   }
               });
+
+        Hanasu.MODEL.model(MessageProcess.plain(packet.getMessage()));
     }
 
     /**

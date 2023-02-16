@@ -307,7 +307,7 @@ public class MessageStore {
     private static byte[] skip(byte[] source, Receptacle<Integer> sign, int targetNumber) {
         BytesReader reader = new BytesReader(source);
         // Skip, and get the cursor.
-        int cursor = reader.skip((byte) 0)
+        int cursor = reader.next((byte) 0)
                            .getCursor();
         // It only makes sense in the context of cursor not 0.
         // The zero means unable to skip empty bytes.

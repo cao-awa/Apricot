@@ -441,7 +441,7 @@ public class ApricotServer {
         // Setup network io
         this.networkIo = new ApricotServerNetworkIo(this);
 
-        intensiveIo().execute(() -> EntrustEnvironment.trys(
+        intensiveCpu().execute(() -> EntrustEnvironment.trys(
                 () -> this.networkIo.start(configs.getInteger("SERVER_PORT")),
                 ex -> {
                     LOGGER.error(

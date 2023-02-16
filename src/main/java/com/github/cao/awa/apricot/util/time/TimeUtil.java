@@ -2,6 +2,9 @@ package com.github.cao.awa.apricot.util.time;
 
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TimeUtil {
     public static long millions() {
         return System.currentTimeMillis();
@@ -31,5 +34,10 @@ public class TimeUtil {
 
     public static long nanoId() {
         return nano() / 100;
+    }
+
+    public static String format(String pattern) {
+        SimpleDateFormat format = new SimpleDateFormat(pattern);
+        return format.format(new Date());
     }
 }
