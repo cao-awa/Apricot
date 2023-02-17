@@ -89,6 +89,7 @@ public class ApricotRouter extends NetworkRouter {
                 this.disconnect("The server is being attacked by you.");
                 this.alive = false;
             } else {
+                this.packetCounter = 0;
                 this.times = TimeUtil.millions();
             }
             return;

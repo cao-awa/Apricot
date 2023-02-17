@@ -53,9 +53,11 @@ public class HanasuModel {
                                  .random(RANDOM);
             } else {
                 int index = 0;
+                Result result = this.analysis.parseStr(preGen);
+                word = this.chain.get(result.get(RANDOM.nextInt(0, result.size())).getName());
                 while (word == null) {
-                    if (this.chain.length() > index) {
-                        word = this.chain.get(this.analysis.parseStr(preGen)
+                    if (result.size() > index) {
+                        word = this.chain.get(result
                                                            .get(index++)
                                                            .getName());
                     } else {
