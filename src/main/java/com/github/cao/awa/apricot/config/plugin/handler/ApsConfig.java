@@ -9,6 +9,7 @@ import org.jetbrains.annotations.*;
 
 import java.io.*;
 import java.nio.charset.StandardCharsets;
+import java.util.List;
 import java.util.function.*;
 
 public class ApsConfig {
@@ -52,6 +53,19 @@ public class ApsConfig {
             );
         }
         return array;
+    }
+
+    @NotNull
+    public <T> List<T> array(@NotNull String key, Class<T> type) {
+        JSONArray array = this.configure.getJSONArray(key);
+        if (array == null) {
+            array = new JSONArray();
+            put(
+                    key,
+                    array
+            );
+        }
+        return array.toList(type);
     }
 
     @NotNull

@@ -45,10 +45,25 @@ public class HanasuModel {
 
     public String text(@NotNull String preGen) {
         try {
-            MarkovWord word = preGen.equals("") ? this.chain.get()
-                                                       .random(RANDOM) : this.chain.get(this.analysis.parseStr(preGen)
-                                                                                                .get(0)
-                                                                                                .getName());
+            this.chain.save();
+
+            MarkovWord word = null;
+            if (preGen.equals("")) {
+                word = this.chain.get()
+                                 .random(RANDOM);
+            } else {
+                int index = 0;
+                while (word == null) {
+                    if (this.chain.length() > index) {
+                        word = this.chain.get(this.analysis.parseStr(preGen)
+                                                           .get(index++)
+                                                           .getName());
+                    } else {
+                        word = this.chain.get()
+                                         .random(RANDOM);
+                    }
+                }
+            }
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < RANDOM.nextInt(10,
                                                25
@@ -76,7 +91,9 @@ public class HanasuModel {
 
     public void model(@NotNull String line) {
         try {
-            if (line.strip().trim().equals("")) {
+            if (line.strip()
+                    .trim()
+                    .equals("")) {
                 return;
             }
 
@@ -88,14 +105,14 @@ public class HanasuModel {
                 if (last.equals("")) {
                     last = term.getName();
                     this.chain.addWeight(last,
-                                    null
+                                         null
                     );
                     continue;
                 }
                 this.chain.addWeight(last,
-                                new MarkovWordWeight(term.getName(),
-                                                     1
-                                )
+                                     new MarkovWordWeight(term.getName(),
+                                                          1
+                                     )
                 );
                 last = term.getName();
             }

@@ -23,6 +23,10 @@ public class MarkovChain {
         );
     }
 
+    public int length() {
+        return this.wordsStore.checkIndex();
+    }
+
     public void addWeight(String str, MarkovWordWeight inputWeight) {
         MarkovWord word = this.words.get(str);
         if (word == null) {
@@ -53,7 +57,9 @@ public class MarkovChain {
             String key = entry.getKey();
             MarkovWord value = entry.getValue();
             MarkovWord weight = this.wordsStore.get(key);
-            compound(value, weight);
+            compound(value,
+                     weight
+            );
 
             this.wordsStore.put(key,
                                 value
@@ -68,16 +74,16 @@ public class MarkovChain {
             return;
         }
         for (MarkovWordWeight target : source.getWeights()
-                                            .values()) {
+                                             .values()) {
             source.setWeight(target.getWord(),
-                            new MarkovWordWeight(input.getWord(),
-                                                 EntrustEnvironment.getNotNull(input.getWeights()
+                             new MarkovWordWeight(input.getWord(),
+                                                  EntrustEnvironment.getNotNull(input.getWeights()
                                                                                      .get(target.getWord()),
-                                                                               ZERO_WEIGHT
-                                                                   )
-                                                                   .getWeight() +
-                                                         target.getWeight()
-                            )
+                                                                                ZERO_WEIGHT
+                                                                    )
+                                                                    .getWeight() +
+                                                          target.getWeight()
+                             )
             );
         }
     }
@@ -86,8 +92,12 @@ public class MarkovChain {
         MarkovWord word = this.words.get(str);
         MarkovWord store = this.wordsStore.get(str);
         if (word != null) {
-            compound(store, word);
-            add(str, store);
+            compound(store,
+                     word
+            );
+            add(str,
+                store
+            );
             this.words.remove(str);
         }
         return store;

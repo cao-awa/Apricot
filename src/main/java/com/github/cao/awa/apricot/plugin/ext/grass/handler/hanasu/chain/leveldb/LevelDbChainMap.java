@@ -74,7 +74,7 @@ public class LevelDbChainMap {
         );
     }
 
-    private int checkIndex() {
+    public int checkIndex() {
         byte[] bytes = this.convert.get("INDEX".getBytes(StandardCharsets.UTF_8));
         int result;
         if (bytes == null) {

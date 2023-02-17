@@ -1,5 +1,6 @@
 package com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message;
 
+import com.github.cao.awa.apricot.config.plugin.handler.ApsConfig;
 import com.github.cao.awa.apricot.event.handler.message.received.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.element.cq.image.*;
@@ -19,8 +20,7 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -56,12 +56,25 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                                           image.getUrl()
                                   );
                               },
-                              Throwable::printStackTrace
+                              Throwable :: printStackTrace
                       );
                   }
               });
 
-        Hanasu.MODEL.model(MessageProcess.plain(packet.getMessage()));
+        ApsConfig learnConfig = config("HanasuLearn");
+
+        if (learnConfig.array("targets",
+                              Long.class
+                       )
+                       .contains(packet.getResponseId()) && (! learnConfig.array("excludes",
+                                                                                 Long.class
+                                                                          )
+                                                                          .contains(packet.getSenderId()) && ! learnConfig.array("excludes",
+                                                                                                                                 Long.class
+                                                                                                                          )
+                                                                                                                          .contains(packet.getResponseId()))) {
+            Hanasu.MODEL.model(MessageProcess.plain(packet.getMessage()));
+        }
     }
 
     /**

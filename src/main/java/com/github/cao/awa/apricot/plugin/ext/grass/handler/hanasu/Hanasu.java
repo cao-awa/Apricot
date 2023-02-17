@@ -43,7 +43,7 @@ public class Hanasu extends GroupMessageReceivedEventHandler {
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     new AssembledMessage().participate(new TextMessageElement(
-                            MODEL.text("")
+                            text("")
                     )),
                     packet.getResponseId()
             ));
@@ -54,13 +54,25 @@ public class Hanasu extends GroupMessageReceivedEventHandler {
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     new AssembledMessage().participate(new TextMessageElement(
-                            MODEL.text(
-                                    MessageProcess.plain(packet.getMessage())
-                            )
+                            text(MessageProcess.plain(packet.getMessage()))
                     )),
                     packet.getResponseId()
             ));
         }
+    }
+
+    private String text(String preGen) {
+        String result = MODEL.text(
+                preGen
+        );
+        int unableToText = 10;
+        while (result == null || result.equals("")) {
+            result = MODEL.text(preGen);;
+            if (unableToText-- == 0) {
+                break;
+            }
+        }
+        return result;
     }
 
     @Override
