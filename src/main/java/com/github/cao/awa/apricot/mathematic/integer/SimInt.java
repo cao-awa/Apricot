@@ -29,6 +29,22 @@ public class SimInt {
         }
     }
 
+    public SimInt(int size, String init) {
+        this.size = size;
+        this.bits = new boolean[size];
+        char[] charArray = init
+                .toCharArray();
+        int index = 0;
+        for (int i = charArray.length - 1; i > - 1; i--) {
+            char c = charArray[i];
+            set(
+                    index,
+                    c == '1'
+            );
+            index++;
+        }
+    }
+
     public void set(int index, boolean value) {
         if (index < this.bits.length) {
             this.bits[index] = value;
@@ -123,17 +139,6 @@ public class SimInt {
     }
 
     public SimInt mut(SimInt mutInteger) {
-        //        String mut = mutInteger.integer();
-        //        if (mut.equals("1")) {
-        //            return this;
-        //        }
-        //        if (mut.equals("0")) {
-        //            return fill(0, this.size, false);
-        //        }
-        //        int onlyOne = mutInteger.one(true);
-        //        if (onlyOne != - 1) {
-        //            return rs(onlyOne);
-        //        }
         Receptacle<Integer> rs = Receptacle.of(- 1);
         SimInt result = SimInt.of(
                 this.size,
@@ -223,6 +228,13 @@ public class SimInt {
         );
     }
 
+    public static SimInt of(String integer) {
+        return new SimInt(
+                integer.length(),
+                integer
+        );
+    }
+
     public SimInt subtract(long integer) {
         return subtract(SimInt.of(integer));
     }
@@ -303,7 +315,6 @@ public class SimInt {
      * </ul>
      *
      * @return a hash code value for this object.
-     *
      * @implSpec As far as is reasonably practical, the {@code hashCode} method defined
      * by class {@code Object} returns distinct integers for distinct objects.
      * @see Object#equals(Object)
@@ -350,11 +361,9 @@ public class SimInt {
      * equivalence class are substitutable for each other, at least
      * for some purposes.
      *
-     * @param obj
-     *         the reference object with which to compare.
+     * @param obj the reference object with which to compare.
      * @return {@code true} if this object is the same as the obj
      * argument; {@code false} otherwise.
-     *
      * @implSpec The {@code equals} method for class {@code Object} implements
      * the most discriminating possible equivalence relation on objects;
      * that is, for any non-null reference values {@code x} and

@@ -54,12 +54,15 @@ public class HanasuModel {
             } else {
                 int index = 0;
                 Result result = this.analysis.parseStr(preGen);
-                word = this.chain.get(result.get(RANDOM.nextInt(0, result.size())).getName());
+                word = this.chain.get(result.get(RANDOM.nextInt(0,
+                                                                result.size()
+                                            ))
+                                            .getName());
                 while (word == null) {
                     if (result.size() > index) {
                         word = this.chain.get(result
-                                                           .get(index++)
-                                                           .getName());
+                                                      .get(index++)
+                                                      .getName());
                     } else {
                         word = this.chain.get()
                                          .random(RANDOM);
@@ -124,7 +127,6 @@ public class HanasuModel {
             e.printStackTrace();
         }
     }
-
 
     static class WeightRandom {
         public static <T> T get(Map<T, Integer> map) {
