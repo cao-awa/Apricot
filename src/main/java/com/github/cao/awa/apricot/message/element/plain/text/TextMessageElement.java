@@ -2,7 +2,6 @@ package com.github.cao.awa.apricot.message.element.plain.text;
 
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.message.element.*;
-import com.github.cao.awa.apricot.util.message.*;
 import org.jetbrains.annotations.*;
 
 @Stable
@@ -24,7 +23,7 @@ public final class TextMessageElement extends MessageElement {
 
     @Override
     public String toPlainText() {
-        return MessageUtil.escape(this.text);
+        return this.text;
     }
 
     @Override

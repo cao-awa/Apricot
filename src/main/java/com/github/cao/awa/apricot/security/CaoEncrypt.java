@@ -1,7 +1,6 @@
 package com.github.cao.awa.apricot.security;
 
 import com.github.cao.awa.apricot.util.io.IOUtil;
-import com.github.cao.awa.apricot.util.time.TimeUtil;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -9,9 +8,9 @@ import java.io.*;
 
 /**
  * Simple encrypt and decrypt.
- *
+ * <p>
  * This encryption can decrypt using exactly the same process.
- *
+ * <p>
  * Experimental algorithm, do not heavily used.
  *
  * @author cao_awa
@@ -19,49 +18,6 @@ import java.io.*;
  */
 public class CaoEncrypt {
     private static final Logger LOGGER = LogManager.getLogger("CaoEncrypt");
-
-    public static void main(String[] args) {
-        try {
-            File sourceFile = new File("test/enc/enc.txt");
-            File resultFile = new File("test/enc/result.data");
-            File decFile = new File("test/enc/source.txt");
-
-            long start = TimeUtil.nano();
-
-            partFile(sourceFile,
-                     resultFile,
-                     new byte[]{32,46,64,78,45,12,36,89,74},
-                     13,
-                     1024 * 1024
-            );
-
-            LOGGER.info("Encrypt done in {} ms",
-                        TimeUtil.processNano(start) / 100000D
-            );
-
-            start = TimeUtil.nano();
-
-            partFile(resultFile,
-                     decFile,
-                     new byte[]{32,46,64,78,45,12,36,89,74},
-                     13,
-                     1024 * 1024
-            );
-            LOGGER.info("Decrypt done in {} ms",
-                        TimeUtil.processNano(start) / 100000D
-            );
-
-//            byte[] text = "abcdefg".getBytes();
-//
-//            part(text, "abcdefg".getBytes(), 13);
-//            System.out.println(new String(text));
-//
-//            part(text, "abcdef".getBytes(), 1);
-//            System.out.println(new String(text));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
 
     public static void partFile(File file, File toFile, byte[] key, int roundCount, int blockSize) throws IOException {
         if (! file.isFile()) {
@@ -109,7 +65,8 @@ public class CaoEncrypt {
             roundCount++;
         }
         int keyIndex = rTdr(inherit,
-                                key.length);
+                            key.length
+        );
         long offs = inherit;
         int flipper = ~ roundCount;
         // Round encrypt and decrypt, the stream feature replace need a few rounds.

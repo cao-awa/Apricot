@@ -47,7 +47,7 @@ public class HanasuModel {
         try {
             this.chain.save();
 
-            MarkovWord word = null;
+            MarkovWord word;
             if (preGen.equals("")) {
                 word = this.chain.get()
                                  .random(RANDOM);
@@ -71,7 +71,7 @@ public class HanasuModel {
             }
             StringBuilder builder = new StringBuilder();
             for (int i = 0; i < RANDOM.nextInt(10,
-                                               25
+                                               35
             ); i++) {
                 if (word == null) {
                     break;
@@ -89,7 +89,6 @@ public class HanasuModel {
 
             return builder.toString();
         } catch (Exception e) {
-            e.printStackTrace();
             return "";
         }
     }
@@ -124,7 +123,7 @@ public class HanasuModel {
 
             this.chain.save();
         } catch (Exception e) {
-            e.printStackTrace();
+
         }
     }
 
