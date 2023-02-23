@@ -32,11 +32,11 @@ public class NameOfHandler extends XxxEventHandler {
 }
 ```
 
-以下是提前准备好的插件的onInitialize方法(见[Plugins](/doc/zh_cn/develop/plugin/README.md))
+以下是提前准备好的插件的 ```initialize``` 方法(见[Plugins](/doc/zh_cn/develop/plugin/README.md))
 
 ```java
 @Override
-public void onInitialize(){
+public void initialize(){
     registerHandler(new NameOfHandler());
 }
 ```
@@ -193,7 +193,7 @@ public class InternalPlugin extends Plugin {
 则可以用事件独占将此用户的此事件独占至"问答游戏"的处理器
 
 \
-使用服务器事件管理器提供的 ``` exclusive ``` API来使处理器独占一个事件
+使用服务器事件管理器提供的 ```exclusive``` API来使处理器独占一个事件
 
 如以下示例，当用户发送awa时，处理器会请求独占三次"收到私聊信息"事件，随后无论用户说什么都给用户反馈"www..."
 
@@ -260,10 +260,10 @@ public class ExclusiveSample extends PrivateMessageReceivedEventHandler {
 
 在事件被独占时，默认只会阻止同属当前插件的处理器，其他插件不受影响
 
-在处理事件独占时，需要通过 ``` onExclusive ``` 方法而不是处理器的常规 ``` onXxx ```方法处理
+在处理事件独占时，需要通过 ```onExclusive``` 方法而不是处理器的常规 ```onXxx```方法处理
 
 ## 强制处理
-重写 EventHandler 的 ``` compulsory ``` 方法或是实现 ``` Compulsory ``` 都可以让事件处理器强制处理事件
+重写 EventHandler 的 ```compulsory``` 方法或是实现 ```Compulsory``` 都可以让事件处理器强制处理事件
 
 以下两种方式均可，两种方式同时使用也行，但是没有必要这么做
 
@@ -290,9 +290,9 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
 }
 ```
 
-如果一个插件内所有处理器都需要强制处理事件，可以对 ``` Plugin ``` 进行上面的操作
+如果一个插件内所有处理器都需要强制处理事件，可以对 ```Plugin``` 进行上面的操作
 
-即可使此插件内所有处理器全部都会进行事件强制处理，此时处理器的 ``` compulsory ``` 已经被忽略，不需要再做出任何修改 
+即可使此插件内所有处理器全部都会进行事件强制处理，此时处理器的 ```compulsory``` 已经被忽略，不需要再做出任何修改 
 
 ```java
 @AutoPlugin
@@ -315,11 +315,11 @@ public class InternalPlugin extends Plugin {
 
 
 ## 独占级别
-杏对独占提供一个"level"，用于决定独占只针对当前插件或是选择其他插件也一起阻止
+杏对独占提供一个```EventExclusiveTarget```，用于决定独占只针对当前插件或是选择其他插件也一起阻止
 
 亦或是让所有杏已加载的插件都被此独占阻止处理
 
-此"level"与"compulsory"判断不冲突，只是决定适用范围
+此级别与"compulsory"判断不冲突，只是决定适用范围
 
 ## 注意
 
@@ -330,9 +330,9 @@ public class InternalPlugin extends Plugin {
 并非是先来后到，或是后者覆盖，而是都别想用（）
 
 # 密集型
-在事件处理器中，可以设置任务密集类型，重写 ``` intensive ``` 方法以设置密集类型
+在事件处理器中，可以设置任务密集类型，重写 ```intensive``` 方法以设置密集类型
 
-默认情况下的密集类型为CPU密集型（``` IntensiveType.CPU ```）
+默认情况下的密集类型为CPU密集型（```IntensiveType.CPU```）
 
 \
 此参数对处理器的性能影响非常巨大，修改前请确认类型是否正确

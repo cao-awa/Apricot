@@ -22,7 +22,7 @@ public class CaptchaPlugin extends Plugin {
     }
 
     @Override
-    public void onInitialize() {
+    public void initialize() {
         registerHandler(new JoinGroupCaptcha());
         registerHandler(new LeaveGroupCaptcha());
         registerHandler(CAPTCHA_WITH_GROUP);

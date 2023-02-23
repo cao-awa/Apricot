@@ -19,7 +19,7 @@ public class Lawn extends Plugin {
     }
 
     @Override
-    public void onInitialize() {
+    public void initialize() {
         // Features handlers.
         registerHandler(new Tests());
         registerHandler(new ApricotInformation());

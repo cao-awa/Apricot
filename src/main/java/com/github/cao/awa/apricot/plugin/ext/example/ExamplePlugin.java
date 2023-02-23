@@ -15,7 +15,7 @@ public class ExamplePlugin extends Plugin {
     private static final UUID ID = UUID.fromString("8e599f58-703f-4dc9-beb8-abee377fb39b");
 
     @Override
-    public UUID getUuid() {
+    public UUID uuid() {
         return ID;
     }
 
@@ -28,7 +28,7 @@ public class ExamplePlugin extends Plugin {
     }
 
     @Override
-    public void onInitialize() {
+    public void initialize() {
         //        registerHandler(new DrawTest());
         registerHandler(new Disinformation());
         registerHandler(new CqCodeReproduce());

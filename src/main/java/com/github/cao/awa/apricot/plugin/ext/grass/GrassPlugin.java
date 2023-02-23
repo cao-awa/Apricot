@@ -27,7 +27,7 @@ public class GrassPlugin extends Plugin {
     }
 
     @Override
-    public void onInitialize() {
+    public void initialize() {
         registerHandler(new QuickResponse());
         registerHandler(new MuteMe());
         registerHandler(new Hitokoto());

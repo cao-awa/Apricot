@@ -117,25 +117,25 @@ public class PluginManager implements ConcurrentService {
 
     private void register0(Plugin plugin) {
         plugin.setServer(this.server);
-        plugin.onInitialize();
+        plugin.initialize();
         if (plugin.isCore()) {
             if (! plugin.compulsory()) {
                 throw new IllegalStateException("The core plugin must be compulsory");
             }
             this.cores.put(
-                    plugin.getUuid(),
+                    plugin.uuid(),
                     plugin
             );
         } else {
             this.plugins.put(
-                    plugin.getUuid(),
+                    plugin.uuid(),
                     plugin
             );
         }
         LOGGER.info(
                 "Plugins '{}'({}) registered {}",
                 plugin.name().eName(),
-                plugin.getUuid(),
+                plugin.uuid(),
                 plugin.isCore() ? "(Core plugin)" : ""
         );
     }
@@ -150,7 +150,7 @@ public class PluginManager implements ConcurrentService {
             LOGGER.warn(
                     "The plugin '{}'({}) already annotation by '@AutoPlugin', do not register it manually",
                     plugin.name(),
-                    plugin.getUuid()
+                    plugin.uuid()
             );
             return;
         }

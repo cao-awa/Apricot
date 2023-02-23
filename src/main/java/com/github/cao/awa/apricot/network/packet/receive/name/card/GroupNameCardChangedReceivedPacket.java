@@ -14,7 +14,7 @@ import com.github.cao.awa.apricot.server.*;
  * The not real time warning is only against for 'cq-http'<br>
  */
 @Warning("NOT_REAL_TIME")
-public class GroupNameChangedReceivedPacket extends ReadonlyPacket {
+public class GroupNameCardChangedReceivedPacket extends ReadonlyPacket {
     private final String oldCard;
     private final String newCard;
     private final long botId;
@@ -22,7 +22,7 @@ public class GroupNameChangedReceivedPacket extends ReadonlyPacket {
     private final long userId;
     private final long timestamp;
 
-    public GroupNameChangedReceivedPacket(String oldCard, String newCard, long botId, long userId, long groupId, long timestamp) {
+    public GroupNameCardChangedReceivedPacket(String oldCard, String newCard, long botId, long userId, long groupId, long timestamp) {
         this.oldCard = oldCard;
         this.newCard = newCard;
         this.botId = botId;
@@ -68,7 +68,7 @@ public class GroupNameChangedReceivedPacket extends ReadonlyPacket {
      */
     @Override
     public void fireEvent(ApricotServer server, ApricotProxy proxy) {
-        server.fireEvent(new GroupNameChangedReceivedEvent(
+        server.fireEvent(new GroupNameCardChangedReceivedEvent(
                 proxy,
                 this
         ));

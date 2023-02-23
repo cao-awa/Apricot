@@ -11,28 +11,36 @@
  * @author cao_awa
  */
 @AutoPlugin
-public class InternalPlugin extends Plugin {
+public class ExamplePlugin extends Plugin {
     private static final UUID ID = UUID.fromString("00000000-0000-0000-0000-000000000000");
 
+    // 可忽略
     @Override
-    public void onInitialize() {
-        // ...
-    }
-
-    @Override
-    public String version() {
-        return "0.0.1";
-    }
-
-    @Override
-    public UUID getUuid() {
+    public UUID uuid() {
         return ID;
     }
-    
-    @NotNull
+
+    // 必要
     @Override
-    public String getName() {
-        return "Example Plugin";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Example",
+                "生草机-示例"
+        );
+    }
+
+    // 必要
+    @Override
+    public void initialize() {
+        // 在此处初始化插件
+        // 执行各种需要的代码
+    }
+
+    // 必要
+    @Override
+    public String version() {
+        return "1.0.0";
     }
 }
+
 ```

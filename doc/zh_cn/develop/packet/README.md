@@ -48,6 +48,14 @@ proxy.send(
 ## 踢人
 踢人：SendGroupKickPacket
 
+## 禁言
+禁言：SendGroupMutePacket
+
+禁言所有人：SendGroupMuteAllPacket
+
+禁言正常人：SendGroupMuteNormalPacket\
+禁言匿名：SendGroupMuteAnonymousPacket
+
 ## 同意入群
 同意入群：SendGroupApprovalPacket\
 （以上数据包需要传入ApprovalType来确定发到哪里，通常从申请入群的事件中获取）
@@ -60,3 +68,9 @@ proxy.send(
 
 ## 群打卡
 群打卡：SendGroupSignPacket
+
+## 修改群名片
+修改某人的群名片：SetGroupNameCardPacket
+
+## 修改群名
+修改群名：SendGroupNameSetPacket

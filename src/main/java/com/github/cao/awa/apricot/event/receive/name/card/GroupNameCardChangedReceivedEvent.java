@@ -16,12 +16,12 @@ import java.util.*;
  * If the proxy to qq is 'cq-http' then this event will be happened under user sent at least one messages.<br>
  * The not real time warning is only against for 'cq-http'<br>
  */
-public class GroupNameChangedReceivedEvent extends Event<GroupNameChangedReceivedPacket> {
+public class GroupNameCardChangedReceivedEvent extends Event<GroupNameCardChangedReceivedPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.newHashSet(), set -> {
         set.add("notice-group-card");
     });
 
-    public GroupNameChangedReceivedEvent(ApricotProxy proxy, GroupNameChangedReceivedPacket packet) {
+    public GroupNameCardChangedReceivedEvent(ApricotProxy proxy, GroupNameCardChangedReceivedPacket packet) {
         super(
                 proxy,
                 packet
@@ -44,7 +44,7 @@ public class GroupNameChangedReceivedEvent extends Event<GroupNameChangedReceive
      */
     @Override
     public void fireEvent(EventHandler<?> handler) {
-        if (handler instanceof GroupNameChangedReceivedEventHandler eventHandler) {
+        if (handler instanceof GroupNameCardChangedReceivedEventHandler eventHandler) {
             if (this.isExclusive()) {
                 eventHandler.onExclusive(this);
             } else {

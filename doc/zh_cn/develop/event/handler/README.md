@@ -10,7 +10,7 @@
 
 收到私聊消息：PrivateMessageReceivedEventHandler\
 收到好友私聊消息：PrivateFriendMessageReceivedEventHandler\
-收到临时会话消息：还没做\
+收到临时会话消息：PrivateTemporaryMessageReceivedPacket\
 收到其他消息：还没做
 
 # 消息被撤回
@@ -46,7 +46,7 @@ Bot被踢：BotDiedFromGroupEventHandler
 此事件已被 @Waring("NOT_REAL_TIME") 警告此非实时性
 此 @Warning 仅针对 CQ-HTTP，Mirai可以忽略此
 ```
-变更：GroupNameChangedReceivedEventHandler
+变更：GroupNameCardChangedReceivedEventHandler
 
 # 禁言
 ```

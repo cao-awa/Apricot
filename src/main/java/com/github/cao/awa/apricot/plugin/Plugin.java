@@ -63,10 +63,10 @@ public abstract class Plugin implements Comparable<Plugin> {
      */
     @Override
     public int compareTo(@NotNull Plugin o) {
-        return getUuid().compareTo(o.getUuid());
+        return uuid().compareTo(o.uuid());
     }
 
-    public UUID getUuid() {
+    public UUID uuid() {
         return UUID.nameUUIDFromBytes(name().name()
                                             .getBytes(StandardCharsets.UTF_8));
     }
@@ -74,7 +74,7 @@ public abstract class Plugin implements Comparable<Plugin> {
     @NotNull
     public abstract PluginName name();
 
-    public abstract void onInitialize();
+    public abstract void initialize();
 
     public boolean canAsync() {
         return true;

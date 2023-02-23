@@ -8,8 +8,8 @@ import org.jetbrains.annotations.*;
 
 public class GroupNameChangedReceivedPacketFactor extends PacketFactor {
     @Override
-    public @NotNull GroupNameChangedReceivedPacket create(@NotNull ApricotServer server, @NotNull JSONObject request) {
-        return new GroupNameChangedReceivedPacket(
+    public @NotNull GroupNameCardChangedReceivedPacket create(@NotNull ApricotServer server, @NotNull JSONObject request) {
+        return new GroupNameCardChangedReceivedPacket(
                 request.getString("card_old"),
                 request.getString("card_new"),
                 request.getLong("self_id"),

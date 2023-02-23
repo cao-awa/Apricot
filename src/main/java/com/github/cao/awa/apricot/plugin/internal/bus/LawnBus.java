@@ -29,7 +29,7 @@ public class LawnBus extends Plugin {
     }
 
     @Override
-    public void onInitialize() {
+    public void initialize() {
         registerHandlers(
                 message,
                 recall,

@@ -8,19 +8,19 @@ import com.github.cao.awa.apricot.network.router.*;
 import java.util.function.*;
 
 public class SendGroupNameSetPacket extends WritablePacket<NoResponsePacket> {
-    private String groupId;
+    private long groupId;
     private String groupName;
 
-    public SendGroupNameSetPacket(String groupId, String groupName) {
+    public SendGroupNameSetPacket(long groupId, String groupName) {
         this.groupId = groupId;
         this.groupName = groupName;
     }
 
-    public String getGroupId() {
+    public long getGroupId() {
         return groupId;
     }
 
-    public void setGroupId(String groupId) {
+    public void setGroupId(long groupId) {
         this.groupId = groupId;
     }
 
