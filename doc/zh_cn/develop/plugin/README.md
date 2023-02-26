@@ -45,7 +45,7 @@ public class ExamplePlugin extends Plugin {
 
 ```
 
-忽略任何可忽略的信息重写：
+忽略任何可忽略的重写：
 ```java
 /**
  * An example plugin.
