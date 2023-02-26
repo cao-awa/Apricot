@@ -44,46 +44,5 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                       packet.getResponseId()
               )
               .append(packet.getOwnId());
-
-        packet.getMessage()
-              .forEach(message -> {
-                  if (message instanceof ImageMessageElement image) {
-                      EntrustEnvironment.trys(
-                              () -> {
-                                  server.download(
-                                          image.getFile()
-                                               .getName(),
-                                          image.getUrl()
-                                  );
-                              },
-                              Throwable :: printStackTrace
-                      );
-                  }
-              });
-
-        ApsConfig learnConfig = config("HanasuLearn");
-
-        if (learnConfig.array("targets",
-                              Long.class
-                       )
-                       .contains(packet.getResponseId()) && (! learnConfig.array("excludes",
-                                                                                 Long.class
-                                                                          )
-                                                                          .contains(packet.getSenderId()) && ! learnConfig.array("excludes",
-                                                                                                                                 Long.class
-                                                                                                                          )
-                                                                                                                          .contains(packet.getResponseId()))) {
-            Hanasu.MODEL.model(MessageProcess.plain(packet.getMessage()));
-        }
-    }
-
-    /**
-     * The messages store service is intensive IO.
-     *
-     * @return Intensive
-     */
-    @Override
-    public IntensiveType intensive() {
-        return IntensiveType.IO;
     }
 }

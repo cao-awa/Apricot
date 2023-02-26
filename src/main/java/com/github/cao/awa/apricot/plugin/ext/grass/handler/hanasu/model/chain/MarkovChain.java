@@ -1,6 +1,6 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain;
+package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain;
 
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.leveldb.LevelDbChainMap;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.leveldb.LevelDbChainMap;
 import com.github.cao.awa.apricot.util.collection.ApricotCollectionFactor;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.EntrustEnvironment;
 

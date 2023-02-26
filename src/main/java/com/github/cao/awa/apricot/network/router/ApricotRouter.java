@@ -30,10 +30,6 @@ public class ApricotRouter extends NetworkRouter {
     private final ApricotUniqueDispenser dispenser;
     private ChannelHandlerContext context;
     private Channel channel;
-    private int packetCounter = 0;
-    private long times = TimeUtil.millions();
-    private static final int PACKET_LIMIT_PER_SECONDS = 1000;
-    private boolean alive = true;
 
     public ApricotRouter(@NotNull ApricotServer server) {
         super(server);
@@ -77,23 +73,6 @@ public class ApricotRouter extends NetworkRouter {
      */
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, WebSocketFrame frame) throws Exception {
-        if (! this.alive) {
-            return;
-        }
-        this.packetCounter++;
-        if (this.packetCounter > PACKET_LIMIT_PER_SECONDS) {
-            if (TimeUtil.processMillion(this.times) < 1000) {
-                LOGGER.warn("Server are received packets more than {} in a seconds, this maybe is a DDOS, attention to attack again",
-                            PACKET_LIMIT_PER_SECONDS
-                );
-                this.disconnect("The server is being attacked by you.");
-                this.alive = false;
-            } else {
-                this.packetCounter = 0;
-                this.times = TimeUtil.millions();
-            }
-            return;
-        }
         handleFragment(frame);
     }
 

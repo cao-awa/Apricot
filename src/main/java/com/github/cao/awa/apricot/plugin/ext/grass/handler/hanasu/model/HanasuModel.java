@@ -1,9 +1,9 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu;
+package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model;
 
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.MarkovChain;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.MarkovWord;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.MarkovWordWeight;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.leveldb.LevelDbChainMap;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.MarkovChain;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.MarkovWord;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.MarkovWordWeight;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.leveldb.LevelDbChainMap;
 import com.github.cao.awa.apricot.util.collection.ApricotCollectionFactor;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.EntrustEnvironment;
 import com.github.zhuaidadaya.rikaishinikui.handler.universal.option.BiOption;

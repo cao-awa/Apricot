@@ -20,6 +20,12 @@ public class ExamplePlugin extends Plugin {
         return ID;
     }
 
+    // 可忽略
+    @Override
+    public String version() {
+        return "1.0.0";
+    }
+    
     // 必要
     @Override
     public @NotNull PluginName name() {
@@ -35,11 +41,31 @@ public class ExamplePlugin extends Plugin {
         // 在此处初始化插件
         // 执行各种需要的代码
     }
+}
 
-    // 必要
+```
+
+忽略任何可忽略的信息重写：
+```java
+/**
+ * An example plugin.
+ *
+ * @since 1.0.0
+ * @author cao_awa
+ */
+@AutoPlugin
+public class ExamplePlugin extends Plugin {
     @Override
-    public String version() {
-        return "1.0.0";
+    public @NotNull PluginName name() {
+        return PluginName.of(
+                "Example",
+                "生草机-示例"
+        );
+    }
+
+    @Override
+    public void initialize() {
+        System.out.println("初始化插件...");
     }
 }
 

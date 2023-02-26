@@ -80,7 +80,9 @@ public abstract class Plugin implements Comparable<Plugin> {
         return true;
     }
 
-    public abstract String version();
+    public String version() {
+        return "1.0.0";
+    }
 
     public final void registerHandlers(EventHandler<?> handler, EventHandler<?>... handlers) {
         registerHandler(handler);

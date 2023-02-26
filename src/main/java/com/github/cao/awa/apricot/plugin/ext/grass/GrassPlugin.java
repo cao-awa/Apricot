@@ -4,6 +4,7 @@ import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.delete.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.Hanasu;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.learn.HanasuLearn;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.hitokoto.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.mute.*;
 import com.github.cao.awa.apricot.plugin.ext.grass.handler.response.*;
@@ -32,7 +33,7 @@ public class GrassPlugin extends Plugin {
         registerHandler(new MuteMe());
         registerHandler(new Hitokoto());
         registerHandler(new FastDelete());
-        registerHandler(new Hanasu());
+        registerHandlers(new Hanasu(), new HanasuLearn());
     }
 
     @Override

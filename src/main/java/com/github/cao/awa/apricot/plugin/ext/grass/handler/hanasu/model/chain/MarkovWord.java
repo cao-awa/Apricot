@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain;
+package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain;
 
 import com.github.cao.awa.apricot.util.collection.ApricotCollectionFactor;
 

@@ -30,14 +30,4 @@ public class RecalledMessageHandler extends MessageRecallEventHandler {
         store.setRecalled(true);
         messageDatabase.setFromId(packet.getMessageId(), store);
     }
-
-    /**
-     * The messages store service is intensive IO.
-     *
-     * @return Intensive
-     */
-    @Override
-    public IntensiveType intensive() {
-        return IntensiveType.IO;
-    }
 }

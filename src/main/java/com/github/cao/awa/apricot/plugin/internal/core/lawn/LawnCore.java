@@ -38,8 +38,7 @@ public class LawnCore extends Plugin implements Compulsory {
         registerHandlers(
                 new OthersMessageStorage(),
                 new SelfMessageStore(),
-                new RecalledMessageHandler(),
-                new MessageExport()
+                new RecalledMessageHandler()
         );
         registerHandlers(new InternalEchoResultHandler());
     }

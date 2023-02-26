@@ -1,20 +1,17 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.leveldb;
+package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.leveldb;
 
 import com.github.cao.awa.apricot.io.bytes.reader.BytesReader;
 import com.github.cao.awa.apricot.mathematic.base.Base256;
 import com.github.cao.awa.apricot.util.collection.ApricotCollectionFactor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.iq80.leveldb.DB;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.MarkovChain;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.MarkovWord;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.chain.MarkovWordWeight;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.MarkovChain;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.MarkovWord;
+import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain.MarkovWordWeight;
 
 import java.io.ByteArrayOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 import java.util.Random;
-import java.util.function.BiConsumer;
 
 public class LevelDbChainMap {
     private final DB head;

@@ -42,31 +42,5 @@ public class SelfMessageStore extends MessageSentEventHandler {
                       packet.getResponseId()
               )
               .append(packet.getOwnId());
-
-        packet.getMessage()
-              .forEach(message -> {
-                  if (message instanceof ImageMessageElement image) {
-                      EntrustEnvironment.trys(
-                              () -> {
-                                  server.download(
-                                          image.getFile()
-                                               .getName(),
-                                          image.getUrl()
-                                  );
-                              },
-                              Throwable::printStackTrace
-                      );
-                  }
-              });
-    }
-
-    /**
-     * The messages store service is intensive IO.
-     *
-     * @return Intensive
-     */
-    @Override
-    public IntensiveType intensive() {
-        return IntensiveType.IO;
     }
 }
