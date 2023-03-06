@@ -48,6 +48,14 @@ public class ApricotInformation extends MessageReceivedEventHandler {
                             .append(plugin.version())
                             .append("\n");
                  });
+            proxy.server()
+                 .getCorePlugins()
+                 .forEach(plugin -> {
+                     builder.append(plugin.name())
+                            .append(" ")
+                            .append(plugin.version())
+                            .append("\n");
+                 });
             long millions = TimeUtil.processMillion(proxy.server()
                                                          .getStartupTime());
             long seconds = (millions / 1000) % 60;

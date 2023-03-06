@@ -3,6 +3,7 @@ package com.github.cao.awa.apricot.plugin.ext.example.disinformation;
 import com.github.cao.awa.apricot.event.handler.message.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
 import com.github.cao.awa.apricot.message.assemble.*;
+import com.github.cao.awa.apricot.message.element.cq.xml.XmlMessageElement;
 import com.github.cao.awa.apricot.message.forward.*;
 import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
@@ -18,8 +19,7 @@ public class CqCodeReproduce extends MessageEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -72,6 +72,13 @@ public class CqCodeReproduce extends MessageEventHandler {
             );
 
             proxy.send(forward);
+        } else if (plain.startsWith(".xml")) {
+            String xml = plain.substring(5);
+
+            proxy.send(new SendMessagePacket(packet.getType(),
+                                             new XmlMessageElement(xml).toMessage(),
+                                             packet.getResponseId()
+            ));
         }
     }
 }

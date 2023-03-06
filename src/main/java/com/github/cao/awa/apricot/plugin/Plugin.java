@@ -231,7 +231,9 @@ public abstract class Plugin implements Comparable<Plugin> {
             return isAllow(
                     target.bot(),
                     target.group()
-            ) && ! blocked(target.person()) && ! blocked(target.group());
+            ) &&
+                    ! blocked(target.person()) &&
+                    ! blocked(target.group());
         }
     }
 
@@ -239,20 +241,28 @@ public abstract class Plugin implements Comparable<Plugin> {
         JSONArray licenses = this.configs.config()
                                          .array("licences");
 
-        return isAllow(botId) && (licenses.contains("*") || licenses.contains(license));
+        return isAllow(botId) && (licenses.toList(String.class)
+                                          .contains("*") || licenses.toList(Long.class)
+                                                                    .contains(license));
     }
 
     public boolean isAllow(long botId) {
         return this.configs.config()
-                           .array("allows")
+                           .array("allows",
+                                  Long.class
+                           )
                            .contains(botId);
     }
 
     public boolean blocked(long license) {
         return this.configs.config()
-                           .array("blocked")
+                           .array("blocked",
+                                  Long.class
+                           )
                            .contains(license) || getServer().apsConfig()
-                                                            .array("blocked")
+                                                            .array("blocked",
+                                                                   Long.class
+                                                            )
                                                             .contains(license);
     }
 

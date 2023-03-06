@@ -616,6 +616,10 @@ public class ApricotServer {
         return this.plugins.getPlugins();
     }
 
+    public Collection<Plugin> getCorePlugins() {
+        return this.plugins.getCores();
+    }
+
     public boolean useBinaryMessage() {
         return this.configs.getBoolean("SO_BINARY_MESSAGE");
     }

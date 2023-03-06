@@ -1,10 +1,10 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.learn;
+package com.github.cao.awa.apricot.plugin.ext.hasnasu.handler.learn;
 
 import com.github.cao.awa.apricot.config.plugin.handler.ApsConfig;
 import com.github.cao.awa.apricot.event.handler.message.received.MessageReceivedEventHandler;
 import com.github.cao.awa.apricot.event.receive.message.MessageReceivedEvent;
 import com.github.cao.awa.apricot.network.packet.receive.message.MessageReceivedPacket;
-import com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.Hanasu;
+import com.github.cao.awa.apricot.plugin.ext.hasnasu.handler.HanasuHandler;
 import com.github.cao.awa.apricot.util.message.MessageProcess;
 
 public class HanasuLearn extends MessageReceivedEventHandler {
@@ -24,7 +24,7 @@ public class HanasuLearn extends MessageReceivedEventHandler {
                                                                                                                                  Long.class
                                                                                                                           )
                                                                                                                           .contains(packet.getResponseId()))) {
-            Hanasu.MODEL.model(MessageProcess.plain(packet.getMessage()));
+            HanasuHandler.MODEL.model(MessageProcess.plain(packet.getMessage()));
         }
     }
 }

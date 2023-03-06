@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.ana;
+package com.github.cao.awa.apricot.plugin.ext.hasnasu.handler.model.ana;
 
 import com.github.cao.awa.apricot.util.text.TextUtil;
 

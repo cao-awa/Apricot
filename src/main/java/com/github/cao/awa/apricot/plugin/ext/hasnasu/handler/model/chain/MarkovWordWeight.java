@@ -1,4 +1,4 @@
-package com.github.cao.awa.apricot.plugin.ext.grass.handler.hanasu.model.chain;
+package com.github.cao.awa.apricot.plugin.ext.hasnasu.handler.model.chain;
 
 public class MarkovWordWeight {
     private String word;
