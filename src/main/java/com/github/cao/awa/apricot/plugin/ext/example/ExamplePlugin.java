@@ -3,7 +3,6 @@ package com.github.cao.awa.apricot.plugin.ext.example;
 import com.github.cao.awa.apricot.anntations.*;
 import com.github.cao.awa.apricot.plugin.*;
 import com.github.cao.awa.apricot.plugin.ext.example.disinformation.*;
-import com.github.cao.awa.apricot.plugin.ext.example.encrypt.*;
 import com.github.cao.awa.apricot.plugin.ext.example.forward.*;
 import com.github.cao.awa.apricot.plugin.name.*;
 import org.jetbrains.annotations.*;
@@ -33,10 +32,6 @@ public class ExamplePlugin extends Plugin {
         registerHandler(new Disinformation());
         registerHandler(new CqCodeReproduce());
         registerHandler(new ForwardGetTest());
-        registerHandlers(
-                new Encrypt(),
-                new Decrypt()
-        );
     }
 
     @Override
