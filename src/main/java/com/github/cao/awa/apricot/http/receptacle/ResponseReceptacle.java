@@ -9,6 +9,12 @@ import org.jetbrains.annotations.*;
 public record ResponseReceptacle(Response response) {
     @Nullable
     public JSONObject json() {
+        try {
+            System.out.println(this.response.body()
+                                            .string());
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
         return EntrustEnvironment.trys(() -> new JSONObject(JSONObject.parse(this.response.body()
                                                                                           .string())));
     }

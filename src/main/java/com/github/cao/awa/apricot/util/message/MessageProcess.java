@@ -85,4 +85,8 @@ public class MessageProcess {
         return message.carver(TextMessageElement.class)
                       .toPlainText();
     }
+
+    public static String plain(MessagePacket packet) {
+        return plain(packet.getMessage());
+    }
 }
