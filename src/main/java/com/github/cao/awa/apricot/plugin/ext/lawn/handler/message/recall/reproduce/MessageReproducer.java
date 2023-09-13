@@ -33,7 +33,7 @@ public class MessageReproducer extends MessageEventHandler {
         if (plain.startsWith(".reproduce")) {
             AssembledMessage response = AssembledMessage.of();
             if (packet.getType() == MessageType.GROUP) {
-                response.participate(ReplyMessageElement.reply(packet.getMessageSeq()));
+                response.participate(ReplyMessageElement.reply(packet.getMessageId()));
             }
 
             String arg = plain.substring(".reproduce".length() + 1)

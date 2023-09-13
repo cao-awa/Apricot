@@ -51,7 +51,7 @@ public class MessageProcess {
                                                       0,
                                                       ReplyMessageElement.class
                                               )
-                                              .getMessageSeq()
+                                              .getMessageId()
                             )
                             .getSenderId() == target,
                 false

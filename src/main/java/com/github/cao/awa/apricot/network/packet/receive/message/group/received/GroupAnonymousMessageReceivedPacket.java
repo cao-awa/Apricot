@@ -13,14 +13,16 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
     private final long responseId;
     private final long timestamp;
     private final long messageSeq;
+    private final long messageId;
 
-    public GroupAnonymousMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, long messageSeq) {
+    public GroupAnonymousMessageReceivedPacket(AssembledMessage message, long botId, IgnoredIdMessageSender sender, long responseId, long timestamp, long messageSeq, long messageId) {
         this.message = message;
         this.botId = botId;
         this.sender = sender;
         this.responseId = responseId;
         this.timestamp = timestamp;
         this.messageSeq = messageSeq;
+        this.messageId = messageId;
     }
 
     public IgnoredIdMessageSender getSender() {
@@ -45,6 +47,10 @@ public class GroupAnonymousMessageReceivedPacket extends GroupMessageReceivedPac
 
     public long getMessageSeq() {
         return this.messageSeq;
+    }
+
+    public long getMessageId() {
+        return this.messageId;
     }
 
     public long getBotId() {

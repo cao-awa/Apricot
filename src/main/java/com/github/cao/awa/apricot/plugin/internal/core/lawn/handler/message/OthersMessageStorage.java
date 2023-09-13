@@ -37,6 +37,9 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
                       packet.getBotId(),
                       packet.getResponseId()
               )
-              .append(packet.getOwnId());
+              .set(
+                      packet.getMessageSeq(),
+                      packet.getOwnId()
+              );
     }
 }

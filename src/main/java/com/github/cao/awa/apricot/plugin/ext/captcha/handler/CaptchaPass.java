@@ -38,7 +38,7 @@ public class CaptchaPass extends MessageEventHandler {
                                                                          0,
                                                                          ReplyMessageElement.class
                                                                  )
-                                                                 .getMessageSeq());
+                                                                 .getMessageId());
 
             if (messageId != null) {
                 if (packet.getMessage()
@@ -57,7 +57,7 @@ public class CaptchaPass extends MessageEventHandler {
                             proxy.send(new SendMessagePacket(
                                     MessageType.GROUP,
                                     AssembledMessage.of()
-                                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                    .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                                     .participate(AtMessageElement.at(AtTarget.of(
                                                             AtTargetType.PERSON,
                                                             packet.getSenderId()
@@ -69,7 +69,7 @@ public class CaptchaPass extends MessageEventHandler {
                             proxy.send(new SendMessagePacket(
                                     MessageType.GROUP,
                                     AssembledMessage.of()
-                                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                    .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                                     .participate(AtMessageElement.at(AtTarget.of(
                                                             AtTargetType.PERSON,
                                                             packet.getSenderId()

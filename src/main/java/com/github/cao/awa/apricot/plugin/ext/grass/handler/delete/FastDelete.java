@@ -8,6 +8,7 @@ import com.github.cao.awa.apricot.message.carve.*;
 import com.github.cao.awa.apricot.message.element.cq.replay.*;
 import com.github.cao.awa.apricot.message.element.plain.text.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.group.received.*;
+import com.github.cao.awa.apricot.network.packet.receive.message.sender.GroupMessageSender;
 import com.github.cao.awa.apricot.network.packet.receive.response.message.get.*;
 import com.github.cao.awa.apricot.network.packet.send.group.mute.personal.normal.*;
 import com.github.cao.awa.apricot.network.packet.send.message.*;
@@ -42,11 +43,13 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     AssembledMessage.of()
-                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                    .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                     .participate(TextMessageElement.text(config.map("delete_responses")
                                                                                .getString("missing_reason"))),
                     packet.getResponseId()
             ));
+
+            return;
         }
 
         if (MessageProcess.command(
@@ -64,13 +67,13 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                                         .getString(plain);
 
                 long targetId = reply.get(0)
-                                     .getMessageSeq();
+                                     .getMessageId();
 
                 if (response == null) {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
                             AssembledMessage.of()
-                                            .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                            .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                             .participate(TextMessageElement.text(config.map("delete_responses")
                                                                                        .getString("unexpected_error"))),
                             packet.getResponseId()
@@ -82,21 +85,21 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                                                                                   targetId
                                                                           );
 
-                    long id = messageResponsePacket.getOwnId() == - 1 ?
+                    long displayId = messageResponsePacket.getOwnId() == - 1 ?
                             messageResponsePacket.getMessageId() :
                             messageResponsePacket.getOwnId();
 
 
-                    if (id != - 1) {
+                    if (displayId != - 1) {
                         proxy.send(new SendRecallMessagePacket(targetId));
                         proxy.send(new SendMessagePacket(
                                 packet.getType(),
                                 AssembledMessage.of()
-                                                .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                                 .participate(TextMessageElement.text(String.format(
                                                         config.map("delete_responses")
                                                               .getString("#"),
-                                                        id
+                                                        displayId
                                                 ) + config.map("delete_responses")
                                                           .getString("deleted") + response)),
                                 packet.getResponseId()
@@ -112,7 +115,7 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                         proxy.send(new SendMessagePacket(
                                 packet.getType(),
                                 AssembledMessage.of()
-                                                .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                                 .participate(TextMessageElement.text(String.format(
                                                         config.map("delete_responses")
                                                               .getString("unable_to_delete"),
@@ -122,6 +125,18 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                         ));
                     }
                 }
+            } else {
+                proxy.send(new SendMessagePacket(
+                        packet.getType(),
+                        AssembledMessage.of()
+                                        .participate(ReplyMessageElement.reply(packet.getMessageId()))
+                                        .participate(TextMessageElement.text(
+                                                             config.map("delete_responses")
+                                                                   .getString("fast_delete_must_reply_to_message")
+                                                     )
+                                        ),
+                        packet.getResponseId()
+                ));
             }
         }
     }

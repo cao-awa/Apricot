@@ -20,7 +20,8 @@ public class PrivateTemporaryMessageReceivedPacketFactor extends PacketFactor {
                 PrivateMessageSender.create(request.getJSONObject("sender")),
                 request.getLong("user_id"),
                 request.getLong("time"),
-                request.getInteger("message_seq")
+                request.getLong("message_seq"),
+                request.getLong("message_id")
         );
     }
 

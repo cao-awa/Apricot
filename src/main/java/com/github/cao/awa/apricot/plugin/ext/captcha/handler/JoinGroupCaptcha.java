@@ -65,7 +65,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                     proxy.send(new SendMessagePacket(
                             MessageType.GROUP,
                             AssembledMessage.of()
-                                            .participate(ReplyMessageElement.reply(result.getMessageSeq()))
+                                            .participate(ReplyMessageElement.reply(result.getMessageId()))
                                             .participate(AtMessageElement.at(AtTarget.of(
                                                     AtTargetType.PERSON,
                                                     packet.getUserId()
@@ -79,7 +79,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                         proxy.send(new SendMessagePacket(
                                 MessageType.GROUP,
                                 AssembledMessage.of()
-                                                .participate(ReplyMessageElement.reply(trysToMuch.getMessageSeq()))
+                                                .participate(ReplyMessageElement.reply(trysToMuch.getMessageId()))
                                                 .participate(AtMessageElement.at(AtTarget.of(
                                                         AtTargetType.PERSON,
                                                         packet.getUserId()

@@ -46,7 +46,7 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
                             AssembledMessage.of()
-                                            .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                            .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                             .participate(TextMessageElement.text(config(CONFIG_NAME).str("cannot_mute_response"))),
                             packet.getResponseId()
                     ));
@@ -54,7 +54,7 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
                             AssembledMessage.of()
-                                            .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                            .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                             .participate(TextMessageElement.text(config(CONFIG_NAME).str("do_mute_me_response"))),
                             packet.getResponseId()
                     ));

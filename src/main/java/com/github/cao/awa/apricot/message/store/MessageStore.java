@@ -41,7 +41,7 @@ public class MessageStore {
                 packet.getMessage(),
                 packet.getSenderId(),
                 packet.getResponseId(),
-                packet.getMessageSeq(),
+                packet.getMessageId(),
                 packet.getTimestamp(),
                 false
         );

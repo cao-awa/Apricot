@@ -59,7 +59,7 @@ public class CaptchaWithGroup extends GroupMessageReceivedEventHandler {
                 );
                 CAPTCHA_CHECKER.reset(packet.target());
             } else {
-                proxy.send(new SendRecallMessagePacket(packet.getMessageSeq()));
+                proxy.send(new SendRecallMessagePacket(packet.getMessageId()));
 
                 CAPTCHA_CHECKER.trys(packet.target());
             }

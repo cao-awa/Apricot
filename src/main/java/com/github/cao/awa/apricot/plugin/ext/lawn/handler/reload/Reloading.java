@@ -41,7 +41,7 @@ public class Reloading extends MessageEventHandler {
             proxy.send(new SendMessagePacket(
                     packet.getType(),
                     AssembledMessage.of()
-                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                    .participate(ReplyMessageElement.reply(packet.getMessageId()))
                                     .participate(TextMessageElement.text("OK")),
                     packet.getResponseId()
             ));

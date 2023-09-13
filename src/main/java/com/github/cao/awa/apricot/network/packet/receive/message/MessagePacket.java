@@ -21,11 +21,12 @@ public abstract class MessagePacket extends ReadonlyPacket {
 
     public abstract long getMessageSeq();
 
+    public abstract long getMessageId();
+
     public abstract long getBotId();
 
     public abstract MessageType getType();
 
-    @Deprecated
     public long getOwnId() {
         return this.ownId;
     }
