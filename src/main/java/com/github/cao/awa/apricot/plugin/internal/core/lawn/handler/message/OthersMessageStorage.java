@@ -22,7 +22,7 @@ public class OthersMessageStorage extends MessageReceivedEventHandler {
     @Override
     public void onMessageReceived(MessageReceivedEvent<?> event) {
         MessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         MessageStore store = MessageStore.fromPacket(packet);

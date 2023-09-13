@@ -28,7 +28,7 @@ public class Disinformation extends MessageEventHandler {
     public void onMessage(MessageEvent<?> event) {
         MessagePacket packet = event.getPacket();
         AssembledMessage message = packet.getMessage();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
 
         String plain = message.toPlainText();
 

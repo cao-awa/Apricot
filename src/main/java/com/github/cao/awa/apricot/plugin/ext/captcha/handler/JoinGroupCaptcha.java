@@ -39,7 +39,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
     @Override
     public void onIncrease(GroupMemberIncreasedEvent<?> event) {
         GroupMemberIncreasedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         CalculateTester tester = CalculateTester.select();

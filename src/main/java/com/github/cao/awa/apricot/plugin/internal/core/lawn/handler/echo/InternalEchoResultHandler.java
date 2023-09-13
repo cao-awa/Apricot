@@ -18,6 +18,6 @@ public class InternalEchoResultHandler extends EchoResultEventHandler {
      */
     @Override
     public void onResult(EchoResultEvent event) {
-        event.getProxy().server().echo(event.getPacket().getIdentifier(), event.getPacket());
+        event.proxy().server().echo(event.getPacket().getIdentifier(), event.getPacket());
     }
 }

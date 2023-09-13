@@ -2,13 +2,10 @@ package com.github.cao.awa.apricot.plugin.internal.core.lawn.handler.message;
 
 import com.github.cao.awa.apricot.event.handler.message.sent.*;
 import com.github.cao.awa.apricot.event.receive.message.*;
-import com.github.cao.awa.apricot.message.element.cq.image.*;
 import com.github.cao.awa.apricot.message.store.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.task.intensive.*;
-import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import org.apache.logging.log4j.*;
 
 public class SelfMessageStore extends MessageSentEventHandler {
@@ -26,7 +23,7 @@ public class SelfMessageStore extends MessageSentEventHandler {
     @Override
     public void onMessageReceived(MessageSentEvent<?> event) {
         MessageSentPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         MessageStore store = MessageStore.fromPacket(packet);

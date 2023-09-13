@@ -26,7 +26,7 @@ public class MessageReproducer extends MessageEventHandler {
     public void onMessage(MessageEvent<?> event) {
         MessagePacket packet = event.getPacket();
         AssembledMessage message = packet.getMessage();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         String plain = message.toPlainText();

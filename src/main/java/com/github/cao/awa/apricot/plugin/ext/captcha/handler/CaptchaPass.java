@@ -30,7 +30,7 @@ public class CaptchaPass extends MessageEventHandler {
     @Override
     public void onMessage(MessageEvent<?> event) {
         MessagePacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         if (packet.getType() == MessageType.GROUP) {

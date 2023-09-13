@@ -52,7 +52,7 @@ public class MessageExport extends MessageReceivedEventHandler {
         File sha = new File("export/json/exports.bin.sha");
         FileUtil.mkdirsParent(raw);
         final BufferedOutputStream rawOutput = new BufferedOutputStream(new FileOutputStream(raw));
-        event.getProxy()
+        event.proxy()
              .server()
              .getMessagesHeadOffice()
              .forEach((k, v) -> {
@@ -88,7 +88,7 @@ public class MessageExport extends MessageReceivedEventHandler {
         File sha = new File("export/json/exports.jsons.sha");
         FileUtil.mkdirsParent(raw);
         final BufferedOutputStream rawOutput = new BufferedOutputStream(new FileOutputStream(raw));
-        event.getProxy()
+        event.proxy()
              .server()
              .getMessagesHeadOffice()
              .forEach((k, v) -> {

@@ -22,7 +22,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
     @Override
     public void onMessageReceived(MessageReceivedEvent<?> event) {
         MessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
 
         String command = packet.getMessage()
                                .toPlainText();

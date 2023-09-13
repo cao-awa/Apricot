@@ -8,14 +8,11 @@ import com.github.cao.awa.apricot.message.forward.dummy.*;
 import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.network.packet.send.forward.*;
 import com.github.cao.awa.apricot.network.packet.send.group.name.card.*;
-import com.github.cao.awa.apricot.network.packet.send.message.*;
 import com.github.cao.awa.apricot.network.packet.send.recall.*;
 import com.github.cao.awa.apricot.network.router.*;
 import com.github.cao.awa.apricot.server.*;
-import com.github.cao.awa.apricot.server.service.counter.traffic.*;
 import com.github.cao.awa.apricot.util.collection.*;
 import com.github.cao.awa.apricot.util.time.*;
-import com.github.zhuaidadaya.rikaishinikui.handler.universal.receptacle.*;
 import org.apache.logging.log4j.*;
 
 import java.util.*;
@@ -34,7 +31,7 @@ public class Tests extends MessageReceivedEventHandler {
      */
     @Override
     public void onMessageReceived(MessageReceivedEvent<?> event) {
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         MessageReceivedPacket packet = event.getPacket();
         ApricotServer server = proxy.server();
 
@@ -42,7 +39,7 @@ public class Tests extends MessageReceivedEventHandler {
                  .getMessage()
                  .toPlainText()
                  .equals(".test_recall")) {
-            event.getProxy()
+            event.proxy()
                  .send(
                          new SendRecallMessagePacket(event.getPacket()
                                                           .getMessageId()),
@@ -64,7 +61,7 @@ public class Tests extends MessageReceivedEventHandler {
                     new TextMessageElement("草").toMessage()
             ));
 
-            event.getProxy()
+            event.proxy()
                  .send(
                          new SendMessagesForwardPacket(
                                  packet.getType(),

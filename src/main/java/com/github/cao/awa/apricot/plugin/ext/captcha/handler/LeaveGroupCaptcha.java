@@ -19,7 +19,7 @@ public class LeaveGroupCaptcha extends GroupMemberDecreasedEventHandler {
     public void onDecrease(GroupMemberDecreasedEvent<?> event) {
         CAPTCHA_CHECKER.reset(event.getPacket()
                                    .target());
-        event.getProxy()
+        event.proxy()
              .server()
              .getEventManager()
              .release(event.getPacket()

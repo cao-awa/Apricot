@@ -18,7 +18,7 @@ import com.github.cao.awa.apricot.util.message.*;
 import java.util.*;
 
 public class FastDelete extends GroupMessageReceivedEventHandler {
-    public static final String NAME = "FastDelete";
+    public static final String CONFIG_NAME = "FastDelete";
     private static final Random RANDOM = new Random();
 
     /**
@@ -33,7 +33,7 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
     @Override
     public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
         GroupMessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
 
         if (MessageProcess.command(
                 packet.getMessage(),
@@ -46,7 +46,7 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                                                              .carver(ReplyMessageElement.class);
 
             if (reply.size() == 1) {
-                ApsConfig config = config(NAME);
+                ApsConfig config = config(CONFIG_NAME);
 
                 String response = config.map("delete_responses")
                                         .getString(plain);

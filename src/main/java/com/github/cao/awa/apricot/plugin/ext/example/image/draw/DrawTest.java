@@ -35,7 +35,7 @@ public class DrawTest extends MessageReceivedEventHandler {
     @Override
     public void onMessageReceived(MessageReceivedEvent<?> event) {
         MessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         AssembledMessage message = packet.getMessage();

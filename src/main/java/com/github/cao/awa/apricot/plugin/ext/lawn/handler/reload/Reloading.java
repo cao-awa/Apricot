@@ -25,13 +25,13 @@ public class Reloading extends MessageEventHandler {
     @Override
     public void onMessage(MessageEvent<?> event) {
         MessagePacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         AssembledMessage message = packet.getMessage();
         ApricotServer server = proxy.server();
 
         if (MessageProcess.command(
                 message,
-                "/reload"
+                "..reload"
         )) {
             server.apsConfig()
                   .reload();

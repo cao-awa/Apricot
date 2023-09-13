@@ -33,7 +33,7 @@ public class CaptchaWithPrivate extends PrivateMessageReceivedEventHandler {
     @Override
     public void onExclusive(PrivateMessageReceivedEvent<?> event) {
         final PrivateMessageReceivedPacket packet = event.getPacket();
-        final ApricotProxy proxy = event.getProxy();
+        final ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         String answerText = packet.getMessage()

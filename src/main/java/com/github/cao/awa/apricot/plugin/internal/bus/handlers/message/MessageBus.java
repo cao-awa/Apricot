@@ -23,7 +23,7 @@ public class MessageBus extends MessageEventHandler implements BusHandler<Messag
      */
     @Override
     public void onMessage(MessageEvent<?> event) {
-        ApricotServer server = event.getProxy()
+        ApricotServer server = event.proxy()
                                     .server();
         this.handlers.forEach(handler -> server.execute(() -> handler.accept(event)));
     }

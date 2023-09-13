@@ -54,7 +54,7 @@ public class EventManager implements ConcurrentService {
 
                 // Fire event for exclusive handler.
                 getServer().execute(
-                        handler.intensive(),
+                        handler.intensiveType(),
                         () -> {
                             event.setExclusive(true);
                             event.fireEvent(handler);

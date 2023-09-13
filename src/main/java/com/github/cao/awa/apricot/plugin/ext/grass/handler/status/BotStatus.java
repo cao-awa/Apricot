@@ -29,12 +29,12 @@ public class BotStatus extends GroupMessageReceivedEventHandler {
     @Override
     public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
         GroupMessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
 
         // Do not response commands.
         if (MessageProcess.command(
                 packet.getMessage(),
-                "一言"
+                "..status"
         )) {
             if (MessageProcess.hasAt(
                     packet.getMessage(),

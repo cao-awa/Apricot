@@ -20,7 +20,7 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
     @Override
     public void onPoke(PokeReceivedEvent<?> event) {
         PokeReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         if (packet.getTargetId() == packet.getBotId() && ! (packet.getCauserId() == packet.getBotId())) {
             proxy.echo(new SendPokePacket(
                     packet.getType(),
@@ -37,7 +37,7 @@ public class PokeReciprocity extends PokeReceivedEventHandler {
      * @return Intensive
      */
     @Override
-    public IntensiveType intensive() {
+    public IntensiveType intensiveType() {
         return IntensiveType.IO;
     }
 }

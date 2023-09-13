@@ -32,7 +32,7 @@ public class CaptchaWithGroup extends GroupMessageReceivedEventHandler {
     @Override
     public void onExclusive(GroupMessageReceivedEvent<?> event) {
         final MessageReceivedPacket packet = event.getPacket();
-        final ApricotProxy proxy = event.getProxy();
+        final ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         String answerText = packet.getMessage()

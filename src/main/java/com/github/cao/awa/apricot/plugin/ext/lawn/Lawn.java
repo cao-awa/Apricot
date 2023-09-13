@@ -23,7 +23,7 @@ public class Lawn extends Plugin {
     @Override
     public void initialize() {
         // Features handlers.
-        registerHandler(new Tests());
+//        registerHandler(new Tests());
         registerHandler(new ApricotInformation());
         registerHandler(new PokeReciprocity());
         registerHandler(new MessageExport());

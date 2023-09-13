@@ -11,7 +11,7 @@ public class MediaDownload extends MessageEventHandler {
     @Override
     public void onMessage(MessageEvent<?> event) {
         MessagePacket packet = event.getPacket();
-        ApricotServer server = event.getProxy().server();
+        ApricotServer server = event.proxy().server();
 
         packet.getMessage()
               .forEach(message -> {

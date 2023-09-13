@@ -28,7 +28,7 @@ public abstract class Event<T extends ReadonlyPacket> {
         return this.packet;
     }
 
-    public ApricotProxy getProxy() {
+    public ApricotProxy proxy() {
         return this.proxy;
     }
 

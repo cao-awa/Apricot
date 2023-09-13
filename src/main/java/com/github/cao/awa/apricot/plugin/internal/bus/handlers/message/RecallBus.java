@@ -23,7 +23,7 @@ public class RecallBus extends MessageRecallEventHandler implements BusHandler<M
      */
     @Override
     public void onRecall(MessageRecallEvent<?> event) {
-        ApricotServer server = event.getProxy()
+        ApricotServer server = event.proxy()
                                     .server();
         this.handlers.forEach(handler -> server.execute(() -> handler.accept(event)));
     }

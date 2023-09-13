@@ -30,7 +30,7 @@ public class RecallNotice extends MessageRecallEventHandler {
     @Override
     public void onRecall(MessageRecallEvent<?> event) {
         MessageRecallPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
         ApricotServer server = proxy.server();
 
         MessageDatabase messageDatabase = server.getMessagesHeadOffice();

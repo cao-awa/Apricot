@@ -143,7 +143,7 @@ public abstract class Plugin implements Comparable<Plugin> {
                                            .forEach(handler -> {
                                                if (parallel()) {
                                                    getServer().execute(
-                                                           handler.intensive(),
+                                                           handler.intensiveType(),
                                                            () -> fireEvent(
                                                                    handler,
                                                                    event

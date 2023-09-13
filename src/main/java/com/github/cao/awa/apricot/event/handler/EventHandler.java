@@ -49,7 +49,7 @@ public abstract class EventHandler<T extends Event<?>> {
         return this instanceof Compulsory;
     }
 
-    public IntensiveType intensive() {
+    public IntensiveType intensiveType() {
         return IntensiveType.CPU;
     }
 

@@ -15,7 +15,7 @@ import com.github.cao.awa.apricot.util.message.*;
 import java.util.*;
 
 public class MuteMe extends GroupMessageReceivedEventHandler {
-    public static final String NAME = "MuteMe";
+    public static final String CONFIG_NAME = "MuteMe";
     private static final Random RANDOM = new Random();
 
     /**
@@ -30,7 +30,7 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
     @Override
     public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
         GroupMessageReceivedPacket packet = event.getPacket();
-        ApricotProxy proxy = event.getProxy();
+        ApricotProxy proxy = event.proxy();
 
         // Do not response commands.
         if (MessageProcess.command(
@@ -47,14 +47,14 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
                             new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                  .participate(new TextMessageElement(config(NAME).str("cannot_mute_response"))),
+                                                  .participate(new TextMessageElement(config(CONFIG_NAME).str("cannot_mute_response"))),
                             packet.getResponseId()
                     ));
                 } else {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
                             new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                  .participate(new TextMessageElement(config(NAME).str("do_mute_me_response"))),
+                                                  .participate(new TextMessageElement(config(CONFIG_NAME).str("do_mute_me_response"))),
                             packet.getResponseId()
                     ));
 
