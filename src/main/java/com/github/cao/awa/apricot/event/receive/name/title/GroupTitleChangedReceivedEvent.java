@@ -14,7 +14,7 @@ import java.util.*;
 @Unsupported
 @Warning("NOT_AFTER_TESTING")
 public class GroupTitleChangedReceivedEvent extends Event<GroupTitleChangedReceivedPacket> {
-    private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.newHashSet(), set -> {
+    private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.hashSet(), set -> {
         set.add("notice-notify-title");
     });
 

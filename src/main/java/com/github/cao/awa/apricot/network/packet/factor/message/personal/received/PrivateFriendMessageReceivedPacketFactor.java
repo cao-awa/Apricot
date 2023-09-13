@@ -21,7 +21,7 @@ public class PrivateFriendMessageReceivedPacketFactor extends PacketFactor {
                 request.getLong("target_id"),
                 request.getLong("user_id"),
                 request.getLong("time"),
-                request.getInteger("message_id")
+                request.getInteger("message_seq")
         );
     }
 

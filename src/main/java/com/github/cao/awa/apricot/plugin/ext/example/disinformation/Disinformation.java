@@ -42,7 +42,7 @@ public class Disinformation extends MessageEventHandler {
                     '\n'
             );
 
-            List<ForwardMessage> msgs = ApricotCollectionFactor.newArrayList();
+            List<ForwardMessage> msgs = ApricotCollectionFactor.arrayList();
 
             for (String arg : args) {
                 arg = MessageUtil.unescape(arg);

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class InviteGroupEvent extends Event<InviteGroupReceivedPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> set.add("request-group-invite")
     );
 

@@ -60,7 +60,7 @@ public class CaptchaWithPrivate extends PrivateMessageReceivedEventHandler {
                 );
                 CAPTCHA_CHECKER.reset(packet.target());
             } else {
-                proxy.send(new SendRecallMessagePacket(packet.getMessageId()));
+                proxy.send(new SendRecallMessagePacket(packet.getMessageSeq()));
 
                 CAPTCHA_CHECKER.trys(packet.target());
             }

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class ProxyDisconnectEvent extends Event<ProxyDisconnectPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("meta-lifecycle-disconnect");
             }

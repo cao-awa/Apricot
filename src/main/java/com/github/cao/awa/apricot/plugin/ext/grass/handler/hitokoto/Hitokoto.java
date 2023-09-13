@@ -16,8 +16,7 @@ public class Hitokoto extends GroupMessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -41,8 +40,9 @@ public class Hitokoto extends GroupMessageReceivedEventHandler {
 
                 proxy.send(new SendMessagePacket(
                         packet.getType(),
-                        new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                              .participate(new TextMessageElement(json.getString("hitokoto") + "\n--" + json.getString("from"))),
+                        AssembledMessage.of()
+                                        .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                        .participate(TextMessageElement.text(json.getString("hitokoto") + "\n--" + json.getString("from"))),
                         packet.getResponseId()
                 ));
             }

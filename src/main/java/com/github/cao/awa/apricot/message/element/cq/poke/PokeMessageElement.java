@@ -1,12 +1,18 @@
 package com.github.cao.awa.apricot.message.element.cq.poke;
 
+import com.github.cao.awa.apricot.anntations.Stable;
 import com.github.cao.awa.apricot.message.element.*;
 
+@Stable
 public class PokeMessageElement extends MessageElement {
     private final long target;
 
-    public PokeMessageElement(long target) {
+    private PokeMessageElement(long target) {
         this.target = target;
+    }
+
+    public static PokeMessageElement poke(long target) {
+        return new PokeMessageElement(target);
     }
 
     @Override

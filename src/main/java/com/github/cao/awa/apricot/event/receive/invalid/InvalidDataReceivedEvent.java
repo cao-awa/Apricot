@@ -12,7 +12,7 @@ import java.util.*;
 
 public class InvalidDataReceivedEvent extends Event<InvalidDataReceivedPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> set.add("invalid-data")
     );
 

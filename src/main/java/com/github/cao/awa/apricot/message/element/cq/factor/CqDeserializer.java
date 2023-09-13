@@ -8,13 +8,13 @@ import org.jetbrains.annotations.*;
 import java.util.*;
 
 public class CqDeserializer {
-    private final Map<String, CqFactor> factors = ApricotCollectionFactor.newHashMap();
+    private final Map<String, CqFactor> factors = ApricotCollectionFactor.hashMap();
 
     @Nullable
     public MessageElement deserializer(ApricotServer server, List<String> elements) {
         String name = elements.get(0);
         if (this.factors.containsKey(name)) {
-            Map<String, String> args = ApricotCollectionFactor.newHashMap();
+            Map<String, String> args = ApricotCollectionFactor.hashMap();
 
             for (int i = 1;elements.size() > i;i++) {
                 String content = elements.get(i);

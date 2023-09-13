@@ -47,7 +47,7 @@ public class CqCodeReproduce extends MessageEventHandler {
 
             proxy.send(send);
         } else if (plain.startsWith(".cq")) {
-            List<ForwardMessage> msgs = ApricotCollectionFactor.newArrayList();
+            List<ForwardMessage> msgs = ApricotCollectionFactor.arrayList();
 
             try {
                 DummyForwardMessage dummyMessage = new DummyForwardMessage(
@@ -76,7 +76,7 @@ public class CqCodeReproduce extends MessageEventHandler {
             String xml = plain.substring(5);
 
             proxy.send(new SendMessagePacket(packet.getType(),
-                                             new XmlMessageElement(xml).toMessage(),
+                                             XmlMessageElement.xml(xml).toMessage(),
                                              packet.getResponseId()
             ));
         }

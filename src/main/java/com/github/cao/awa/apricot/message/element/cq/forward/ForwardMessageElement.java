@@ -1,12 +1,18 @@
 package com.github.cao.awa.apricot.message.element.cq.forward;
 
+import com.github.cao.awa.apricot.anntations.Stable;
 import com.github.cao.awa.apricot.message.element.*;
 
+@Stable
 public class ForwardMessageElement extends MessageElement {
     private final String id;
 
-    public ForwardMessageElement(String id) {
+    private ForwardMessageElement(String id) {
         this.id = id;
+    }
+
+    public static ForwardMessageElement forward(String id) {
+        return new ForwardMessageElement(id);
     }
 
     public String getId() {

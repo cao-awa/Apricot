@@ -8,8 +8,12 @@ import org.jetbrains.annotations.*;
 public final class TextMessageElement extends MessageElement {
     private final @NotNull String text;
 
-    public TextMessageElement(@NotNull String text) {
+    private TextMessageElement(@NotNull String text) {
         this.text = text;
+    }
+
+    public static TextMessageElement text(String text) {
+        return new TextMessageElement(text);
     }
 
     @NotNull

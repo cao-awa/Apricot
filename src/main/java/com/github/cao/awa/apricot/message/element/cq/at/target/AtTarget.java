@@ -5,26 +5,26 @@ public class AtTarget {
     private final long atPerson;
     private final String title;
 
-    public AtTarget(AtTargetType type) {
+    private AtTarget(AtTargetType type) {
         this.type = type;
         this.atPerson = - 1;
         this.title = null;
     }
 
-    public AtTarget(AtTargetType type, String title) {
+    private AtTarget(AtTargetType type, String title) {
         this.type = type;
         this.atPerson = - 1;
         this.title = title;
     }
 
 
-    public AtTarget(AtTargetType type, long atPerson, String title) {
+    private AtTarget(AtTargetType type, long atPerson, String title) {
         this.type = type;
         this.atPerson = atPerson;
         this.title = title;
     }
 
-    public AtTarget(AtTargetType type, long atPerson) {
+    private AtTarget(AtTargetType type, long atPerson) {
         this.type = type;
         this.atPerson = atPerson;
         this.title = null;
@@ -35,6 +35,30 @@ public class AtTarget {
         return new AtTarget(
                 type,
                 type == AtTargetType.PERSON ? Long.parseLong(source) : - 1
+        );
+    }
+
+    public static AtTarget of(AtTargetType type) {
+        return new AtTarget(type);
+    }
+
+    public static AtTarget of(AtTargetType type, String title) {
+        return new AtTarget(type,
+                            title
+        );
+    }
+
+
+    public static AtTarget of(AtTargetType type, long atPerson, String title) {
+        return new AtTarget(type,
+                            atPerson,
+                            title
+        );
+    }
+
+    public static AtTarget of(AtTargetType type, long atPerson) {
+        return new AtTarget(type,
+                            atPerson
         );
     }
 
@@ -52,7 +76,7 @@ public class AtTarget {
 
     public String toString() {
         return this.type == AtTargetType.ALL ?
-               "all" :
-               this.title == null ? String.valueOf(this.atPerson) : this.atPerson + ",name=" + this.title;
+                "all" :
+                this.title == null ? String.valueOf(this.atPerson) : this.atPerson + ",name=" + this.title;
     }
 }

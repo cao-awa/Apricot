@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 public class DummyForwardTree {
-    private final List<DummyForwardNode> nodes = ApricotCollectionFactor.newArrayList();
+    private final List<DummyForwardNode> nodes = ApricotCollectionFactor.arrayList();
 
     public void add(DummyForwardNode node) {
         this.nodes.add(node);

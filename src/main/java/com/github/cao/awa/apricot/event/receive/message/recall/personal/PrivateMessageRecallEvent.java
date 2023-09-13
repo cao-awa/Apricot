@@ -12,7 +12,7 @@ import java.util.*;
 
 public class PrivateMessageRecallEvent extends MessageRecallEvent<PrivateMessageRecallPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("notice-recall");
                 set.add("notice-friend-recall");

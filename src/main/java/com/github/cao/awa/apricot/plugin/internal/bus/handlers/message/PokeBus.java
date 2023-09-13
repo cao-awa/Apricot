@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.*;
 
 public class PokeBus extends PokeReceivedEventHandler implements BusHandler<PokeReceivedEvent<?>> {
-    private final List<Consumer<PokeReceivedEvent<?>>> handlers = ApricotCollectionFactor.newArrayList();
+    private final List<Consumer<PokeReceivedEvent<?>>> handlers = ApricotCollectionFactor.arrayList();
 
     /**
      * Process event.

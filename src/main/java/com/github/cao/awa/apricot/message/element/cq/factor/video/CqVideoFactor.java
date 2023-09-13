@@ -10,7 +10,7 @@ import java.util.*;
 public class CqVideoFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return new VideoMessageElement(
+        return VideoMessageElement.video(
                 args.get("file"),
                 args.get("cover")
         );

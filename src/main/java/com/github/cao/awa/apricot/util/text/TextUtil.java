@@ -64,7 +64,7 @@ public class TextUtil {
     @NotNull
     public static List<String> partitionToList(@NotNull String str, int size, boolean saveUnnecessary) {
         int capacity = str.length() / size + 1;
-        List<String> result = ApricotCollectionFactor.newArrayList(capacity);
+        List<String> result = ApricotCollectionFactor.arrayList(capacity);
         int cursor = 0;
         for (int i = 0; i < capacity; i++) {
             int nextCursor = cursor + size;
@@ -155,7 +155,7 @@ public class TextUtil {
 
     @NotNull
     public static List<String> equivalentRepeated(@NotNull String str) {
-        List<String> result = ApricotCollectionFactor.newArrayList();
+        List<String> result = ApricotCollectionFactor.arrayList();
         StringBuilder builder = new StringBuilder();
         char last = str.charAt(0);
         boolean started = false;
@@ -262,7 +262,7 @@ public class TextUtil {
     @NotNull
     public static List<String> splitToList(@NotNull String source, char delim) {
         final int length = source.length();
-        final List<String> strings = ApricotCollectionFactor.newArrayList(length / 2);
+        final List<String> strings = ApricotCollectionFactor.arrayList(length / 2);
         int cursor = 0;
 
         while (cursor < length) {

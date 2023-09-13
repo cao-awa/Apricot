@@ -16,8 +16,7 @@ public class MessageReproducer extends MessageEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -32,9 +31,9 @@ public class MessageReproducer extends MessageEventHandler {
         String plain = message.toPlainText();
 
         if (plain.startsWith(".reproduce")) {
-            AssembledMessage response = new AssembledMessage();
+            AssembledMessage response = AssembledMessage.of();
             if (packet.getType() == MessageType.GROUP) {
-                response.participate(new ReplyMessageElement(packet.getMessageId()));
+                response.participate(ReplyMessageElement.reply(packet.getMessageSeq()));
             }
 
             String arg = plain.substring(".reproduce".length() + 1)
@@ -52,17 +51,17 @@ public class MessageReproducer extends MessageEventHandler {
                 //                System.out.println("'" + arg + "'来自" + (store.getTargetId() == store.getSenderId() ?
                 //                                                          "私聊" :
                 //                                                          "群") + "：" + store.getTargetId() + "\n由" + store.getSenderId() + "发送\n内容是：\n" + store.getMessage());
-                response.participate(new TextMessageElement("\"" + arg + "\"来自" + (store.getTargetId() == store.getSenderId() ?
-                                                                                   "私聊" :
-                                                                                   "群") + "：" + store.getTargetId() + "\n由" + store.getSenderId() + "发送" + (
-                                                                    store.isRecalled() ?
-                                                                    "，已被撤回" :
-                                                                    "") + "\n内容是：\n"));
+                response.participate(TextMessageElement.text("\"" + arg + "\"来自" + (store.getTargetId() == store.getSenderId() ?
+                        "私聊" :
+                        "群") + "：" + store.getTargetId() + "\n由" + store.getSenderId() + "发送" + (
+                        store.isRecalled() ?
+                                "，已被撤回" :
+                                "") + "\n内容是：\n"));
                 store.getMessage()
-                     .forEach(response::participate);
+                     .forEach(response :: participate);
             } catch (Exception e) {
                 e.printStackTrace();
-                response.participate(new TextMessageElement("无法找到消息： '" + arg + "'"));
+                response.participate(TextMessageElement.text("无法找到消息： '" + arg + "'"));
             }
             proxy.send(new SendMessagePacket(
                     packet.getType(),

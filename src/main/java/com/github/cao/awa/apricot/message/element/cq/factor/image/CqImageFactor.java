@@ -10,7 +10,7 @@ import java.util.*;
 public class CqImageFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return new ImageMessageElement(
+        return ImageMessageElement.image(
                 args.get("file"),
                 args.get("url"),
                 args.get("subType")

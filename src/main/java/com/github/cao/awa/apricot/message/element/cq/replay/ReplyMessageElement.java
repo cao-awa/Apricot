@@ -1,29 +1,35 @@
 package com.github.cao.awa.apricot.message.element.cq.replay;
 
+import com.github.cao.awa.apricot.anntations.Stable;
 import com.github.cao.awa.apricot.message.element.*;
 
+@Stable
 public class ReplyMessageElement extends MessageElement {
-    private final long messageId;
+    private final long messageSeq;
 
-    public ReplyMessageElement(long messageId) {
-        this.messageId = messageId;
+    private ReplyMessageElement(long messageSeq) {
+        this.messageSeq = messageSeq;
     }
 
-    public long getMessageId() {
-        return this.messageId;
+    public static ReplyMessageElement reply(long messageSeq) {
+        return new ReplyMessageElement(messageSeq);
+    }
+
+    public long getMessageSeq() {
+        return this.messageSeq;
     }
 
     public String toString() {
-        return "ReplyMessageElement{id=" + this.messageId + "}";
+        return "ReplyMessageElement{seq=" + this.messageSeq + "}";
     }
 
     @Override
     public String toPlainText() {
-        return "[CQ:reply,id=" + this.messageId + "]";
+        return "[CQ:reply,seq=" + this.messageSeq + "]";
     }
 
     @Override
     public String getShortName() {
-        return "ReplyMessageElement{" + this.messageId + "}";
+        return "ReplyMessageElement{" + this.messageSeq + "}";
     }
 }

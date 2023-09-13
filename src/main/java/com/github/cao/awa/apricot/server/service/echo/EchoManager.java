@@ -13,7 +13,7 @@ import java.util.function.*;
 
 public class EchoManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("EchoManager");
-    private final Map<String, Consumer<EchoResultPacket>> echos = ApricotCollectionFactor.newHashMap();
+    private final Map<String, Consumer<EchoResultPacket>> echos = ApricotCollectionFactor.hashMap();
     private final ExecutorEntrust executor;
     private boolean active = true;
 

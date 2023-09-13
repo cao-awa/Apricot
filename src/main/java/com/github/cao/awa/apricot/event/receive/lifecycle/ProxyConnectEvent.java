@@ -12,7 +12,7 @@ import java.util.*;
 
 public class ProxyConnectEvent extends Event<ProxyConnectPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("meta-lifecycle-connect");
             }

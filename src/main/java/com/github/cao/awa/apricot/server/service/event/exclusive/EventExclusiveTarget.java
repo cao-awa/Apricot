@@ -10,7 +10,7 @@ public class EventExclusiveTarget {
     public static final EventExclusiveTarget ALL = new EventExclusiveTarget(EventExclusiveLevel.ALL);
 
     private final EventExclusiveLevel level;
-    private final List<Plugin> targets = ApricotCollectionFactor.newArrayList();
+    private final List<Plugin> targets = ApricotCollectionFactor.arrayList();
 
     public List<Plugin> getTargets() {
         return this.targets;

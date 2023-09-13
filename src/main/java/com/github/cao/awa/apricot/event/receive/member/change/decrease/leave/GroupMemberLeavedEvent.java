@@ -11,7 +11,7 @@ import com.github.zhuaidadaya.rikaishinikui.handler.universal.entrust.*;
 import java.util.*;
 
 public class GroupMemberLeavedEvent extends GroupMemberDecreasedEvent<GroupMemberLeavedPacket> {
-    private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.newHashSet(), set -> {
+    private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.hashSet(), set -> {
         set.add("notice-group-member-changed");
         set.add("notice-group-member-decrease");
         set.add("notice-group-decrease-leave");

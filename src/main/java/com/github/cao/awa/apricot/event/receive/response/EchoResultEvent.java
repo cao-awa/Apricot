@@ -12,7 +12,7 @@ import java.util.*;
 
 public class EchoResultEvent extends Event<EchoResultPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> set.add("echo-result")
     );
 

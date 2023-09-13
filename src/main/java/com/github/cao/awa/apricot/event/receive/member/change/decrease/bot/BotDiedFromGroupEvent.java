@@ -12,7 +12,7 @@ import java.util.*;
 
 public class BotDiedFromGroupEvent extends GroupMemberDecreasedEvent<BotDiedFromGroupPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("notice-group-member-changed");
                 set.add("notice-group-member-decrease");

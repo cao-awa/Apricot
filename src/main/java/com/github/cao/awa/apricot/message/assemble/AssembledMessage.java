@@ -13,23 +13,35 @@ import java.util.function.*;
 
 @Stable
 public class AssembledMessage extends Message<MessageElement, AssembledMessage> {
-    private static final MessageElement EMPTY_PLAINS_TEXT = new TextMessageElement("");
+    private static final MessageElement EMPTY_PLAINS_TEXT = TextMessageElement.text("");
     private final List<MessageElement> elements;
     private final List<AssembledMessage> incinerate;
 
-    public AssembledMessage(List<MessageElement> elements, List<AssembledMessage> incinerate) {
+    private AssembledMessage(List<MessageElement> elements, List<AssembledMessage> incinerate) {
         this.elements = elements;
         this.incinerate = incinerate;
     }
 
-    public AssembledMessage(List<MessageElement> elements) {
+    private AssembledMessage(List<MessageElement> elements) {
         this.elements = elements;
-        this.incinerate = ApricotCollectionFactor.newArrayList();
+        this.incinerate = ApricotCollectionFactor.arrayList();
     }
 
-    public AssembledMessage() {
-        this.elements = ApricotCollectionFactor.newArrayList();
-        this.incinerate = ApricotCollectionFactor.newArrayList();
+    private AssembledMessage() {
+        this.elements = ApricotCollectionFactor.arrayList();
+        this.incinerate = ApricotCollectionFactor.arrayList();
+    }
+
+    public static AssembledMessage of() {
+        return new AssembledMessage();
+    }
+
+    public static AssembledMessage of(List<MessageElement> elements, List<AssembledMessage> incinerate) {
+        return new AssembledMessage(elements, incinerate);
+    }
+
+    public static AssembledMessage of(List<MessageElement> elements) {
+        return new AssembledMessage(elements);
     }
 
     public AssembledMessage participate(MessageElement element) {

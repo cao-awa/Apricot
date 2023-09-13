@@ -26,7 +26,7 @@ public abstract class Plugin implements Comparable<Plugin> {
             this,
             isCore() ? "core" : "ext"
     );
-    private final Map<String, List<EventHandler<?>>> handlers = ApricotCollectionFactor.newHashMap();
+    private final Map<String, List<EventHandler<?>>> handlers = ApricotCollectionFactor.hashMap();
     private ApricotServer server;
 
     /**
@@ -95,7 +95,7 @@ public abstract class Plugin implements Comparable<Plugin> {
         if (! this.handlers.containsKey(handler.getType())) {
             this.handlers.put(
                     handler.getType(),
-                    ApricotCollectionFactor.newLinkedList()
+                    ApricotCollectionFactor.linkedList()
             );
         }
         this.handlers.get(handler.getType())

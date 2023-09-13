@@ -12,7 +12,7 @@ import java.util.*;
 
 public class GroupMessageRecallEvent extends MessageRecallEvent<GroupMessageRecallPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("notice-recall");
                 set.add("notice-group-recall");

@@ -12,7 +12,7 @@ import java.util.*;
 
 public class IssueGroupAllMuteEvent extends IssueGroupMuteEvent<IssueGroupAllMuteReceivedPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("notice-group-ban-ban");
                 set.add("notice-group-ban-all");

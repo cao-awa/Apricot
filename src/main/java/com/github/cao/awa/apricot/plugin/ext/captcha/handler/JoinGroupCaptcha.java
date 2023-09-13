@@ -30,8 +30,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -65,12 +64,13 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                     ));
                     proxy.send(new SendMessagePacket(
                             MessageType.GROUP,
-                            new AssembledMessage().participate(new ReplyMessageElement(result.getMessageId()))
-                                                  .participate(new AtMessageElement(new AtTarget(
-                                                          AtTargetType.PERSON,
-                                                          packet.getUserId()
-                                                  )))
-                                                  .participate(new TextMessageElement("已完成Captcha验证，欢迎您的加入！")),
+                            AssembledMessage.of()
+                                            .participate(ReplyMessageElement.reply(result.getMessageSeq()))
+                                            .participate(AtMessageElement.at(AtTarget.of(
+                                                    AtTargetType.PERSON,
+                                                    packet.getUserId()
+                                            )))
+                                            .participate(TextMessageElement.text("已完成Captcha验证，欢迎您的加入！")),
                             packet.getGroupId()
                     ));
                 },
@@ -78,12 +78,13 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                     if (CaptchaPlugin.CAPTCHA_CHECKER.contains(trysToMuch.target())) {
                         proxy.send(new SendMessagePacket(
                                 MessageType.GROUP,
-                                new AssembledMessage().participate(new ReplyMessageElement(trysToMuch.getMessageId()))
-                                                      .participate(new AtMessageElement(new AtTarget(
-                                                              AtTargetType.PERSON,
-                                                              packet.getUserId()
-                                                      )))
-                                                      .participate(new TextMessageElement("尝试次数过多，此验证已失效！")),
+                                AssembledMessage.of()
+                                                .participate(ReplyMessageElement.reply(trysToMuch.getMessageSeq()))
+                                                .participate(AtMessageElement.at(AtTarget.of(
+                                                        AtTargetType.PERSON,
+                                                        packet.getUserId()
+                                                )))
+                                                .participate(TextMessageElement.text("尝试次数过多，此验证已失效！")),
                                 packet.getGroupId()
                         ));
                         proxy.send(new SendGroupKickPacket(
@@ -104,11 +105,12 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                       () -> {
                           proxy.send(new SendMessagePacket(
                                   MessageType.GROUP,
-                                  new AssembledMessage().participate(new AtMessageElement(new AtTarget(
-                                                                AtTargetType.PERSON,
-                                                                packet.getUserId()
-                                                        )))
-                                                        .participate(new TextMessageElement("验证已超时！")),
+                                  AssembledMessage.of()
+                                                  .participate(AtMessageElement.at(AtTarget.of(
+                                                          AtTargetType.PERSON,
+                                                          packet.getUserId()
+                                                  )))
+                                                  .participate(TextMessageElement.text("验证已超时！")),
                                   packet.getGroupId()
                           ));
                           proxy.send(new SendGroupKickPacket(
@@ -123,11 +125,12 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
         proxy.send(
                 new SendMessagePacket(
                         MessageType.GROUP,
-                        new AssembledMessage().participate(new AtMessageElement(new AtTarget(
-                                                      AtTargetType.PERSON,
-                                                      packet.getUserId()
-                                              )))
-                                              .participate(new TextMessageElement("请您在五分钟内回答此问题，直接发出得数：\n" + tester.getNumber1() + tester.getOperator() + tester.getNumber2() + "=?")),
+                        AssembledMessage.of()
+                                        .participate(AtMessageElement.at(AtTarget.of(
+                                                AtTargetType.PERSON,
+                                                packet.getUserId()
+                                        )))
+                                        .participate(TextMessageElement.text("请您在五分钟内回答此问题，直接发出得数：\n" + tester.getNumber1() + tester.getOperator() + tester.getNumber2() + "=?")),
                         packet.getGroupId()
                 ),
                 result -> {
@@ -169,7 +172,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
         );
         config.putIfAbsent(
                 "allows",
-                JSONArray::new
+                JSONArray :: new
         );
     }
 
@@ -203,7 +206,7 @@ public class JoinGroupCaptcha extends GroupMemberIncreasedEventHandler {
                 );
                 default -> new CalculateTester(
                         "+",
-                        Integer::sum,
+                        Integer :: sum,
                         () -> RANDOM.nextInt(50)
                 );
             };

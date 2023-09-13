@@ -16,8 +16,7 @@ public class Reloading extends MessageEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -37,12 +36,13 @@ public class Reloading extends MessageEventHandler {
                   .reload();
 
             server.getPlugins()
-                  .forEach(Plugin::reload);
+                  .forEach(Plugin :: reload);
 
             proxy.send(new SendMessagePacket(
                     packet.getType(),
-                    new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                          .participate(new TextMessageElement("OK")),
+                    AssembledMessage.of()
+                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                    .participate(TextMessageElement.text("OK")),
                     packet.getResponseId()
             ));
         }

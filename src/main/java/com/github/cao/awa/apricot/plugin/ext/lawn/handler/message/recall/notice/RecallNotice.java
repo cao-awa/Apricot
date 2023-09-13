@@ -21,8 +21,7 @@ public class RecallNotice extends MessageRecallEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -40,12 +39,12 @@ public class RecallNotice extends MessageRecallEventHandler {
                 store
         );
 
-        AssembledMessage message = new AssembledMessage();
+        AssembledMessage message = AssembledMessage.of();
 
-        message.participate(new TextMessageElement("用户 '" + store.getSenderId() + "' 撤回了消息 '" + store.getMessageId() + "'(永久id: '" + messageDatabase.getConvert(store.getMessageId()) + "')\n内容为:\n"));
+        message.participate(TextMessageElement.text("用户 '" + store.getSenderId() + "' 撤回了消息 '" + store.getMessageId() + "'(永久id: '" + messageDatabase.getConvert(store.getMessageId()) + "')\n内容为:\n"));
 
         store.getMessage()
-             .forEach(message::participate);
+             .forEach(message :: participate);
 
         proxy.echo(new SendMessagePacket(
                 packet.getType(),

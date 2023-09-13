@@ -11,7 +11,7 @@ import java.util.*;
 public class CqAtFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return new AtMessageElement(AtTarget.of(args.get("qq")));
+        return AtMessageElement.at(AtTarget.of(args.get("qq")));
     }
 
     @Override

@@ -9,7 +9,7 @@ import java.util.*;
 
 @Stable
 public class CarvedMessage<T extends MessageElement> extends Message<T, CarvedMessage<T>> {
-    private final List<T> elements = ApricotCollectionFactor.newArrayList();
+    private final List<T> elements = ApricotCollectionFactor.arrayList();
 
     public T get(int index) {
         return this.elements.get(index);

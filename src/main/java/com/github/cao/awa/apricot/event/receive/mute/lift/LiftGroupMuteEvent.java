@@ -12,7 +12,7 @@ import java.util.*;
 
 public abstract class LiftGroupMuteEvent<T extends LiftGroupMuteReceivedPacket> extends Event<T> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> set.add("notice-group-lift-ban")
     );
 

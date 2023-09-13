@@ -24,8 +24,8 @@ import java.util.concurrent.*;
 public class PluginManager implements ConcurrentService {
     private static final Logger LOGGER = LogManager.getLogger("PluginManager");
     private final ApricotServer server;
-    private final Map<UUID, Plugin> cores = ApricotCollectionFactor.newConcurrentHashMap();
-    private final Map<UUID, Plugin> plugins = ApricotCollectionFactor.newConcurrentHashMap();
+    private final Map<UUID, Plugin> cores = ApricotCollectionFactor.concurrentHashMap();
+    private final Map<UUID, Plugin> plugins = ApricotCollectionFactor.concurrentHashMap();
     private final ExecutorEntrust executor;
     private boolean active = true;
 
@@ -69,7 +69,7 @@ public class PluginManager implements ConcurrentService {
                         StandardCharsets.UTF_8
                 ));
 
-                Set<Class<?>> results = ApricotCollectionFactor.newHashSet();
+                Set<Class<?>> results = ApricotCollectionFactor.hashSet();
 
                 results.addAll(apricotJar.isFile() ?
                                new Reflections(new ConfigurationBuilder().addUrls(apricotJar.toURI()
@@ -84,7 +84,7 @@ public class PluginManager implements ConcurrentService {
 
             boolean shouldAsync = server.shouldAsyncLoadPlugins();
 
-            List<Plugin> blockLoading = ApricotCollectionFactor.newArrayList();
+            List<Plugin> blockLoading = ApricotCollectionFactor.arrayList();
 
             for (Class<?> clazz : plugins) {
                 EntrustEnvironment.trys(

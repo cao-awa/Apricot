@@ -21,8 +21,7 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -46,15 +45,17 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
                                                                                                                 .equals("owner"))) {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
-                            new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                  .participate(new TextMessageElement(config(CONFIG_NAME).str("cannot_mute_response"))),
+                            AssembledMessage.of()
+                                            .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                            .participate(TextMessageElement.text(config(CONFIG_NAME).str("cannot_mute_response"))),
                             packet.getResponseId()
                     ));
                 } else {
                     proxy.send(new SendMessagePacket(
                             packet.getType(),
-                            new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                  .participate(new TextMessageElement(config(CONFIG_NAME).str("do_mute_me_response"))),
+                            AssembledMessage.of()
+                                            .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                            .participate(TextMessageElement.text(config(CONFIG_NAME).str("do_mute_me_response"))),
                             packet.getResponseId()
                     ));
 
@@ -62,8 +63,8 @@ public class MuteMe extends GroupMessageReceivedEventHandler {
                             packet.getGroupId(),
                             packet.getSenderId(),
                             RANDOM.nextInt(
-                                    60,
-                                    5 * 60
+                                    30,
+                                    3 * 60
                             )
                     ));
                 }

@@ -11,7 +11,7 @@ import java.util.*;
 
 public class GroupPokeReceivedEvent extends PokeReceivedEvent<GroupPokeReceivedPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("notice-poke");
                 set.add("notice-poke-group");

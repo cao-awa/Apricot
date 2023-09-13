@@ -11,11 +11,11 @@ public class CqXmlFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
         return args.containsKey("resid") ?
-               new XmlMessageElement(
-                       args.get("data"),
-                       Integer.parseInt(args.get("resid"))
-               ) :
-               new XmlMessageElement(args.get("data"));
+                XmlMessageElement.xml(
+                        args.get("data"),
+                        Integer.parseInt(args.get("resid"))
+                ) :
+                XmlMessageElement.xml(args.get("data"));
     }
 
     @Override

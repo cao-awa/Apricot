@@ -1,24 +1,28 @@
 package com.github.cao.awa.apricot.message.element.cq.image;
 
+import com.github.cao.awa.apricot.anntations.Stable;
 import com.github.cao.awa.apricot.message.element.*;
 
 import java.io.*;
 
+@Stable
 public class ImageMessageElement extends MessageElement {
     private final File file;
     private final String url;
     private final String subType;
 
-    public ImageMessageElement(String file, String url, String subType) {
-        this.file = new File(file);
+    private ImageMessageElement(File file, String url, String subType) {
+        this.file = file;
         this.url = url;
         this.subType = subType;
     }
 
-    public ImageMessageElement(File file, String url, String subType) {
-        this.file = file;
-        this.url = url;
-        this.subType = subType;
+    public static ImageMessageElement image(String file, String url, String subType) {
+        return new ImageMessageElement(new File(file), url, subType);
+    }
+
+    public static ImageMessageElement image(File file, String url, String subType) {
+        return new ImageMessageElement(file, url, subType);
     }
 
     public File getFile() {

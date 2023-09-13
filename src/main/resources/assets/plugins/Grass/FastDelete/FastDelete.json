@@ -1,6 +1,8 @@
 {
     "delete_responses": {
         "#": "#%s ",
+        "unexpected_error": "执行命令时遇到了未知的错误",
+        "missing_reason": "缺少快速删除理由",
         "deleted": "已尝试删除，",
         "unable_to_delete": "无法删除 #%s，请联系管理员或群主",
         "v": "理由为：恶意骚扰",

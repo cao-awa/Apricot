@@ -10,7 +10,8 @@ public abstract class MessageElement {
     public abstract String getShortName();
 
     public AssembledMessage toMessage() {
-        return new AssembledMessage().participate(this);
+        return AssembledMessage.of()
+                               .participate(this);
     }
 
     public boolean shouldIncinerate() {

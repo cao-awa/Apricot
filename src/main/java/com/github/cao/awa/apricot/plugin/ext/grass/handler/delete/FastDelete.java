@@ -24,8 +24,7 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -34,6 +33,21 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
     public void onMessageReceived(GroupMessageReceivedEvent<?> event) {
         GroupMessageReceivedPacket packet = event.getPacket();
         ApricotProxy proxy = event.proxy();
+
+        ApsConfig config = config(CONFIG_NAME);
+
+        if (MessageProcess.pureCommand(packet.getMessage(),
+                                       "/d"
+        )) {
+            proxy.send(new SendMessagePacket(
+                    packet.getType(),
+                    AssembledMessage.of()
+                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                    .participate(TextMessageElement.text(config.map("delete_responses")
+                                                                               .getString("missing_reason"))),
+                    packet.getResponseId()
+            ));
+        }
 
         if (MessageProcess.command(
                 packet.getMessage(),
@@ -46,20 +60,21 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                                                              .carver(ReplyMessageElement.class);
 
             if (reply.size() == 1) {
-                ApsConfig config = config(CONFIG_NAME);
-
                 String response = config.map("delete_responses")
                                         .getString(plain);
 
                 long targetId = reply.get(0)
-                                     .getMessageId();
+                                     .getMessageSeq();
 
                 if (response == null) {
-                    //                proxy.send(new SendMessagePacket(
-                    //                        packet.getType(),
-                    //                        new AssembledMessage().participate(new TextMessageElement("我只是一只Bot，我看不懂")),
-                    //                        packet.getResponseId()
-                    //                ));
+                    proxy.send(new SendMessagePacket(
+                            packet.getType(),
+                            AssembledMessage.of()
+                                            .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                            .participate(TextMessageElement.text(config.map("delete_responses")
+                                                                                       .getString("unexpected_error"))),
+                            packet.getResponseId()
+                    ));
                 } else {
                     GetMessageResponsePacket messageResponsePacket = proxy.server()
                                                                           .getMessage(
@@ -68,20 +83,22 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                                                                           );
 
                     long id = messageResponsePacket.getOwnId() == - 1 ?
-                              messageResponsePacket.getMessageId() :
-                              messageResponsePacket.getOwnId();
+                            messageResponsePacket.getMessageId() :
+                            messageResponsePacket.getOwnId();
+
 
                     if (id != - 1) {
                         proxy.send(new SendRecallMessagePacket(targetId));
                         proxy.send(new SendMessagePacket(
                                 packet.getType(),
-                                new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                      .participate(new TextMessageElement(String.format(
-                                                              config.map("delete_responses")
-                                                                    .getString("#"),
-                                                              id
-                                                      ) + config.map("delete_responses")
-                                                                .getString("deleted") + response)),
+                                AssembledMessage.of()
+                                                .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                .participate(TextMessageElement.text(String.format(
+                                                        config.map("delete_responses")
+                                                              .getString("#"),
+                                                        id
+                                                ) + config.map("delete_responses")
+                                                          .getString("deleted") + response)),
                                 packet.getResponseId()
                         ));
 
@@ -94,12 +111,13 @@ public class FastDelete extends GroupMessageReceivedEventHandler {
                     } else {
                         proxy.send(new SendMessagePacket(
                                 packet.getType(),
-                                new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                      .participate(new TextMessageElement(String.format(
-                                                              config.map("delete_responses")
-                                                                    .getString("unable_to_delete"),
-                                                              targetId
-                                                      ))),
+                                AssembledMessage.of()
+                                                .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                .participate(TextMessageElement.text(String.format(
+                                                        config.map("delete_responses")
+                                                              .getString("unable_to_delete"),
+                                                        targetId
+                                                ))),
                                 packet.getResponseId()
                         ));
                     }

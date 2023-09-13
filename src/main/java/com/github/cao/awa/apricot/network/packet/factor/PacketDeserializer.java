@@ -12,7 +12,7 @@ import org.jetbrains.annotations.*;
 import java.util.*;
 
 public class PacketDeserializer {
-    private final Map<String, PacketFactor> factors = ApricotCollectionFactor.newHashMap();
+    private final Map<String, PacketFactor> factors = ApricotCollectionFactor.hashMap();
 
     @NotNull
     public ReadonlyPacket deserializerPacket(ApricotServer server, JSONObject request) {

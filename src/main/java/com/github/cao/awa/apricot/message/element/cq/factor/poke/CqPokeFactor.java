@@ -10,7 +10,7 @@ import java.util.*;
 public class CqPokeFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return new PokeMessageElement(
+        return PokeMessageElement.poke(
                 Long.parseLong(args.get("qq"))
         );
     }

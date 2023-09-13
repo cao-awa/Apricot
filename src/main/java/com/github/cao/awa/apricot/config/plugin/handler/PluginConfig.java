@@ -8,7 +8,7 @@ import java.util.*;
 public class PluginConfig {
     private final String configPath;
     private final String defaultConfigPath;
-    private final Map<String, ApsConfig> configs = ApricotCollectionFactor.newConcurrentHashMap();
+    private final Map<String, ApsConfig> configs = ApricotCollectionFactor.concurrentHashMap();
     private final ApsConfig pluginConfig;
 
     public PluginConfig(Plugin plugin, String prefix) {

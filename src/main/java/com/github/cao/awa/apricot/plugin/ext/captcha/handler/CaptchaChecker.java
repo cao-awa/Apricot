@@ -11,11 +11,11 @@ import java.util.*;
 import java.util.function.*;
 
 public class CaptchaChecker {
-    private final Map<EventTarget, Pair<Object, BiOption<Consumer<MessageReceivedPacket>>>> answers = ApricotCollectionFactor.newConcurrentHashMap();
-    private final Map<EventTarget, Integer> trys = ApricotCollectionFactor.newConcurrentHashMap();
+    private final Map<EventTarget, Pair<Object, BiOption<Consumer<MessageReceivedPacket>>>> answers = ApricotCollectionFactor.concurrentHashMap();
+    private final Map<EventTarget, Integer> trys = ApricotCollectionFactor.concurrentHashMap();
 
-    private final Map<Long, EventTarget> passable = ApricotCollectionFactor.newConcurrentHashMap();
-    private final Map<EventTarget, Long> passable_ = ApricotCollectionFactor.newConcurrentHashMap();
+    private final Map<Long, EventTarget> passable = ApricotCollectionFactor.concurrentHashMap();
+    private final Map<EventTarget, Long> passable_ = ApricotCollectionFactor.concurrentHashMap();
 
     public static void release(ApricotServer server, MessageReceivedPacket packet) {
         server.getEventManager()

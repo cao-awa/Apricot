@@ -19,10 +19,10 @@ import java.util.function.*;
 @Stable
 public class Configure {
     private static final @NotNull Logger LOGGER = LogManager.getLogger("Configure");
-    private final @NotNull Map<String, Map<String, String>> warning = ApricotCollectionFactor.newHashMap();
-    private final @NotNull Map<String, String> configs = ApricotCollectionFactor.newHashMap();
+    private final @NotNull Map<String, Map<String, String>> warning = ApricotCollectionFactor.hashMap();
+    private final @NotNull Map<String, String> configs = ApricotCollectionFactor.hashMap();
     private @NotNull Supplier<String> loader;
-    private final Map<String, String> defaultValues = ApricotCollectionFactor.newHashMap();
+    private final Map<String, String> defaultValues = ApricotCollectionFactor.hashMap();
 
     /**
      * Setting basic prepares.
@@ -217,7 +217,7 @@ public class Configure {
     public void warningWhen(String key, String value, String info) {
         Map<String, String> map = this.warning.computeIfAbsent(
                 key,
-                k -> ApricotCollectionFactor.newHashMap()
+                k -> ApricotCollectionFactor.hashMap()
         );
         map.put(
                 value,

@@ -26,8 +26,7 @@ public class DrawTest extends MessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -88,16 +87,17 @@ public class DrawTest extends MessageReceivedEventHandler {
 
                 proxy.send(new SendMessagePacket(
                         packet.getType(),
-                        new AssembledMessage().participate(new ImageMessageElement(
-                                MessageDigger.digestFile(
-                                        file,
-                                        MessageDigger.Sha3.SHA_224
-                                ),
-                                file.toURI()
-                                    .toURL()
-                                    .toString(),
-                                ""
-                        )),
+                        AssembledMessage.of()
+                                        .participate(ImageMessageElement.image(
+                                                MessageDigger.digestFile(
+                                                        file,
+                                                        MessageDigger.Sha3.SHA_224
+                                                ),
+                                                file.toURI()
+                                                    .toURL()
+                                                    .toString(),
+                                                ""
+                                        )),
                         packet.getResponseId()
                 ));
 
@@ -149,16 +149,17 @@ public class DrawTest extends MessageReceivedEventHandler {
 
                 proxy.send(new SendMessagePacket(
                         packet.getType(),
-                        new AssembledMessage().participate(new ImageMessageElement(
-                                MessageDigger.digestFile(
-                                        file,
-                                        MessageDigger.Sha3.SHA_224
-                                ),
-                                file.toURI()
-                                    .toURL()
-                                    .toString(),
-                                ""
-                        )),
+                        AssembledMessage.of()
+                                        .participate(ImageMessageElement.image(
+                                                MessageDigger.digestFile(
+                                                        file,
+                                                        MessageDigger.Sha3.SHA_224
+                                                ),
+                                                file.toURI()
+                                                    .toURL()
+                                                    .toString(),
+                                                ""
+                                        )),
                         packet.getResponseId()
                 ));
 

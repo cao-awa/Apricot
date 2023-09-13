@@ -23,8 +23,7 @@ public class Tests extends MessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -42,7 +41,7 @@ public class Tests extends MessageReceivedEventHandler {
             event.proxy()
                  .send(
                          new SendRecallMessagePacket(event.getPacket()
-                                                          .getMessageId()),
+                                                          .getMessageSeq()),
                          result -> {
                          }
                  );
@@ -52,13 +51,14 @@ public class Tests extends MessageReceivedEventHandler {
                  .getMessage()
                  .toPlainText()
                  .equals(".dummy_forward")) {
-            List<ForwardMessage> messages = ApricotCollectionFactor.newArrayList();
+            List<ForwardMessage> messages = ApricotCollectionFactor.arrayList();
 
             messages.add(new DummyForwardMessage(
                     packet.getSenderId(),
                     packet.getSender()
                           .getName(),
-                    new TextMessageElement("草").toMessage()
+                    TextMessageElement.text("草")
+                                      .toMessage()
             ));
 
             event.proxy()

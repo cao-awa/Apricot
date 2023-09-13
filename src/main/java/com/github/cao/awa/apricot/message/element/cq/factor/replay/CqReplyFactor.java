@@ -10,7 +10,7 @@ import java.util.*;
 public class CqReplyFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return new ReplyMessageElement(
+        return ReplyMessageElement.reply(
                 Long.parseLong(args.get("id"))
         );
     }

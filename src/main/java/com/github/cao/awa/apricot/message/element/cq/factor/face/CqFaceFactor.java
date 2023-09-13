@@ -10,7 +10,7 @@ import java.util.*;
 public class CqFaceFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return new FaceMessageElement(
+        return FaceMessageElement.face(
                 Integer.parseInt(args.get("id"))
         );
     }

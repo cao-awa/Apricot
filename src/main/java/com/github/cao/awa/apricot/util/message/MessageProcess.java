@@ -51,7 +51,7 @@ public class MessageProcess {
                                                       0,
                                                       ReplyMessageElement.class
                                               )
-                                              .getMessageId()
+                                              .getMessageSeq()
                             )
                             .getSenderId() == target,
                 false
@@ -66,6 +66,12 @@ public class MessageProcess {
                              .getAtPerson() == userId,
                 false
         );
+    }
+
+    public static boolean pureCommand(AssembledMessage message, String command) {
+        return message.carver(TextMessageElement.class)
+                      .toPlainText()
+                      .equals(command);
     }
 
     public static boolean command(AssembledMessage message, String prefix) {

@@ -66,14 +66,14 @@ public class SendPokePacket extends WritablePacket<SendMessageResponsePacket> {
               );
         if (this.type == MessageType.PRIVATE) {
             new SendPrivateMessagePacket(
-                    new PokeMessageElement(this.targetId).toMessage(),
+                    PokeMessageElement.poke(this.targetId).toMessage(),
                     this.responseId,
                     0,
                     false
             ).write(writer);
         } else {
             new SendGroupMessagePacket(
-                    new PokeMessageElement(this.targetId).toMessage(),
+                    PokeMessageElement.poke(this.targetId).toMessage(),
                     this.responseId,
                     false
             ).write(writer);

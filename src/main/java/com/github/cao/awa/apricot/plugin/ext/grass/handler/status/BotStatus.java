@@ -52,13 +52,13 @@ public class BotStatus extends GroupMessageReceivedEventHandler {
                                                 .code();
                 long googleLatency = TimeUtil.processMillion(start);
 
-                List<ForwardMessage> messages = ApricotCollectionFactor.newArrayList();
+                List<ForwardMessage> messages = ApricotCollectionFactor.arrayList();
 
                 messages.add(new DummyForwardMessage(
                         packet.getSenderId(),
                         packet.getSender()
                               .getName(),
-                        new AssembledMessage().participate(new TextMessageElement("..."))
+                        AssembledMessage.of().participate(TextMessageElement.text("..."))
                 ));
 
                 proxy.send(new SendMessagesForwardPacket(

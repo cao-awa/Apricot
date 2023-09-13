@@ -6,16 +6,9 @@ import com.github.cao.awa.apricot.network.packet.receive.message.*;
 import com.github.cao.awa.apricot.util.time.*;
 
 public abstract class GroupMessageReceivedPacket extends MessageReceivedPacket {
-    private final long ownId = TimeUtil.nanoId();
-
     @Override
     public MessageType getType() {
         return MessageType.GROUP;
-    }
-
-    @Override
-    public long getOwnId() {
-        return this.ownId;
     }
 
     @Override

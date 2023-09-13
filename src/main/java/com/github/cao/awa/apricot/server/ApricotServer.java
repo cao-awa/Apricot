@@ -95,7 +95,7 @@ public class ApricotServer {
     private final PacketDeserializer packetDeserializers = new PacketDeserializer();
     private final CqDeserializer cqDeserializers = new CqDeserializer();
     private final Configure configs = new Configure(() -> "");
-    private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.newHashMap();
+    private final Map<String, SerialLongKvDatabase> relationalDatabases = ApricotCollectionFactor.hashMap();
     private final ResourcesDispenser resourcesDispenser = new ResourcesDispenser(
             RESOURCE_DATABASE_PATH,
             this
@@ -153,7 +153,7 @@ public class ApricotServer {
 
             proxy.send(
                     new GetMessagePacket(messageId),
-                    response::set
+                    response :: set
             );
 
             long timeout = 2000;
@@ -170,7 +170,7 @@ public class ApricotServer {
                                 - 1,
                                 ""
                         ),
-                        new AssembledMessage(),
+                        AssembledMessage.of(),
                         MessageType.GROUP,
                         - 1,
                         - 1,
@@ -569,8 +569,7 @@ public class ApricotServer {
     /**
      * Let an event be fired.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author 草二号机
      * @since 1.0.0
      */

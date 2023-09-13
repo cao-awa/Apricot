@@ -12,7 +12,7 @@ import java.util.*;
 
 public class AddFriendEvent extends Event<AddFriendReceivedPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> set.add("request-friend")
     );
 

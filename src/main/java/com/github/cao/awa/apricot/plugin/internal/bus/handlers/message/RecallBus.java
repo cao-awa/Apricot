@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.*;
 
 public class RecallBus extends MessageRecallEventHandler implements BusHandler<MessageRecallEvent<?>> {
-    private final List<Consumer<MessageRecallEvent<?>>> handlers = ApricotCollectionFactor.newArrayList();
+    private final List<Consumer<MessageRecallEvent<?>>> handlers = ApricotCollectionFactor.arrayList();
 
     /**
      * Process event.

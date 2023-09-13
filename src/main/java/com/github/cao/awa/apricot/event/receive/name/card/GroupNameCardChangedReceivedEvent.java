@@ -17,7 +17,7 @@ import java.util.*;
  * The not real time warning is only against for 'cq-http'<br>
  */
 public class GroupNameCardChangedReceivedEvent extends Event<GroupNameCardChangedReceivedPacket> {
-    private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.newHashSet(), set -> {
+    private static final Set<String> TARGETS = EntrustEnvironment.operation(ApricotCollectionFactor.hashSet(), set -> {
         set.add("notice-group-card");
     });
 

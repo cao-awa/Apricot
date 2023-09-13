@@ -11,7 +11,7 @@ import java.util.*;
 
 public class PrivateTemporaryMessageSentEvent extends PrivateMessageSentEvent<PrivateTemporaryMessageSentPacket> {
     private static final Set<String> TARGETS = EntrustEnvironment.operation(
-            ApricotCollectionFactor.newHashSet(),
+            ApricotCollectionFactor.hashSet(),
             set -> {
                 set.add("message");
                 set.add("message-sent");

@@ -13,8 +13,7 @@ public class ApricotInformation extends MessageReceivedEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -89,7 +88,8 @@ public class ApricotInformation extends MessageReceivedEventHandler {
 
             proxy.echo(new SendMessagePacket(
                     packet.getType(),
-                    new TextMessageElement(builder.toString()).toMessage(),
+                    TextMessageElement.text(builder.toString())
+                                      .toMessage(),
                     packet.getResponseId()
             ));
         }

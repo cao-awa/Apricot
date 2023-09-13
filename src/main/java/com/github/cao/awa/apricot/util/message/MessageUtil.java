@@ -20,7 +20,7 @@ public class MessageUtil {
                 content
         );
 
-        List<MessageElement> elements = ApricotCollectionFactor.newArrayList();
+        List<MessageElement> elements = ApricotCollectionFactor.arrayList();
         while ((pos = content.indexOf(
                 "[CQ:",
                 cursor
@@ -34,7 +34,7 @@ public class MessageUtil {
                                 pos
                         )
                 );
-                elements.add(new TextMessageElement(unescape(result)));
+                elements.add(TextMessageElement.text(unescape(result)));
             }
             // Find cq code end.
             int endPos = content.indexOf(
@@ -68,7 +68,7 @@ public class MessageUtil {
 
         // It means have CQ codes is unsupported
         if (elements.size() == 0) {
-            elements.add(new TextMessageElement(unescape(carve(
+            elements.add(TextMessageElement.text(unescape(carve(
                     server,
                     content
             ))));
@@ -81,13 +81,13 @@ public class MessageUtil {
                         source
                 );
                 elements.add(result.length() > 0 ?
-                             new TextMessageElement(unescape(result)) :
-                             new TextMessageElement(unescape(source)));
+                             TextMessageElement.text(unescape(result)) :
+                             TextMessageElement.text(unescape(source)));
             }
         }
 
         // Let all prepared element participate in message
-        return new AssembledMessage(elements);
+        return AssembledMessage.of(elements);
     }
 
     public static String carve(ApricotServer server, String source) {

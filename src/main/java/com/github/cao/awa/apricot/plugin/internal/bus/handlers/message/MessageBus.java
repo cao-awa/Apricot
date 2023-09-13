@@ -10,7 +10,7 @@ import java.util.*;
 import java.util.function.*;
 
 public class MessageBus extends MessageEventHandler implements BusHandler<MessageEvent<?>> {
-    private final List<Consumer<MessageEvent<?>>> handlers = ApricotCollectionFactor.newArrayList();
+    private final List<Consumer<MessageEvent<?>>> handlers = ApricotCollectionFactor.arrayList();
 
     /**
      * Process event.

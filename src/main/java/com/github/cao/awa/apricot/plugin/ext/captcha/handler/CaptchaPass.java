@@ -21,8 +21,7 @@ public class CaptchaPass extends MessageEventHandler {
     /**
      * Process event.
      *
-     * @param event
-     *         event
+     * @param event event
      * @author cao_awa
      * @author 草二号机
      * @since 1.0.0
@@ -39,7 +38,7 @@ public class CaptchaPass extends MessageEventHandler {
                                                                          0,
                                                                          ReplyMessageElement.class
                                                                  )
-                                                                 .getMessageId());
+                                                                 .getMessageSeq());
 
             if (messageId != null) {
                 if (packet.getMessage()
@@ -57,23 +56,25 @@ public class CaptchaPass extends MessageEventHandler {
 
                             proxy.send(new SendMessagePacket(
                                     MessageType.GROUP,
-                                    new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                          .participate(new AtMessageElement(new AtTarget(
-                                                                  AtTargetType.PERSON,
-                                                                  packet.getSenderId()
-                                                          )))
-                                                          .participate(new TextMessageElement("此验证已手动通过！")),
+                                    AssembledMessage.of()
+                                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                    .participate(AtMessageElement.at(AtTarget.of(
+                                                            AtTargetType.PERSON,
+                                                            packet.getSenderId()
+                                                    )))
+                                                    .participate(TextMessageElement.text("此验证已手动通过！")),
                                     packet.getResponseId()
                             ));
                         } else {
                             proxy.send(new SendMessagePacket(
                                     MessageType.GROUP,
-                                    new AssembledMessage().participate(new ReplyMessageElement(packet.getMessageId()))
-                                                          .participate(new AtMessageElement(new AtTarget(
-                                                                  AtTargetType.PERSON,
-                                                                  packet.getSenderId()
-                                                          )))
-                                                          .participate(new TextMessageElement("您没有权限处理Captcha验证！")),
+                                    AssembledMessage.of()
+                                                    .participate(ReplyMessageElement.reply(packet.getMessageSeq()))
+                                                    .participate(AtMessageElement.at(AtTarget.of(
+                                                            AtTargetType.PERSON,
+                                                            packet.getSenderId()
+                                                    )))
+                                                    .participate(TextMessageElement.text("您没有权限处理Captcha验证！")),
                                     packet.getResponseId()
                             ));
                         }

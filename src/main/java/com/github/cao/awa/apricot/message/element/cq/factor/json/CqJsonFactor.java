@@ -11,10 +11,10 @@ import java.util.*;
 public class CqJsonFactor extends CqFactor {
     @Override
     public MessageElement create(ApricotServer server, Map<String, String> args) {
-        return args.containsKey("resid") ? new JsonMessageElement(
+        return args.containsKey("resid") ? JsonMessageElement.json(
                 JSONObject.parse(args.get("data")),
                 Integer.parseInt(args.get("resid"))
-        ) : new JsonMessageElement(JSONObject.parse(args.get("data")));
+        ) : JsonMessageElement.json(JSONObject.parse(args.get("data")));
     }
 
     @Override

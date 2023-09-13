@@ -19,7 +19,7 @@ public class EventManager implements ConcurrentService {
     private final ApricotServer server;
     private final ExecutorEntrust executor;
     private final PluginManager plugins;
-    private final Map<EventTarget, EventExclusive> exclusives = ApricotCollectionFactor.newConcurrentHashMap();
+    private final Map<EventTarget, EventExclusive> exclusives = ApricotCollectionFactor.concurrentHashMap();
     private boolean active = true;
 
     public EventManager(ApricotServer server, Executor executor, PluginManager plugins) {
@@ -38,7 +38,7 @@ public class EventManager implements ConcurrentService {
 
     public void fireEvent(Event<?> event) {
         if (this.active) {
-            final Map<EventTarget, EventExclusive> currentExclusives = ApricotCollectionFactor.newHashMap(this.exclusives);
+            final Map<EventTarget, EventExclusive> currentExclusives = ApricotCollectionFactor.hashMap(this.exclusives);
             EventTarget target = event.getPacket()
                                       .target();
             EventExclusive exclusive = currentExclusives.get(target);
